@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../actions/userActions";
 import { AppDispatch } from "../store";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const userInfo = useSelector((state: any) => state.user.userInfo);
+
+  useEffect(() => {
+    if (userInfo?.isAuthenticated) {
+      history.push("/home");
+    }
+  }, [userInfo, history]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
