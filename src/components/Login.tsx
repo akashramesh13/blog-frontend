@@ -18,7 +18,6 @@ const Login: React.FC = () => {
     dispatch(login(username, password));
   };
 
-  // Redirect to home if already logged in
   if (userInfo) {
     return <Redirect to="/" />;
   }

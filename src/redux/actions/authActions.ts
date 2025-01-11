@@ -1,9 +1,6 @@
-import axios from "axios";
+import axios from "../../helpers/axios";
 import { LOGIN_SUCCESS, LOGOUT } from "../constants/authConstants";
 import { Dispatch } from "redux";
-
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://localhost:8090";
 
 export const login =
   (username: string, password: string) => async (dispatch: Dispatch) => {
