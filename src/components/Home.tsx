@@ -30,7 +30,7 @@ const Home: React.FC = () => {
   const history = useHistory();
 
   const handleOnPostClick = (post: any) => {
-    const redirectUrl = `/edit/${post.id}`;
+    const redirectUrl = `/view/${post.id}`;
     history.push({
       pathname: redirectUrl,
       state: post,

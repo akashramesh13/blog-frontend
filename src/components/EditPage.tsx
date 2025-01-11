@@ -10,7 +10,7 @@ const EditPage: React.FC = () => {
   const [post, setPost] = useState({
     title: "",
     content: "",
-    owner: false,
+    owner: true,
   });
   const [content, setContent] = useState(post?.content ?? "");
   const [title, setTitle] = useState(post?.title ?? "");
@@ -40,6 +40,10 @@ const EditPage: React.FC = () => {
     return <p>Post not found.</p>;
   }
 
+  if (!post.owner) {
+    history.push(`/view/${id}`);
+  }
+
   return (
     <div className="edit">
       <h1 className="edit__title">Edit Post</h1>
@@ -63,9 +67,11 @@ const EditPage: React.FC = () => {
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
-        <button type="button" disabled={!post.owner} onClick={handleSave}>
-          Save
-        </button>
+        {post.owner ? (
+          <button type="button" onClick={handleSave}>
+            Save
+          </button>
+        ) : null}
       </form>
     </div>
   );

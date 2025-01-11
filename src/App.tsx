@@ -7,11 +7,12 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
-import Navbar from "./components/NavBar";
+import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import EditPage from "./components/EditPage";
+import viewPage from "./components/ViewPage";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
         <PrivateRoute path="/home" component={Home} />
         <PrivateRoute path="/" exact component={Home} />
         <PrivateRoute path="/edit/:id" component={EditPage} />
+        <PrivateRoute path="/view/:id" component={viewPage} />
         <Redirect to="/" />
       </Switch>
     </Router>
