@@ -16,8 +16,7 @@ axios.interceptors.response.use(
 );
 
 function clearSession() {
-  sessionStorage.clear(); // If using sessionStorage for the session
-
+  sessionStorage.clear();
   window.location.href = "/login";
 }
 
