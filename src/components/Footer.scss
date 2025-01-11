@@ -1,0 +1,15 @@
+.footer {
+  background-color: white;
+  color: #808080;
+  text-align: center;
+  border-top: 1px solid #ddd;
+
+  .heart {
+    font-size: 1em;
+    color: grey;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 4px;
+    margin: 0 5px;
+  }
+}

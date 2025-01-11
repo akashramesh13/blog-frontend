@@ -16,7 +16,6 @@ import EditPage from "./components/EditPage";
 const App: React.FC = () => {
   return (
     <Router>
-      <Navbar />
       <Switch>
         <Route path="/login" component={Login} />
         <PrivateRoute path="/home" component={Home} />

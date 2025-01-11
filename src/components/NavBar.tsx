@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar__brand">
-        <Link to="/">MyBlog</Link>
+        <Link to="/">Pixel Pursuit</Link>
       </div>
       <div className={`navbar__links ${isOpen ? "active" : ""}`}>
         <Link to="/home">Home</Link>

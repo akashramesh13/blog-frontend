@@ -39,7 +39,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
-      <h1 className="home__title">Welcome to My Blog</h1>
+      <h1 className="home__title">Welcome to Pixel Pursuit</h1>
       <div className="home__posts">
         {dummyPosts.map((post) => (
           <div

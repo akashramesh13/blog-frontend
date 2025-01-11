@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
+import Layout from "../components/Layout";
 
 interface PrivateRouteProps {
   component: React.ComponentType<any>;
@@ -19,7 +20,13 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     <Route
       {...rest}
       render={(props) =>
-        userInfo ? <Component {...props} /> : <Redirect to="/login" />
+        userInfo ? (
+          <Layout>
+            <Component {...props} />
+          </Layout>
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   );
