@@ -41,6 +41,13 @@ const Home: React.FC = () => {
     history.push(`/blog/view/${post.id}`, post);
   };
 
+  const stripHtmlAndTruncate = (html: string, maxLength: number = 100) => {
+    const plainText = html.replace(/<\/?[^>]+(>|$)/g, "").trim();
+    return plainText.length > maxLength
+      ? `${plainText.substring(0, maxLength)}...`
+      : plainText;
+  };
+
   return (
     <div className="home">
       <div className="home__header">
@@ -55,7 +62,10 @@ const Home: React.FC = () => {
             onClick={() => handleOnPostClick(post)}
           >
             <h2 className="home__post-title">{post.title}</h2>
-            <p className="home__post-excerpt">{post.content}</p>
+            <p className="home__post-excerpt">
+              {stripHtmlAndTruncate(post.content, 150)}{" "}
+              {/* Adjust the length here */}
+            </p>
             <span className="home__post-date">
               {moment(post.createdAt).format("DD MMM, YY")}
             </span>

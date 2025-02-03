@@ -11,8 +11,6 @@ import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import EditPage from "./components/EditPage";
-import viewPage from "./components/ViewPage";
 import BlogEditorPage from "./components/BlogEditorPage";
 import BlogViewer from "./components/BlogViewer";
 import Register from "./components/Register";

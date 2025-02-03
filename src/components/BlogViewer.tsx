@@ -32,7 +32,10 @@ const BlogViewer: React.FC = () => {
   return (
     <div className="blog-view">
       <h1 className="blog-view__title">{post.title}</h1>
-      <div className="blog-view__content">{post.content}</div>
+      <div
+        className="blog-view__content"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
 
       {post.owner && (
         <button
