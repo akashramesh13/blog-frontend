@@ -20,9 +20,6 @@ interface IPost {
 const Home: React.FC = () => {
   const history = useHistory();
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(sessionStorage.getItem("userInfo") || "null")
-  );
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -63,7 +60,7 @@ const Home: React.FC = () => {
           >
             <h2 className="home__post-title">{post.title}</h2>
             <p className="home__post-excerpt">
-              {stripHtmlAndTruncate(post.content, 150)}{" "}
+              {stripHtmlAndTruncate(post.content, 10)}{" "}
               {/* Adjust the length here */}
             </p>
             <span className="home__post-date">

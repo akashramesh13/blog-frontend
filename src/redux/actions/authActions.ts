@@ -1,5 +1,9 @@
 import axios from "../../helpers/axios";
-import { LOGIN_SUCCESS, LOGOUT } from "../constants/authConstants";
+import {
+  LOGIN_FAILURE,
+  LOGIN_SUCCESS,
+  LOGOUT,
+} from "../constants/authConstants";
 import { Dispatch } from "redux";
 
 export const login =
@@ -11,11 +15,24 @@ export const login =
       sessionStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
       console.error("Login failed", error);
+      dispatch({
+        type: LOGIN_FAILURE,
+        payload: "Invalid username or password!",
+      });
     }
   };
 
-export const logout = () => (dispatch: Dispatch) => {
-  sessionStorage.removeItem("userInfo");
+export const logout = () => async (dispatch: Dispatch) => {
+  sessionStorage.clear();
+  try {
+    await axios.post("/logout");
+    sessionStorage.removeItem("userInfo");
+    localStorage.removeItem("userInfo");
+    window.location.reload();
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+
   dispatch({ type: LOGOUT });
   window.location.href = "/";
 };

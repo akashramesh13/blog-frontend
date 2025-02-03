@@ -17,7 +17,7 @@ axios.interceptors.response.use(
 
 function clearSession() {
   sessionStorage.clear();
-  window.location.href = "/login";
+  localStorage.clear();
 }
 
 export default axios;

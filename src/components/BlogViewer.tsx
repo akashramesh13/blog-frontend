@@ -27,7 +27,7 @@ const BlogViewer: React.FC = () => {
     };
 
     fetchPost();
-  }, [id]);
+  }, []);
 
   return (
     <div className="blog-view">

@@ -28,7 +28,6 @@ const NavBar: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    sessionStorage.removeItem("userInfo");
   };
 
   return (
