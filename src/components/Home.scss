@@ -10,10 +10,42 @@ body {
   max-width: 800px;
   margin: 0 auto;
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
   &__title {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     text-align: center;
+  }
+
+  &__btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+
+    &--primary {
+      background: black;
+      color: white;
+    }
+
+    &--secondary {
+      background: white;
+      color: black;
+      border: 2px solid black;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   &__posts {
@@ -27,6 +59,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
+    transition: background 0.2s ease-in-out;
 
     &:hover {
       background-color: #f1f1f1;

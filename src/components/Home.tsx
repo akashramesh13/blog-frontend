@@ -1,55 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
+import axios from "../helpers/axios";
 
-const dummyPosts = [
-  {
-    id: 1,
-    title: "Understanding React Hooks",
-    excerpt:
-      "Learn about the most important hooks in React and how they can simplify your code...",
-    date: "January 9, 2025",
-  },
-  {
-    id: 2,
-    title: "A Guide to JavaScript Closures",
-    excerpt:
-      "Closures are a fundamental concept in JavaScript. This guide will help you understand them with ease...",
-    date: "January 8, 2025",
-  },
-  {
-    id: 3,
-    title: "CSS Grid vs Flexbox",
-    excerpt:
-      "Wondering whether to use CSS Grid or Flexbox? This article will break down their differences and use cases...",
-    date: "January 7, 2025",
-  },
-];
+interface IPost {
+  id: number;
+  title: string;
+  content: string;
+  user: {
+    id: Number;
+    username: String;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+  isOwner: boolean;
+}
 
 const Home: React.FC = () => {
   const history = useHistory();
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(sessionStorage.getItem("userInfo") || "null")
+  );
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get(`/posts/`);
+        setPosts(data);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleOnPostClick = (post: any) => {
-    const redirectUrl = `/view/${post.id}`;
-    history.push({
-      pathname: redirectUrl,
-      state: post,
-    });
+    history.push(`/blog/view/${post.id}`, post);
   };
 
   return (
     <div className="home">
-      <h1 className="home__title">Welcome to Pixel Pursuit</h1>
+      <div className="home__header">
+        <h1 className="home__title">Welcome to Pixel Pursuit</h1>
+      </div>
+
       <div className="home__posts">
-        {dummyPosts.map((post) => (
+        {posts.map((post) => (
           <div
             key={post.id}
             className="home__post"
             onClick={() => handleOnPostClick(post)}
           >
             <h2 className="home__post-title">{post.title}</h2>
-            <p className="home__post-excerpt">{post.excerpt}</p>
-            <span className="home__post-date">{post.date}</span>
+            <p className="home__post-excerpt">{post.content}</p>
+            <span className="home__post-date">
+              {moment(post.createdAt).format("DD MMM, YY")}
+            </span>
           </div>
         ))}
       </div>

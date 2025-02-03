@@ -17,4 +17,5 @@ export const login =
 export const logout = () => (dispatch: Dispatch) => {
   sessionStorage.removeItem("userInfo");
   dispatch({ type: LOGOUT });
+  window.location.href = "/";
 };

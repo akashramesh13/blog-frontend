@@ -1,0 +1,62 @@
+// Define colors
+$primary-bg: #fafafa;
+$border-color: #ddd;
+$toolbar-bg: #f4f4f4;
+$button-bg: #007bff;
+$button-hover: #0056b3;
+$text-color: white;
+$editor-bg: white;
+
+// Editor container
+.editor-container {
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  background: $primary-bg;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+// Quill Editor
+.ql-container {
+  border-radius: 8px;
+  height: 250px; // ✅ Set a fixed height
+  overflow-y: auto; // ✅ Allow scrolling when text overflows
+  background: $editor-bg;
+  font-size: 16px;
+  padding: 10px;
+}
+
+// Quill Toolbar
+.ql-toolbar {
+  border-radius: 8px 8px 0 0;
+  background: $toolbar-bg;
+  padding: 10px;
+  border-bottom: 1px solid $border-color;
+}
+
+// Save Button
+.save-button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: $button-bg;
+  color: $text-color;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: $button-hover;
+  }
+}
+
+.ql-editor::before {
+  color: #999;
+  font-style: italic;
+  padding: 0px 9px;
+}
