@@ -2,8 +2,8 @@
 $primary-bg: #fafafa;
 $border-color: #ddd;
 $toolbar-bg: #f4f4f4;
-$button-bg: #007bff;
-$button-hover: #0056b3;
+$button-bg: #333;
+$button-hover: #555;
 $text-color: white;
 $editor-bg: white;
 
@@ -61,7 +61,7 @@ $editor-bg: white;
   padding: 0px 9px;
 }
 .ql-container {
-  position: relative; /* Ensures the tooltip stays within bounds */
+  position: relative;
 }
 
 .ql-tooltip {

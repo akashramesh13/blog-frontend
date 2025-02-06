@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "../helpers/axios";
 import "./BlogViewer.scss";
+import { GiComputerFan } from "react-icons/gi";
 
 const BlogViewer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -87,6 +88,14 @@ const BlogViewer: React.FC = () => {
             </li>
           ))}
         </ul>
+        <div className="summary">
+          <p>
+            Summarize
+            <span id="summary-icon">
+              <GiComputerFan />
+            </span>
+          </p>
+        </div>
       </aside>
     </div>
   );
