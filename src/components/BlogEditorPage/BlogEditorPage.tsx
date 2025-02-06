@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import axios from "../helpers/axios";
-import BlogEditor from "./BlogEditor";
+import axios from "../../helpers/axios";
+import BlogEditor from "../BlogEditor/BlogEditor";
 
 const BlogEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Navbar.scss";
 import { Link, useLocation } from "react-router-dom"; // Import useLocation
-import { logout } from "../redux/actions/authActions";
+import { logout } from "../../redux/actions/authActions";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/reducers";
+import { RootState } from "../../redux/reducers";
 
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

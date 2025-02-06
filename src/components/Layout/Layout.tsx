@@ -1,6 +1,4 @@
 import React, { ReactNode } from "react";
-import NavBar from "./NavBar";
-import Footer from "./Footer";
 import "./Layout.scss";
 
 interface LayoutProps {

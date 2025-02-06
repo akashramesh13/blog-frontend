@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
-import axios from "../helpers/axios";
+import axios from "../../helpers/axios";
 
 interface IPost {
   id: number;

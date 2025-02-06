@@ -7,14 +7,14 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import PrivateRoute from "./components/PrivateRoute";
-import BlogEditorPage from "./components/BlogEditorPage";
-import BlogViewer from "./components/BlogViewer";
-import Register from "./components/Register";
-import Footer from "./components/Footer";
+import BlogEditorPage from "./components/BlogEditorPage/BlogEditorPage";
+import BlogViewer from "./components/BlogViewer/BlogViewer";
+import NavBar from "./components/Navbar/NavBar";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import Home from "./components/Home/Home";
+import Footer from "./components/Footer/Footer";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 const App: React.FC = () => {
   return (

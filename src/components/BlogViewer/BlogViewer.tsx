@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import axios from "../helpers/axios";
+import axios from "../../helpers/axios";
 import "./BlogViewer.scss";
 import { GiComputerFan } from "react-icons/gi";
 

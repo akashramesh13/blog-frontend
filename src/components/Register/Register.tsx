@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../redux/actions/authActions";
-import { RootState } from "../redux/reducers";
-import { Redirect } from "react-router-dom";
+import { RootState } from "../../redux/reducers";
+import { Redirect, useHistory } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "./Login.scss";
+import "./Register.scss";
+import axios from "axios";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch: any = useDispatch();
-  const { userInfo, loading, error } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const history = useHistory();
+  const [error, setError] = useState("");
+
+  const { userInfo, loading } = useSelector((state: RootState) => state.auth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(login(username, password));
+
+    try {
+      const response = await axios.post("/register", { username, password });
+      console.log("Registration successful", response.data);
+      history.push("/login");
+    } catch (err) {
+      console.error("Registration failed", err);
+      setError("Registration failed. Please try again.");
+    }
   };
 
   if (userInfo) {
@@ -25,9 +33,9 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1>Login</h1>
+    <div className="register-container">
+      <div className="register-card">
+        <h1>Register</h1>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -54,8 +62,8 @@ const Login: React.FC = () => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+          <button type="submit" className="register-button" disabled={loading}>
+            {loading ? "Logging in..." : "Register"}
           </button>
         </form>
       </div>
@@ -63,4 +71,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;
