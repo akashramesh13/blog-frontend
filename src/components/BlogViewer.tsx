@@ -16,6 +16,8 @@ const BlogViewer: React.FC = () => {
     owner: false,
   });
 
+  const [headings, setHeadings] = useState<{ text: string; id: string }[]>([]);
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -29,22 +31,63 @@ const BlogViewer: React.FC = () => {
     fetchPost();
   }, []);
 
+  useEffect(() => {
+    if (post.content) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(post.content, "text/html");
+      const headingElements = doc.querySelectorAll("h1, h2, h3");
+
+      const newHeadings = Array.from(headingElements).map((el, index) => {
+        const id = `heading-${index}`;
+        el.setAttribute("id", id); // Ensure the heading has an ID
+        return { text: el.textContent || "", id };
+      });
+
+      setHeadings(newHeadings);
+
+      // Update actual DOM to include the IDs
+      const updatedContent = doc.body.innerHTML;
+      setPost((prev) => ({ ...prev, content: updatedContent }));
+    }
+  }, [post.content]);
+
+  const handleScrollToHeading = (id: string) => {
+    const headingElement = document.getElementById(id);
+    if (headingElement) {
+      headingElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <div className="blog-view">
-      <h1 className="blog-view__title">{post.title}</h1>
-      <div
-        className="blog-view__content"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className="blog-view__content">
+        <h1 className="blog-view__title">{post.title}</h1>
+        <div
+          className="blog-view__body"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+        {post.owner && (
+          <button
+            className="blog-view__edit-button"
+            onClick={() => history.push(`/blog/edit/${id}`)}
+          >
+            ✏️ Edit
+          </button>
+        )}
+      </div>
 
-      {post.owner && (
-        <button
-          className="blog-view__edit-button"
-          onClick={() => history.push(`/blog/edit/${id}`)}
-        >
-          ✏️ Edit
-        </button>
-      )}
+      <aside className="toc-sidebar">
+        <h3>Table of Contents</h3>
+        <ul>
+          {headings.map((heading) => (
+            <li key={heading.id}>
+              <button onClick={() => handleScrollToHeading(heading.id)}>
+                {heading.text}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </aside>
     </div>
   );
 };

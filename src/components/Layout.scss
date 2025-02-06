@@ -1,0 +1,17 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensures full height */
+}
+
+.content {
+  flex: 1; /* Pushes the footer down */
+  padding-bottom: 50px; /* Prevents content from hiding behind the footer */
+}

@@ -13,6 +13,62 @@ interface BlogEditorProps {
   isEditing: boolean;
 }
 
+const handleImageUpload = () => {
+  const input = document.createElement("input");
+  input.setAttribute("type", "file");
+  input.setAttribute("accept", "image/*");
+  input.click();
+
+  input.onchange = async () => {
+    const file = input.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const quill = document.querySelector(".ql-editor");
+        const img = document.createElement("img");
+        img.src = reader.result as string;
+        quill?.appendChild(img);
+      };
+    }
+  };
+};
+
+const modules = {
+  toolbar: {
+    container: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["blockquote", "code-block"],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ align: [] }],
+      ["link", "image"],
+      ["clean"],
+    ],
+    handlers: {
+      image: handleImageUpload,
+    },
+  },
+};
+
+const formats = [
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "align",
+  "link",
+  "image",
+  "code-block",
+  "script",
+];
+
 const BlogEditor: React.FC<BlogEditorProps> = ({
   content,
   setContent,
@@ -22,20 +78,7 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
   readOnly,
   isEditing,
 }) => {
-  const modules = {
-    toolbar: readOnly
-      ? false
-      : [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["link"],
-          ["clean"],
-        ],
-  };
-
   return (
-    
     <div className="editor-container">
       {!readOnly ? (
         <input
@@ -51,12 +94,15 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
       )}
 
       <ReactQuill
+        key={readOnly ? "readOnly" : "editable"}
         value={content}
         onChange={readOnly ? () => {} : setContent}
         modules={modules}
+        formats={formats}
         readOnly={readOnly}
         placeholder="Write something amazing..."
       />
+
       {!readOnly && (
         <button className="save-button" onClick={saveBlog}>
           {isEditing ? "Update Blog" : "Publish Blog"}

@@ -1,19 +1,18 @@
+html,
+body {
+  height: 100%; /* Make sure the body takes full height */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative; /* No longer fixed */
   width: 100%;
   background-color: white;
   color: #808080;
   border-top: 1px solid #ddd;
-  .heart {
-    font-size: 1em;
-    color: grey;
-    border-radius: 50%;
-    display: inline-block;
-    padding: 4px;
-    margin: 0 5px;
-  }
   text-align: center;
   padding: 10px;
 }

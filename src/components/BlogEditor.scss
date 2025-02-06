@@ -60,3 +60,11 @@ $editor-bg: white;
   font-style: italic;
   padding: 0px 9px;
 }
+.ql-container {
+  position: relative; /* Ensures the tooltip stays within bounds */
+}
+
+.ql-tooltip {
+  overflow: hidden;
+  margin-left: 100px;
+}
