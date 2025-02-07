@@ -16,7 +16,7 @@
   font-size: 1.2rem;
   line-height: 1.6;
   color: #333;
-  white-space: pre-wrap; // To handle new lines properly
+  white-space: pre-wrap;
 }
 
 .blog-view__title {
@@ -31,21 +31,20 @@
 
 .blog-view__edit-button {
   padding: 0.8rem;
-  background-color: #333; /* Dark gray instead of full black */
+  background-color: #333;
   color: white;
-  border: 1px solid #333; /* Dark border to match */
+  border: 1px solid #333;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease, border 0.3s ease;
 
   &:hover {
-    background-color: #555; /* Slightly lighter on hover */
-    border: 1px solid #555; /* Match the hover background */
+    background-color: #555;
+    border: 1px solid #555;
   }
 }
 
-/* ✅ TOC is on the right and scrolls */
 .toc-sidebar {
   width: 250px;
   max-height: 80vh;

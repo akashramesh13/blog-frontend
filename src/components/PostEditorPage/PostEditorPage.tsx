@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import axios from "../../helpers/axios";
-import BlogEditor from "../BlogEditor/BlogEditor";
+import PostEditor from "../PostEditor/PostEditor";
 
 const BlogEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +21,7 @@ const BlogEditorPage: React.FC = () => {
       try {
         const { data } = await axios.get(`/posts/${id}`);
         if (!data.owner) {
-          const redirectUrl = `/blog/view/${id}`;
+          const redirectUrl = `/post/view/${id}`;
           history.push({
             pathname: redirectUrl,
           });
@@ -59,7 +59,7 @@ const BlogEditorPage: React.FC = () => {
 
   return (
     <div className="blog-editor-page">
-      <BlogEditor
+      <PostEditor
         content={content}
         setContent={setContent}
         saveBlog={saveBlog}

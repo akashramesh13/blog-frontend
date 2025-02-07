@@ -4,11 +4,10 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Link,
   Redirect,
 } from "react-router-dom";
-import BlogEditorPage from "./components/BlogEditorPage/BlogEditorPage";
-import BlogViewer from "./components/BlogViewer/BlogViewer";
+import PostEditorPage from "./components/PostEditorPage/PostEditorPage";
+import PostViewer from "./components/PostViewer/PostViewer";
 import NavBar from "./components/Navbar/NavBar";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
@@ -25,9 +24,9 @@ const App: React.FC = () => {
         <Route path="/register" component={Register} />
         <Route path="/" exact component={Home} />
         <Route path="/home" component={Home} />
-        <Route path="/blog/view/:id" component={BlogViewer} />
-        <PrivateRoute path="/blog/new" component={BlogEditorPage} />
-        <PrivateRoute path="/blog/edit/:id" component={BlogEditorPage} />
+        <Route path="/post/view/:id" component={PostViewer} />
+        <PrivateRoute path="/post/new" component={PostEditorPage} />
+        <PrivateRoute path="/post/edit/:id" component={PostEditorPage} />
         <Redirect to="/" />
       </Switch>
       <Footer />

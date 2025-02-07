@@ -1,7 +1,7 @@
 import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "./BlogEditor.scss";
+import "./PostEditor.scss";
 
 interface BlogEditorProps {
   content: string;
@@ -43,12 +43,9 @@ const modules = {
       ["blockquote", "code-block"],
       [{ indent: "-1" }, { indent: "+1" }],
       [{ align: [] }],
-      ["link", "image"],
+      ["link"],
       ["clean"],
     ],
-    handlers: {
-      image: handleImageUpload,
-    },
   },
 };
 
@@ -69,7 +66,7 @@ const formats = [
   "script",
 ];
 
-const BlogEditor: React.FC<BlogEditorProps> = ({
+const PostEditor: React.FC<BlogEditorProps> = ({
   content,
   setContent,
   saveBlog,
@@ -112,4 +109,4 @@ const BlogEditor: React.FC<BlogEditorProps> = ({
   );
 };
 
-export default BlogEditor;
+export default PostEditor;

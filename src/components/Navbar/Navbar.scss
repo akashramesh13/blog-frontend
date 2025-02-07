@@ -45,6 +45,22 @@ body {
   gap: 1rem;
 }
 
+.navbar__right #add-post {
+  padding: 0.8rem;
+  background-color: #333; /* Dark gray instead of full black */
+  color: white;
+  border: 0.8px solid #333; /* Dark border to match */
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.navbar__right #add-post:hover {
+  background-color: #555; /* Slightly lighter on hover */
+  border: 1px solid #555; /* Match the hover background */
+}
+
 /* Push login/logout to the right */
 .navbar__right {
   display: flex;

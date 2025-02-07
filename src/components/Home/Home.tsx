@@ -35,7 +35,7 @@ const Home: React.FC = () => {
   }, []);
 
   const handleOnPostClick = (post: any) => {
-    history.push(`/blog/view/${post.id}`, post);
+    history.push(`/post/view/${post.id}`, post);
   };
 
   const stripHtmlAndTruncate = (html: string, maxLength: number = 100) => {

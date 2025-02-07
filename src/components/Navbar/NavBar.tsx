@@ -38,12 +38,15 @@ const NavBar: React.FC = () => {
         </div>
         <div className={`navbar__links ${isOpen ? "active" : ""}`}>
           <Link to="/home">Home</Link>
-          <Link to="/about">About</Link>
         </div>
       </div>
 
       <div className="navbar__right">
-        {/* Only show Login and Register if we're not on those pages */}
+        {userInfo && (
+          <Link to="/post/new">
+            <span id="add-post">+ Add new post</span>
+          </Link>
+        )}
         {
           <>
             {userInfo ? (

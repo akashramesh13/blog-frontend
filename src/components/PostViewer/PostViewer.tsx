@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "../../helpers/axios";
-import "./BlogViewer.scss";
+import "./PostViewer.scss";
 import { GiComputerFan } from "react-icons/gi";
 
-const BlogViewer: React.FC = () => {
+const PostViewer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const [post, setPost] = useState<{
@@ -70,7 +70,7 @@ const BlogViewer: React.FC = () => {
         {post.owner && (
           <button
             className="blog-view__edit-button"
-            onClick={() => history.push(`/blog/edit/${id}`)}
+            onClick={() => history.push(`/post/edit/${id}`)}
           >
             ✏️ Edit
           </button>
@@ -101,4 +101,4 @@ const BlogViewer: React.FC = () => {
   );
 };
 
-export default BlogViewer;
+export default PostViewer;
