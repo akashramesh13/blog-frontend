@@ -10,21 +10,20 @@ body {
   justify-content: center;
   align-items: flex-start;
   gap: 2rem;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
 .sidebar {
   flex: 1;
-  min-width: 250px;
-  background-color: #f1f1f1;
+  max-width: 250px;
+  background-color: #f3f0f0;
   padding: 1rem;
   border-radius: 8px;
 }
 
 .home {
-  flex: 2;
+  flex: 1;
   max-width: 800px;
 }
 
