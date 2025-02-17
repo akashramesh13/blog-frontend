@@ -47,7 +47,7 @@ const BlogEditorPage: React.FC = () => {
       await axios({
         method,
         url,
-        data: { title, content },
+        data: { title, content, category: { id: 1, name: "technology" } },
       });
       history.push(id ? `/view/${id}` : "/");
     } catch (error) {

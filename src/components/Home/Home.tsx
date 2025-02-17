@@ -1,73 +1,99 @@
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import { useHistory } from "react-router-dom";
-import moment from "moment";
 import axios from "../../helpers/axios";
+import Post from "../Post/Post";
 
 interface IPost {
   id: number;
   title: string;
   content: string;
   user: {
-    id: Number;
-    username: String;
+    id: number;
+    username: string;
   };
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   isOwner: boolean;
+}
+
+interface ICategory {
+  id: number;
+  name: string;
 }
 
 const Home: React.FC = () => {
   const history = useHistory();
   const [posts, setPosts] = useState<IPost[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const trendingPosts = [
+    "AI Breakthrough",
+    "Stock Market Crash",
+    "Best Travel Tips",
+    "Healthy Diet Hacks",
+  ];
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await axios.get(`/posts/`);
+        const { data } = await axios.get<IPost[]>("/posts/");
         setPosts(data);
       } catch (error) {
-        console.error("Error fetching post:", error);
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get<ICategory[]>("/category/");
+        setCategories(data);
+      } catch (error) {
+        console.log("Error fetching categories: ", error);
       }
     };
 
     fetchPosts();
+    fetchCategories();
   }, []);
 
-  const handleOnPostClick = (post: any) => {
+  const handleOnPostClick = (post: IPost) => {
     history.push(`/post/view/${post.id}`, post);
   };
 
-  const stripHtmlAndTruncate = (html: string, maxLength: number = 100) => {
-    const plainText = html.replace(/<\/?[^>]+(>|$)/g, "").trim();
-    return plainText.length > maxLength
-      ? `${plainText.substring(0, maxLength)}...`
-      : plainText;
-  };
-
   return (
-    <div className="home">
-      <div className="home__header">
-        <h1 className="home__title">Welcome to Pixel Pursuit</h1>
+    <div className="home-container">
+      <div className="sidebar">
+        <h2>Categories</h2>
+        <ul>
+          {categories.map((category) => (
+            <li key={category.id}>{category.name}</li>
+          ))}
+        </ul>
       </div>
 
-      <div className="home__posts">
-        {posts.map((post) => (
-          <div
-            key={post.id}
-            className="home__post"
-            onClick={() => handleOnPostClick(post)}
-          >
-            <h2 className="home__post-title">{post.title}</h2>
-            <p className="home__post-excerpt">
-              {stripHtmlAndTruncate(post.content, 10)}{" "}
-              {/* Adjust the length here */}
-            </p>
-            <span className="home__post-date">
-              {moment(post.createdAt).format("DD MMM, YY")}
-            </span>
-          </div>
-        ))}
+      <div className="home">
+        <div className="home__header">
+          <h1 className="home__title">Welcome to Pixel Pursuit</h1>
+        </div>
+
+        <div className="home__posts">
+          {posts.map((post) => (
+            <Post
+              key={post.id}
+              post={post}
+              handleOnPostClick={handleOnPostClick}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="sidebar">
+        <h2>Trending Posts</h2>
+        <ul>
+          {trendingPosts.map((post, index) => (
+            <li key={index}>{post}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );

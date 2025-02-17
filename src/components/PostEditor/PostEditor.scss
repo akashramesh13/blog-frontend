@@ -1,4 +1,3 @@
-// Define colors
 $primary-bg: #fafafa;
 $border-color: #ddd;
 $toolbar-bg: #f4f4f4;
@@ -7,7 +6,6 @@ $button-hover: #555;
 $text-color: white;
 $editor-bg: white;
 
-// Editor container
 .editor-container {
   max-width: 800px;
   margin: 20px auto;
@@ -19,17 +17,15 @@ $editor-bg: white;
   flex-direction: column;
 }
 
-// Quill Editor
 .ql-container {
   border-radius: 8px;
-  height: 250px; // ✅ Set a fixed height
-  overflow-y: auto; // ✅ Allow scrolling when text overflows
+  height: 250px;
+  overflow-y: auto;
   background: $editor-bg;
   font-size: 16px;
   padding: 10px;
 }
 
-// Quill Toolbar
 .ql-toolbar {
   border-radius: 8px 8px 0 0;
   background: $toolbar-bg;
@@ -37,7 +33,6 @@ $editor-bg: white;
   border-bottom: 1px solid $border-color;
 }
 
-// Save Button
 .save-button {
   margin-top: 15px;
   padding: 10px 15px;

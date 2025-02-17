@@ -88,14 +88,6 @@ const PostViewer: React.FC = () => {
             </li>
           ))}
         </ul>
-        <div className="summary">
-          <p>
-            Summarize
-            <span id="summary-icon">
-              <GiComputerFan />
-            </span>
-          </p>
-        </div>
       </aside>
     </div>
   );
