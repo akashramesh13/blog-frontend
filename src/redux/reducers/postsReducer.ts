@@ -1,28 +1,24 @@
 import { Dispatch } from "redux";
 import axios from "../../helpers/axios";
+import {
+  CLEAR_POSTS,
+  FETCH_CATEGORIES_SUCCESS,
+  FETCH_POST_FAILURE,
+  FETCH_POST_REQUEST,
+  FETCH_POST_SUCCESS,
+  FETCH_POSTS_FAILURE,
+  FETCH_POSTS_REQUEST,
+  FETCH_POSTS_SUCCESS,
+  SAVE_POST_FAILURE,
+  SAVE_POST_REQUEST,
+  SAVE_POST_SUCCESS,
+} from "../actions/postsActions";
 
-// Action Types
-export const FETCH_POSTS_REQUEST = "FETCH_POSTS_REQUEST";
-export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
-export const FETCH_POSTS_FAILURE = "FETCH_POSTS_FAILURE";
-
-export const FETCH_POST_REQUEST = "FETCH_POST_REQUEST";
-export const FETCH_POST_SUCCESS = "FETCH_POST_SUCCESS";
-export const FETCH_POST_FAILURE = "FETCH_POST_FAILURE";
-
-export const FETCH_CATEGORIES_SUCCESS = "FETCH_CATEGORIES_SUCCESS";
-export const CLEAR_POSTS = "CLEAR_POSTS";
-
-export const SAVE_POST_REQUEST = "SAVE_POST_REQUEST";
-export const SAVE_POST_SUCCESS = "SAVE_POST_SUCCESS";
-export const SAVE_POST_FAILURE = "SAVE_POST_FAILURE";
-
-// Interfaces
 export interface IPost {
   id: number;
   title: string;
   content: string;
-  categoryId: number | null | "new";
+  category: ICategory;
   user: {
     id: number;
     username: string;
@@ -46,7 +42,6 @@ interface PostState {
   totalPages: number;
 }
 
-// Initial State
 const initialState: PostState = {
   posts: [],
   post: null,
@@ -56,7 +51,6 @@ const initialState: PostState = {
   totalPages: 1,
 };
 
-// Reducer
 export const postsReducer = (state = initialState, action: any): PostState => {
   switch (action.type) {
     case FETCH_POSTS_REQUEST:
@@ -96,9 +90,6 @@ export const postsReducer = (state = initialState, action: any): PostState => {
   }
 };
 
-// Action Creators
-
-/** ✅ Fetch all posts */
 export const fetchPosts =
   (page = 0, size = 5, category: string | null = null, reset = false) =>
   async (dispatch: Dispatch) => {
@@ -123,7 +114,6 @@ export const fetchPosts =
     }
   };
 
-/** ✅ Fetch a single post by ID */
 export const fetchPost = (postId: number) => async (dispatch: Dispatch) => {
   dispatch({ type: FETCH_POST_REQUEST });
 
@@ -138,7 +128,6 @@ export const fetchPost = (postId: number) => async (dispatch: Dispatch) => {
   }
 };
 
-/** ✅ Fetch all categories */
 export const fetchCategories = () => async (dispatch: Dispatch) => {
   try {
     const { data } = await axios.get<ICategory[]>("/category/");
@@ -148,7 +137,6 @@ export const fetchCategories = () => async (dispatch: Dispatch) => {
   }
 };
 
-/** ✅ Save or update a post */
 export const savePost =
   (post: IPost, postId?: number) => async (dispatch: Dispatch) => {
     dispatch({ type: SAVE_POST_REQUEST });
@@ -164,5 +152,4 @@ export const savePost =
     }
   };
 
-/** ✅ Clear posts from the state */
 export const clearPosts = () => ({ type: CLEAR_POSTS });

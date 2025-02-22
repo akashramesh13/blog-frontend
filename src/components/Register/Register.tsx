@@ -5,6 +5,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Register.scss";
 import axios from "axios";
+import Loading from "../Loading/Loading";
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -63,7 +64,7 @@ const Register: React.FC = () => {
             </span>
           </div>
           <button type="submit" className="register-button" disabled={loading}>
-            {loading ? "Logging in..." : "Register"}
+            {loading ? <Loading /> : "Register"}
           </button>
         </form>
       </div>

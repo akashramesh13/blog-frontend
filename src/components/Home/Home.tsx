@@ -25,13 +25,6 @@ const Home: React.FC = () => {
   const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const trendingPosts = [
-    "AI Breakthrough",
-    "Stock Market Crash",
-    "Best Travel Tips",
-    "Healthy Diet Hacks",
-  ];
-
   useEffect(() => {
     dispatch(clearPosts());
     setPage(0);
@@ -80,11 +73,6 @@ const Home: React.FC = () => {
               key={category.id}
               onClick={() => handleCategoryClick(category.name)}
               className={selectedCategory === category.name ? "active" : ""}
-              style={{
-                cursor: "pointer",
-                fontWeight:
-                  selectedCategory === category.name ? "bold" : "normal",
-              }}
             >
               {category.name}
             </li>

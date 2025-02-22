@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Varela", sans-serif;
   background-color: #fff;
   color: #000;
 }
@@ -12,11 +12,11 @@ body {
   padding: 1rem 2rem;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 100;
 }
 
-/* Navbar Links */
 .navbar a {
   color: #000;
   text-decoration: none;
@@ -47,9 +47,9 @@ body {
 
 .navbar__right #add-post {
   padding: 0.8rem;
-  background-color: #333; /* Dark gray instead of full black */
+  background-color: #333;
   color: white;
-  border: 0.8px solid #333; /* Dark border to match */
+  border: 0.8px solid #333;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
@@ -57,18 +57,16 @@ body {
 }
 
 .navbar__right #add-post:hover {
-  background-color: #555; /* Slightly lighter on hover */
-  border: 1px solid #555; /* Match the hover background */
+  background-color: #555;
+  border: 1px solid #555;
 }
 
-/* Push login/logout to the right */
 .navbar__right {
   display: flex;
   gap: 1rem;
   margin-left: auto;
 }
 
-/* Mobile Navigation */
 .navbar__toggle {
   display: none;
   font-size: 1.8rem;
@@ -78,15 +76,19 @@ body {
   border: none;
 }
 
-/* Mobile Styles */
 @media (max-width: 768px) {
   .navbar {
     padding: 1rem;
     position: relative;
   }
 
-  .navbar__links {
-    display: none;
+  .navbar__toggle {
+    display: block;
+  }
+
+  .navbar__links,
+  .navbar__right {
+    display: flex;
     flex-direction: column;
     position: absolute;
     top: 100%;
@@ -98,22 +100,20 @@ body {
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     padding: 1rem 0;
+    transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
   }
 
-  .navbar__links a {
+  .navbar__links a,
+  .navbar__right a {
     padding: 0.75rem 1rem;
     width: 100%;
     text-align: center;
     display: block;
   }
 
-  /* Active menu */
-  .navbar__links.active {
-    display: flex;
-  }
-
-  .navbar__toggle {
-    display: block;
+  .navbar__links.active,
+  .navbar__right.active {
+    transform: translateX(0);
   }
 }

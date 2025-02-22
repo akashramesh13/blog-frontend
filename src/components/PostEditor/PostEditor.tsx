@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
 
-interface BlogEditorProps {
+interface PostEditorProps {
   content: string;
   setContent: (content: string) => void;
   saveBlog: () => void;
@@ -12,27 +12,6 @@ interface BlogEditorProps {
   readOnly: boolean;
   isEditing: boolean;
 }
-
-const handleImageUpload = () => {
-  const input = document.createElement("input");
-  input.setAttribute("type", "file");
-  input.setAttribute("accept", "image/*");
-  input.click();
-
-  input.onchange = async () => {
-    const file = input.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const quill = document.querySelector(".ql-editor");
-        const img = document.createElement("img");
-        img.src = reader.result as string;
-        quill?.appendChild(img);
-      };
-    }
-  };
-};
 
 const modules = {
   toolbar: {
@@ -66,7 +45,7 @@ const formats = [
   "script",
 ];
 
-const PostEditor: React.FC<BlogEditorProps> = ({
+const PostEditor: React.FC<PostEditorProps> = ({
   content,
   setContent,
   saveBlog,
@@ -75,7 +54,6 @@ const PostEditor: React.FC<BlogEditorProps> = ({
   readOnly,
   isEditing,
 }) => {
-  console.log(readOnly)
   return (
     <div className="editor-container">
       {!readOnly ? (
@@ -85,7 +63,8 @@ const PostEditor: React.FC<BlogEditorProps> = ({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           disabled={readOnly}
-          className="editor-title"
+          className="editor-container__editor-title"
+          autoFocus
         />
       ) : (
         <h1>{title}</h1>
@@ -103,7 +82,7 @@ const PostEditor: React.FC<BlogEditorProps> = ({
 
       {!readOnly && (
         <button className="save-button" onClick={saveBlog}>
-          {isEditing ? "Update Blog" : "Publish Blog"}
+          {isEditing ? "Update Post" : "Publish Post"}
         </button>
       )}
     </div>

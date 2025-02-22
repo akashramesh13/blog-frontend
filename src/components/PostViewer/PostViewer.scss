@@ -1,25 +1,19 @@
-
-
-
-
-
-
-
-.blog-view {
+.post-view {
   max-width: 1000px;
+  width: 1000px;
   margin: 2rem auto;
   padding: 2rem;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
   overflow-y: scroll;
   gap: 30px;
-  height: 60vh;
+  max-height: 100vh;
+  height: 100vh;
   align-items: flex-start;
 }
 
-.blog-view__content {
+.post-view__content {
   flex: 1;
   min-width: 600px;
   font-size: 1.2rem;
@@ -28,17 +22,17 @@
   white-space: pre-wrap;
 }
 
-.blog-view__title {
+.post-view__title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.blog-view__body {
+.post-view__body {
   margin-bottom: 2rem;
 }
 
-.blog-view__edit-button {
+.post-view__edit-button {
   padding: 0.8rem;
   background-color: #333;
   color: white;
