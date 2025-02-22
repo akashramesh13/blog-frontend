@@ -26,8 +26,8 @@ const PostEditorPage: React.FC = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState<ICategory>({
-    id: 0,
-    name: "Loading...",
+    id: 1,
+    name: "food",
   });
 
   useEffect(() => {
@@ -82,8 +82,8 @@ const PostEditorPage: React.FC = () => {
           onChange={(e) =>
             setCategory(
               categories.find((cat) => cat.id === Number(e.target.value)) ?? {
-                id: 0,
-                name: "Loading...",
+                id: 1,
+                name: "food",
               }
             )
           }

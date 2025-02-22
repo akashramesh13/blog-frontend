@@ -128,6 +128,20 @@ export const fetchPost = (postId: number) => async (dispatch: Dispatch) => {
   }
 };
 
+export const deletePost = (postId: number) => async (dispatch: Dispatch) => {
+  dispatch({ type: FETCH_POST_REQUEST });
+
+  try {
+    const { data } = await axios.delete(`/posts/${postId}`);
+    dispatch({ type: FETCH_POST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: FETCH_POST_FAILURE,
+      payload: "Error fetching post",
+    });
+  }
+};
+
 export const fetchCategories = () => async (dispatch: Dispatch) => {
   try {
     const { data } = await axios.get<ICategory[]>("/category/");

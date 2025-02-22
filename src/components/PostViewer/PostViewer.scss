@@ -48,6 +48,23 @@
   }
 }
 
+.post-view__delete-button {
+  padding: 0.8rem;
+  margin-left: 10px;
+  background-color: #e31b2c;
+  color: white;
+  border: 1px solid #e31b2c;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, border 0.3s ease;
+
+  &:hover {
+    background-color: #e31b2cb4;
+    border: 1px solid #e31b2c;
+  }
+}
+
 .toc-sidebar {
   width: 250px;
   max-height: 80vh;

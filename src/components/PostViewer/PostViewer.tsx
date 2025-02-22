@@ -3,7 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./PostViewer.scss";
 import { RootState } from "../../redux/reducers";
-import { fetchPost } from "../../redux/reducers/postsReducer";
+import { deletePost, fetchPost } from "../../redux/reducers/postsReducer";
 import Loading from "../Loading/Loading";
 
 const PostViewer: React.FC = () => {
@@ -39,6 +39,11 @@ const PostViewer: React.FC = () => {
     }
   }, [post?.content]);
 
+  const handleDeleteButtonClick = async (id: Number) => {
+    await dispatch(deletePost(Number(id)));
+    history.push("/");
+  };
+
   const handleScrollToHeading = (id: string) => {
     const headingElement = document.getElementById(id);
     if (headingElement) {
@@ -64,12 +69,21 @@ const PostViewer: React.FC = () => {
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
               {post.owner && (
-                <button
-                  className="post-view__edit-button"
-                  onClick={() => history.push(`/post/edit/${id}`)}
-                >
-                  ✏️ Edit
-                </button>
+                <div>
+                  <button
+                    className="post-view__edit-button"
+                    onClick={() => history.push(`/post/edit/${id}`)}
+                  >
+                    ✏️ Edit
+                  </button>
+
+                  <button
+                    className="post-view__delete-button"
+                    onClick={async () => handleDeleteButtonClick(Number(id))}
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               )}
             </>
           ) : (
