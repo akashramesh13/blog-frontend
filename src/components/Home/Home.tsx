@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from "react";
-import "./Home.scss";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "../../helpers/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
+import {
+  fetchPosts,
+  fetchCategories,
+  clearPosts,
+} from "../../redux/reducers/postsReducer";
 import Post from "../Post/Post";
-
-interface IPost {
-  id: number;
-  title: string;
-  content: string;
-  user: {
-    id: number;
-    username: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-  isOwner: boolean;
-}
-
-interface ICategory {
-  id: number;
-  name: string;
-}
+import "./Home.scss";
+import Loading from "../Loading/Loading";
 
 const Home: React.FC = () => {
   const history = useHistory();
-  const [posts, setPosts] = useState<IPost[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const dispatch: any = useDispatch();
+  const { posts, categories, loading, totalPages } = useSelector(
+    (state: RootState) => state.posts
+  );
+
+  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
+    null
+  );
+  const [page, setPage] = React.useState(0);
+  const size = 5;
+  const observer = useRef<IntersectionObserver | null>(null);
+
   const trendingPosts = [
     "AI Breakthrough",
     "Stock Market Crash",
@@ -34,31 +33,42 @@ const Home: React.FC = () => {
   ];
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const { data } = await axios.get<IPost[]>("/posts/");
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
+    dispatch(clearPosts());
+    setPage(0);
+    dispatch(fetchPosts(0, size, selectedCategory, true));
+  }, [selectedCategory, dispatch]);
 
-    const fetchCategories = async () => {
-      try {
-        const { data } = await axios.get<ICategory[]>("/category/");
-        setCategories(data);
-      } catch (error) {
-        console.log("Error fetching categories: ", error);
-      }
-    };
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
-    fetchPosts();
-    fetchCategories();
-  }, []);
-
-  const handleOnPostClick = (post: IPost) => {
+  const handleOnPostClick = (post: any) => {
     history.push(`/post/view/${post.id}`, post);
   };
+
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategory(categoryName);
+  };
+
+  const lastPostRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && page + 1 < totalPages) {
+            setPage((prev) => prev + 1);
+            dispatch(fetchPosts(page + 1, size, selectedCategory));
+          }
+        },
+        { threshold: 1 }
+      );
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, page, totalPages, selectedCategory, dispatch]
+  );
 
   return (
     <div className="home-container">
@@ -66,8 +76,22 @@ const Home: React.FC = () => {
         <h2>Categories</h2>
         <ul>
           {categories.map((category) => (
-            <li key={category.id}>{category.name}</li>
+            <li
+              key={category.id}
+              onClick={() => handleCategoryClick(category.name)}
+              className={selectedCategory === category.name ? "active" : ""}
+              style={{
+                cursor: "pointer",
+                fontWeight:
+                  selectedCategory === category.name ? "bold" : "normal",
+              }}
+            >
+              {category.name}
+            </li>
           ))}
+          {selectedCategory !== null && (
+            <li onClick={() => setSelectedCategory(null)}>Clear</li>
+          )}
         </ul>
       </div>
 
@@ -77,23 +101,30 @@ const Home: React.FC = () => {
         </div>
 
         <div className="home__posts">
-          {posts.map((post) => (
-            <Post
-              key={post.id}
-              post={post}
-              handleOnPostClick={handleOnPostClick}
-            />
-          ))}
+          {posts.length === 0 && !loading ? (
+            <p className="no-posts">No posts found. (404)</p>
+          ) : (
+            posts.map((post, index) => {
+              if (index === posts.length - 1) {
+                return (
+                  <div ref={lastPostRef} key={post.id}>
+                    <Post post={post} handleOnPostClick={handleOnPostClick} />
+                  </div>
+                );
+              } else {
+                return (
+                  <Post
+                    key={post.id}
+                    post={post}
+                    handleOnPostClick={handleOnPostClick}
+                  />
+                );
+              }
+            })
+          )}
         </div>
-      </div>
 
-      <div className="sidebar">
-        <h2>Trending Posts</h2>
-        <ul>
-          {trendingPosts.map((post, index) => (
-            <li key={index}>{post}</li>
-          ))}
-        </ul>
+        {loading && <Loading />}
       </div>
     </div>
   );

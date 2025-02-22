@@ -75,6 +75,7 @@ const PostEditor: React.FC<BlogEditorProps> = ({
   readOnly,
   isEditing,
 }) => {
+  console.log(readOnly)
   return (
     <div className="editor-container">
       {!readOnly ? (

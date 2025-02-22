@@ -18,7 +18,7 @@ interface IPost {
   };
   createdAt: string;
   updatedAt: string;
-  isOwner: boolean;
+  owner: boolean;
 }
 
 interface PostProps {
