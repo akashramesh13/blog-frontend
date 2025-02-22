@@ -85,7 +85,9 @@ const Home: React.FC = () => {
 
       <div className="home">
         <div className="home__header">
-          <h1 className="home__title">Welcome to Pixel Pursuit</h1>
+          <h1 className="home__title">
+            Welcome to <span id="home__blog-title">பிக்ஸல் பர்ஸ்யூட்</span>  🙏
+          </h1>
         </div>
 
         <div className="home__posts">
