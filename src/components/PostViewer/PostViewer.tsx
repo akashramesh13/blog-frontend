@@ -168,6 +168,7 @@ const PostViewer: React.FC = () => {
                   className="post-cover-image"
                 />
               )}
+              <p className="post-view__title">{post.title}</p>
               <div className="post-meta">
                 <div className="meta-left">
                   <p>
@@ -192,7 +193,6 @@ const PostViewer: React.FC = () => {
                 )}
               </div>
 
-              <h1 className="post-view__title">{post.title}</h1>
               <div
                 className="post-view__body"
                 dangerouslySetInnerHTML={{ __html: updatedPostContent || "" }}
