@@ -16,10 +16,8 @@ $editor-bg: white;
   display: flex;
   flex-direction: column;
 
-  &__editor-title{
-
+  &__editor-title {
     margin-bottom: 13px;
-
   }
 }
 
@@ -68,4 +66,19 @@ $editor-bg: white;
 .ql-tooltip {
   overflow: hidden;
   margin-left: 100px;
+}
+
+.post-cover-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.cover-image-preview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin-top: 10px;
+  border-radius: 8px;
 }

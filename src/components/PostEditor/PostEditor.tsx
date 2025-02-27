@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
@@ -9,41 +9,11 @@ interface PostEditorProps {
   saveBlog: () => void;
   title: string;
   setTitle: (title: string) => void;
+  coverImage: string | null;
+  setCoverImage: (image: string | null) => void;
   readOnly: boolean;
   isEditing: boolean;
 }
-
-const modules = {
-  toolbar: {
-    container: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["blockquote", "code-block"],
-      [{ indent: "-1" }, { indent: "+1" }],
-      [{ align: [] }],
-      ["link"],
-      ["clean"],
-    ],
-  },
-};
-
-const formats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "bullet",
-  "indent",
-  "align",
-  "link",
-  "image",
-  "code-block",
-  "script",
-];
 
 const PostEditor: React.FC<PostEditorProps> = ({
   content,
@@ -51,9 +21,24 @@ const PostEditor: React.FC<PostEditorProps> = ({
   saveBlog,
   title,
   setTitle,
+  coverImage,
+  setCoverImage,
   readOnly,
   isEditing,
 }) => {
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setCoverImage(reader.result.split(",")[1]);
+        }
+      };
+    }
+  };
+
   return (
     <div className="editor-container">
       {!readOnly ? (
@@ -70,12 +55,50 @@ const PostEditor: React.FC<PostEditorProps> = ({
         <h1>{title}</h1>
       )}
 
+      {!readOnly && (
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+      )}
+
+      {coverImage && (
+        <img
+          src={`data:image/png;base64,${coverImage}`}
+          alt="Cover"
+          className="cover-preview"
+        />
+      )}
+
       <ReactQuill
         key={readOnly ? "readOnly" : "editable"}
         value={content}
         onChange={readOnly ? () => {} : setContent}
-        modules={modules}
-        formats={formats}
+        modules={{
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["blockquote", "code-block"],
+            [{ indent: "-1" }, { indent: "+1" }],
+            [{ align: [] }],
+            ["link"],
+            ["clean"],
+          ],
+        }}
+        formats={[
+          "header",
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "blockquote",
+          "list",
+          "bullet",
+          "indent",
+          "align",
+          "link",
+          "image",
+          "code-block",
+          "script",
+        ]}
         readOnly={readOnly}
         placeholder="Write something amazing..."
       />

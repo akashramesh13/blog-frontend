@@ -18,6 +18,7 @@ export interface IPost {
   id: number;
   title: string;
   content: string;
+  coverImage: string | null;
   category: ICategory;
   user: {
     id: number;
