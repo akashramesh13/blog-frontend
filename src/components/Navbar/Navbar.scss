@@ -65,6 +65,12 @@ body {
   display: flex;
   gap: 1rem;
   margin-left: auto;
+
+  .profile-icon {
+    color: #555;
+    font-size: 30px;
+    cursor: pointer;
+  }
 }
 
 .navbar__toggle {
@@ -115,5 +121,54 @@ body {
   .navbar__links.active,
   .navbar__right.active {
     transform: translateX(0);
+  }
+}
+
+.profile-menu {
+  position: relative;
+  display: inline-block;
+
+  .profile-icon {
+    color: #555;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  .profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    padding: 10px 0;
+
+    a,
+    button {
+      text-align: left;
+      padding: 10px 15px;
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      color: #000;
+    }
+
+    a:hover,
+    button:hover {
+      background: #f0f0f0;
+    }
+
+    button {
+      text-align: left;
+      color: red;
+    }
   }
 }

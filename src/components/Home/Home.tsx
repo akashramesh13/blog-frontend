@@ -1,26 +1,24 @@
-import React, { useEffect, useRef, useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/reducers";
-import {
-  fetchPosts,
-  fetchCategories,
-  clearPosts,
-} from "../../redux/reducers/postsReducer";
-import Post from "../Post/Post";
-import "./Home.scss";
-import Loading from "../Loading/Loading";
+import React, { useEffect, useRef, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/reducers';
+import { fetchPosts, fetchCategories, clearPosts } from '../../redux/actions/postsActions';
+import Post from '../Post/Post';
+import './Home.scss';
+import Loading from '../Loading/Loading';
+
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { IPost } from '../../types/postsTypes';
+
+type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const Home: React.FC = () => {
   const history = useHistory();
-  const dispatch: any = useDispatch();
-  const { posts, categories, loading, totalPages } = useSelector(
-    (state: RootState) => state.posts
-  );
+  const dispatch: AppDispatch = useDispatch<AppDispatch>();
+  const { posts, categories, loading, totalPages } = useSelector((state: RootState) => state.posts);
 
-  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
-    null
-  );
+  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
   const [page, setPage] = React.useState(0);
   const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
@@ -35,7 +33,7 @@ const Home: React.FC = () => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  const handleOnPostClick = (post: any) => {
+  const handleOnPostClick = (post: IPost) => {
     history.push(`/post/view/${post.id}`, post);
   };
 
@@ -55,12 +53,12 @@ const Home: React.FC = () => {
             dispatch(fetchPosts(page + 1, size, selectedCategory));
           }
         },
-        { threshold: 1 }
+        { threshold: 1 },
       );
 
       if (node) observer.current.observe(node);
     },
-    [loading, page, totalPages, selectedCategory, dispatch]
+    [loading, page, totalPages, selectedCategory, dispatch],
   );
 
   return (
@@ -72,21 +70,19 @@ const Home: React.FC = () => {
             <li
               key={category.id}
               onClick={() => handleCategoryClick(category.name)}
-              className={selectedCategory === category.name ? "active" : ""}
+              className={selectedCategory === category.name ? 'active' : ''}
             >
               {category.name}
             </li>
           ))}
-          {selectedCategory !== null && (
-            <li onClick={() => setSelectedCategory(null)}>Clear</li>
-          )}
+          {selectedCategory !== null && <li onClick={() => setSelectedCategory(null)}>Clear</li>}
         </ul>
       </div>
 
       <div className="home">
         <div className="home__header">
           <h1 className="home__title">
-            Welcome to <span id="home__blog-title">பிக்ஸல் பர்ஸ்யூட்</span>  🙏
+            Welcome to <span id="home__blog-title">பிக்ஸல் பர்ஸ்யூட்</span> 🙏
           </h1>
         </div>
 
@@ -102,13 +98,7 @@ const Home: React.FC = () => {
                   </div>
                 );
               } else {
-                return (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    handleOnPostClick={handleOnPostClick}
-                  />
-                );
+                return <Post key={post.id} post={post} handleOnPostClick={handleOnPostClick} />;
               }
             })
           )}

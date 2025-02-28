@@ -1,14 +1,20 @@
-import { Dispatch } from "redux";
-import axios from "../../helpers/axios";
-import { PROFILE_SUCCESS } from "../constants/profileConstants";
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../reducers';
+import { PROFILE_REQUEST, PROFILE_SUCCESS, PROFILE_FAILURE } from '../constants/profileConstants';
+import { ProfileActionTypes } from '../../types/profileTypes';
 
-export const profile = () => async (dispatch: Dispatch) => {
-  try {
-    const { data } = await axios.get("/profile");
+export const getProfile =
+  (id?: string): ThunkAction<void, RootState, unknown, ProfileActionTypes> =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PROFILE_REQUEST });
 
-    dispatch({ type: PROFILE_SUCCESS, payload: data });
-    sessionStorage.setItem("userInfo", JSON.stringify(data));
-  } catch (error) {
-    console.error("Profile load failed!", error);
-  }
-};
+      const response = await fetch(`/api/profile/${id || 'me'}`);
+      const data = await response.json();
+
+      dispatch({ type: PROFILE_SUCCESS, payload: data });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: PROFILE_FAILURE, payload: 'Failed to fetch profile' });
+    }
+  };

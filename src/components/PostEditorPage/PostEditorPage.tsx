@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/reducers";
-import {
-  fetchPost,
-  fetchCategories,
-  savePost,
-  IPost,
-  ICategory,
-} from "../../redux/reducers/postsReducer";
-import PostEditor from "../PostEditor/PostEditor";
-import "./PostEditorPage.scss";
-import Loading from "../Loading/Loading";
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/reducers';
+import { fetchPost, fetchCategories, savePost } from '../../redux/actions/postsActions';
+import PostEditor from '../PostEditor/PostEditor';
+import './PostEditorPage.scss';
+import Loading from '../Loading/Loading';
+import { ICategory, IPost } from '../../types/postsTypes';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const PostEditorPage: React.FC = () => {
   const { id: idParam } = useParams<{ id: string }>();
   const id = idParam ? Number(idParam) : null;
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
 
-  const { post, categories, loading } = useSelector(
-    (state: RootState) => state.posts
-  );
+  const { post, categories, loading } = useSelector((state: RootState) => state.posts);
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [category, setCategory] = useState<ICategory>({
     id: 1,
-    name: "food",
+    name: 'food',
   });
 
   const cropAndResizeImage = (file: File): Promise<string> => {
@@ -39,11 +35,11 @@ const PostEditorPage: React.FC = () => {
         const img = new Image();
         img.src = event.target?.result as string;
         img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
 
           if (!ctx) {
-            reject("Canvas context not supported");
+            reject('Canvas context not supported');
             return;
           }
 
@@ -59,10 +55,10 @@ const PostEditorPage: React.FC = () => {
             newWidth = BANNER_HEIGHT * aspectRatio;
           }
 
-          const tempCanvas = document.createElement("canvas");
+          const tempCanvas = document.createElement('canvas');
           tempCanvas.width = newWidth;
           tempCanvas.height = newHeight;
-          const tempCtx = tempCanvas.getContext("2d");
+          const tempCtx = tempCanvas.getContext('2d');
           if (tempCtx) {
             tempCtx.drawImage(img, 0, 0, newWidth, newHeight);
           }
@@ -78,14 +74,14 @@ const PostEditorPage: React.FC = () => {
             0,
             0,
             BANNER_WIDTH,
-            BANNER_HEIGHT
+            BANNER_HEIGHT,
           );
 
-          resolve(canvas.toDataURL("image/jpeg"));
+          resolve(canvas.toDataURL('image/jpeg'));
         };
-        img.onerror = () => reject("Image load error");
+        img.onerror = () => reject('Image load error');
       };
-      reader.onerror = () => reject("File read error");
+      reader.onerror = () => reject('File read error');
     });
   };
 
@@ -96,9 +92,9 @@ const PostEditorPage: React.FC = () => {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: "image/jpeg" });
+    const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-    return new File([blob], filename, { type: "image/jpeg" });
+    return new File([blob], filename, { type: 'image/jpeg' });
   };
 
   useEffect(() => {
@@ -119,7 +115,7 @@ const PostEditorPage: React.FC = () => {
     let imageBase64: string | null = null;
 
     if (coverImage) {
-      const file = base64ToFile(coverImage, "cover.jpg");
+      const file = base64ToFile(coverImage, 'cover.jpg');
       imageBase64 = await cropAndResizeImage(file);
     }
 
@@ -129,14 +125,14 @@ const PostEditorPage: React.FC = () => {
       content,
       category,
       coverImage: imageBase64,
-      user: { id: 0, username: "" },
+      user: { id: 0, username: '' },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       owner: true,
     };
 
     await dispatch(savePost(newPost, id ?? undefined));
-    history.push(id ? `/post/view/${id}` : "/");
+    history.push(id ? `/post/view/${id}` : '/');
   };
 
   if (loading) return <Loading />;
@@ -163,8 +159,8 @@ const PostEditorPage: React.FC = () => {
             setCategory(
               categories.find((cat) => cat.id === Number(e.target.value)) ?? {
                 id: 1,
-                name: "food",
-              }
+                name: 'food',
+              },
             )
           }
         >

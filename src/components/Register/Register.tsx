@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/reducers";
-import { Redirect, useHistory } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "./Register.scss";
-import axios from "axios";
-import Loading from "../Loading/Loading";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/reducers';
+import { Redirect, useHistory } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import './Register.scss';
+import axios from 'axios';
+import Loading from '../Loading/Loading';
 
 const Register: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const { userInfo, loading } = useSelector((state: RootState) => state.auth);
 
@@ -20,12 +20,12 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/register", { username, password });
-      console.log("Registration successful", response.data);
-      history.push("/login");
+      const response = await axios.post('/register', { username, password });
+      console.log('Registration successful', response.data);
+      history.push('/login');
     } catch (err) {
-      console.error("Registration failed", err);
-      setError("Registration failed. Please try again.");
+      console.error('Registration failed', err);
+      setError('Registration failed. Please try again.');
     }
   };
 
@@ -50,21 +50,18 @@ const Register: React.FC = () => {
           </div>
           <div className="input-group password-group">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <span
-              className="password-toggle"
-              onClick={() => setShowPassword(!showPassword)}
-            >
+            <span className="password-toggle" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
           <button type="submit" className="register-button" disabled={loading}>
-            {loading ? <Loading /> : "Register"}
+            {loading ? <Loading /> : 'Register'}
           </button>
         </form>
       </div>

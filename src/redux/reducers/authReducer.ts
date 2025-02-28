@@ -1,35 +1,22 @@
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT,
-} from "../constants/authConstants";
+import { AuthActionTypes, AuthState } from '../../types/authTypes';
+import { LOGIN_SUCCESS, LOGOUT } from '../constants/authConstants';
 
-interface AuthState {
-  loading: boolean;
-  userInfo?: {
-    username: string;
-    id: number;
-  };
-  error?: string;
-}
-
-const initialState: AuthState | any = {
-  userInfo: sessionStorage.getItem("userInfo")
-    ? JSON.parse(sessionStorage.getItem("userInfo")!)
-    : null,
+const initialState: AuthState = {
+  loading: false,
+  userInfo: JSON.parse(sessionStorage.getItem('userInfo') || 'null'),
+  error: undefined,
 };
 
-export const authReducer = (state = initialState, action: any): AuthState => {
+export const authReducer = (state = initialState, action: AuthActionTypes): AuthState => {
   switch (action.type) {
-    case LOGIN_REQUEST:
-      return { ...state, loading: true };
     case LOGIN_SUCCESS:
-      return { loading: false, userInfo: action.payload, error: undefined };
-    case LOGIN_FAILURE:
-      return { loading: false, error: action.payload, userInfo: undefined };
+      sessionStorage.setItem('userInfo', JSON.stringify(action.payload));
+      return { ...state, userInfo: action.payload };
+
     case LOGOUT:
-      return { ...initialState };
+      sessionStorage.removeItem('userInfo');
+      return { ...state, userInfo: undefined };
+
     default:
       return state;
   }
