@@ -1,7 +1,12 @@
-import { ThunkAction } from 'redux-thunk';
-import { RootState } from '../reducers';
-import { PROFILE_REQUEST, PROFILE_SUCCESS, PROFILE_FAILURE } from '../constants/profileConstants';
-import { ProfileActionTypes } from '../../types/profileTypes';
+import { ThunkAction } from "redux-thunk";
+import { RootState } from "../reducers";
+import {
+  PROFILE_REQUEST,
+  PROFILE_SUCCESS,
+  PROFILE_FAILURE,
+} from "../constants/profileConstants";
+import { ProfileActionTypes } from "../../types/profileTypes";
+import axios from "../../helpers/axios";
 
 export const getProfile =
   (id?: string): ThunkAction<void, RootState, unknown, ProfileActionTypes> =>
@@ -9,12 +14,11 @@ export const getProfile =
     try {
       dispatch({ type: PROFILE_REQUEST });
 
-      const response = await fetch(`/api/profile/${id || 'me'}`);
-      const data = await response.json();
+      const { data } = await axios.get(`/profile/${id || "me"}`);
 
       dispatch({ type: PROFILE_SUCCESS, payload: data });
     } catch (error) {
       console.error(error);
-      dispatch({ type: PROFILE_FAILURE, payload: 'Failed to fetch profile' });
+      dispatch({ type: PROFILE_FAILURE, payload: "Failed to fetch profile" });
     }
   };
