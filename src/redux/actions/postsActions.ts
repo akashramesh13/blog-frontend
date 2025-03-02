@@ -1,5 +1,5 @@
-import { Dispatch } from 'redux';
-import axios from '../../helpers/axios';
+import { Dispatch } from "redux";
+import axios from "../../helpers/axios";
 import {
   CLEAR_POSTS,
   FETCH_CATEGORIES_SUCCESS,
@@ -12,8 +12,8 @@ import {
   SAVE_POST_FAILURE,
   SAVE_POST_REQUEST,
   SAVE_POST_SUCCESS,
-} from '../constants/postConstants';
-import { ICategory, IPost } from '../../types/postsTypes';
+} from "../constants/postConstants";
+import { ICategory, IPost } from "../../types/postsTypes";
 
 export const fetchPosts =
   (page = 0, size = 5, category: string | null = null, reset = false) =>
@@ -35,12 +35,26 @@ export const fetchPosts =
       console.log(error);
       dispatch({
         type: FETCH_POSTS_FAILURE,
-        payload: 'Error fetching posts',
+        payload: "Error fetching posts",
       });
     }
   };
 
-export const fetchPost = (postId: number) => async (dispatch: Dispatch) => {
+export const addCategory =
+  (categoryName: string) => async (dispatch: Dispatch) => {
+    try {
+      const { data } = await axios.post("/category/", { name: categoryName });
+
+      dispatch({ type: "ADD_CATEGORY_SUCCESS", payload: data });
+    } catch (error) {
+      dispatch({
+        type: "ADD_CATEGORY_FAILURE",
+        payload: "Failed to add category",
+      });
+    }
+  };
+
+export const fetchPost = (postId: string) => async (dispatch: Dispatch) => {
   dispatch({ type: FETCH_POST_REQUEST });
 
   try {
@@ -51,12 +65,12 @@ export const fetchPost = (postId: number) => async (dispatch: Dispatch) => {
 
     dispatch({
       type: FETCH_POST_FAILURE,
-      payload: 'Error fetching post',
+      payload: "Error fetching post",
     });
   }
 };
 
-export const deletePost = (postId: number) => async (dispatch: Dispatch) => {
+export const deletePost = (postId: string) => async (dispatch: Dispatch) => {
   dispatch({ type: FETCH_POST_REQUEST });
 
   try {
@@ -67,34 +81,35 @@ export const deletePost = (postId: number) => async (dispatch: Dispatch) => {
 
     dispatch({
       type: FETCH_POST_FAILURE,
-      payload: 'Error fetching post',
+      payload: "Error fetching post",
     });
   }
 };
 
 export const fetchCategories = () => async (dispatch: Dispatch) => {
   try {
-    const { data } = await axios.get<ICategory[]>('/category/');
+    const { data } = await axios.get<ICategory[]>("/category/");
     dispatch({ type: FETCH_CATEGORIES_SUCCESS, payload: data });
   } catch (error) {
-    console.error('Error fetching categories', error);
+    console.error("Error fetching categories", error);
   }
 };
 
-export const savePost = (post: IPost, postId?: number) => async (dispatch: Dispatch) => {
-  dispatch({ type: SAVE_POST_REQUEST });
+export const savePost =
+  (post: IPost, postId?: string) => async (dispatch: Dispatch) => {
+    dispatch({ type: SAVE_POST_REQUEST });
 
-  try {
-    const { data } = postId
-      ? await axios.put(`/posts/${postId}`, post)
-      : await axios.post('/posts', post);
+    try {
+      const { data } = postId
+        ? await axios.put(`/posts/${postId}`, post)
+        : await axios.post("/posts", post);
 
-    dispatch({ type: SAVE_POST_SUCCESS, payload: data });
-  } catch (error) {
-    console.log(error);
+      dispatch({ type: SAVE_POST_SUCCESS, payload: data });
+    } catch (error) {
+      console.log(error);
 
-    dispatch({ type: SAVE_POST_FAILURE, payload: 'Error saving post' });
-  }
-};
+      dispatch({ type: SAVE_POST_FAILURE, payload: "Error saving post" });
+    }
+  };
 
 export const clearPosts = () => ({ type: CLEAR_POSTS });

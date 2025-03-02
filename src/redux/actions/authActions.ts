@@ -9,15 +9,17 @@ import {
   REGISTER_SUCCESS,
 } from "../constants/authConstants";
 import { Dispatch } from "redux";
-
 import { History } from "history";
 
 export const login =
   (username: string, password: string) => async (dispatch: Dispatch) => {
     try {
       dispatch({ type: LOGIN_REQUEST });
+
       const { data } = await axios.post("/login", { username, password });
+
       dispatch({ type: LOGIN_SUCCESS, payload: data });
+
       sessionStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
       console.error("Login failed", error);
@@ -40,7 +42,6 @@ export const logout = () => async (dispatch: Dispatch) => {
     window.location.href = "/";
   } catch (error) {
     console.error("Logout failed:", error);
-
     dispatch({ type: LOGOUT });
     sessionStorage.removeItem("userInfo");
     localStorage.removeItem("userInfo");
@@ -52,9 +53,12 @@ export const register =
   (username: string, password: string, history: History<unknown>) =>
   async (dispatch: Dispatch) => {
     try {
-      dispatch({ type: REGISTER_REQUEST, loading: true });
+      dispatch({ type: REGISTER_REQUEST });
+
       const { data } = await axios.post("/register", { username, password });
-      dispatch({ type: REGISTER_SUCCESS, payload: data, loading: false });
+
+      dispatch({ type: REGISTER_SUCCESS, payload: data });
+
       history.push("/");
     } catch (error) {
       console.error("Registration failed", error);

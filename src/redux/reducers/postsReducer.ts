@@ -1,4 +1,4 @@
-import { PostsActionTypes, PostState } from '../../types/postsTypes';
+import { PostsActionTypes, PostState } from "../../types/postsTypes";
 import {
   CLEAR_POSTS,
   FETCH_CATEGORIES_SUCCESS,
@@ -11,7 +11,7 @@ import {
   SAVE_POST_FAILURE,
   SAVE_POST_REQUEST,
   SAVE_POST_SUCCESS,
-} from '../constants/postConstants';
+} from "../constants/postConstants";
 
 const initialState: PostState = {
   posts: [],
@@ -22,7 +22,10 @@ const initialState: PostState = {
   totalPages: 1,
 };
 
-export const postsReducer = (state = initialState, action: PostsActionTypes): PostState => {
+export const postsReducer = (
+  state = initialState,
+  action: PostsActionTypes
+): PostState => {
   switch (action.type) {
     case FETCH_POSTS_REQUEST:
     case FETCH_POST_REQUEST:

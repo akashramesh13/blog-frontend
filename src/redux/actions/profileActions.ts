@@ -14,7 +14,7 @@ export const getProfile =
     try {
       dispatch({ type: PROFILE_REQUEST });
 
-      const { data } = await axios.get(`/profile/${id || "me"}`);
+      const { data } = await axios.get(`/profile/${id ?? ""}`);
 
       dispatch({ type: PROFILE_SUCCESS, payload: data });
     } catch (error) {

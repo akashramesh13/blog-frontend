@@ -13,13 +13,13 @@ import {
 } from '../redux/constants/postConstants';
 
 export interface IPost {
-  id: number;
+  id: string | null | undefined;
   title: string;
   content: string;
   coverImage: string | null;
   category: ICategory;
   user: {
-    id: number;
+    id: string;
     username: string;
   };
   createdAt: string;
