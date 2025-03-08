@@ -98,10 +98,14 @@ const PostViewer: React.FC = () => {
     setTimeout(() => {
       const headingElement = document.getElementById(id);
       if (headingElement) {
-        console.log(`✅ Found ${id}, scrolling...`);
-        headingElement.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        console.warn(`❌ Heading with id ${id} NOT found!`);
+        const yOffset = -75;
+        const yPosition =
+          headingElement.getBoundingClientRect().top + window.scrollY + yOffset;
+
+        window.scrollTo({
+          top: yPosition,
+          behavior: "smooth",
+        });
       }
     }, 200);
   };
