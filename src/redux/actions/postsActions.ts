@@ -23,7 +23,7 @@ export const fetchPosts =
     try {
       let url = `/posts/?page=${page}&size=${size}`;
       if (category) {
-        url += `&category=${category}`;
+        url += `&category=${encodeURIComponent(category)}`;
       }
 
       const { data } = await axios.get(url);

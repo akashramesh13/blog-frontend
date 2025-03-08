@@ -92,14 +92,33 @@ body {
     text-transform: capitalize;
 
     &:hover {
-      color: rgb(91, 91, 82);
+      color: rgb(91, 91, 93);
     }
   }
 }
 
 .active {
-  font-weight: bold;
-  color: #555;
+  font-weight: 900;
+  color: #000;
+}
+
+.selected-category {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+
+.clear-category {
+  font-size: 14px;
+  margin-left: 8px;
+  cursor: pointer;
+  color: #777;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #444;
+  }
 }
 
 @media (max-width: 1024px) {
