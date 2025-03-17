@@ -1,6 +1,7 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://blog-backend.akashramesh.in";
+axios.defaults.baseURL =
+  process.env.REACT_APP_BACKEND_URL || "https://blog-backend.akashramesh.in";
 
 axios.interceptors.response.use(
   (response) => response,

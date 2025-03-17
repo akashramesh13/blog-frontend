@@ -14,6 +14,7 @@ import Loading from "../Loading/Loading";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { IPost } from "../../types/postsTypes";
+import Typed from "typed.js";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
@@ -30,6 +31,22 @@ const Home: React.FC = () => {
   const [page, setPage] = React.useState(0);
   const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
+
+  const typedElement = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (typedElement.current) {
+      const typed = new Typed(typedElement.current, {
+        strings: ["Pixel Pursuit"],
+        typeSpeed: 75,
+        backSpeed: 30,
+        startDelay: 1500,
+        showCursor: false,
+      });
+
+      return () => typed.destroy();
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(clearPosts());
@@ -106,7 +123,11 @@ const Home: React.FC = () => {
       <div className="home">
         <div className="home__header">
           <h1 className="home__title">
-            Welcome to <span id="home__blog-title">பிக்ஸல் பர்ஸ்யூட்</span> 🙏
+            Welcome to{" "}
+            <span id="home__blog-title" ref={typedElement}>
+              பிக்ஸல் பர்ஸ்யூட்
+            </span>{" "}
+            🙏
           </h1>
         </div>
 

@@ -10,7 +10,10 @@ body {
 #root {
   display: flex;
   flex-direction: column;
-  
+}
+
+.heart {
+  color: #ff4d4d;
 }
 
 .main-content {
