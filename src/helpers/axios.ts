@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "https://blog-backend-spring.onrender.com";
+axios.defaults.baseURL = "https://blog-backend.akashramesh.in";
 
 axios.interceptors.response.use(
   (response) => response,
