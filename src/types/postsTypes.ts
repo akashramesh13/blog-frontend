@@ -97,6 +97,10 @@ export interface ClearPostsAction {
   type: typeof CLEAR_POSTS;
 }
 
+export interface ClearCurrentPostAction {
+  type: "CLEAR_CURRENT_POST";
+}
+
 export type PostsActionTypes =
   | FetchPostsRequestAction
   | FetchPostsSuccessAction
@@ -108,4 +112,5 @@ export type PostsActionTypes =
   | SavePostSuccessAction
   | SavePostFailureAction
   | FetchCategoriesSuccessAction
-  | ClearPostsAction;
+  | ClearPostsAction
+  | ClearCurrentPostAction;

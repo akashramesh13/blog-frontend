@@ -123,11 +123,10 @@ const Home: React.FC = () => {
       <div className="home">
         <div className="home__header">
           <h1 className="home__title">
-            Welcome to{" "}
+            <span className="welcome-text">Welcome to</span>{" "}
             <span id="home__blog-title" ref={typedElement}>
               பிக்ஸல் பர்ஸ்யூட்
-            </span>{" "}
-            🙏
+            </span>
           </h1>
         </div>
 

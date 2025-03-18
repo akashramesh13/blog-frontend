@@ -1,6 +1,7 @@
 import { PostsActionTypes, PostState } from "../../types/postsTypes";
 import {
   CLEAR_POSTS,
+  CLEAR_CURRENT_POST,
   FETCH_CATEGORIES_SUCCESS,
   FETCH_POST_FAILURE,
   FETCH_POST_REQUEST,
@@ -58,6 +59,9 @@ export const postsReducer = (
 
     case CLEAR_POSTS:
       return { ...state, posts: [], post: null, totalPages: 1 };
+
+    case CLEAR_CURRENT_POST:
+      return { ...state, post: null };
 
     default:
       return state;

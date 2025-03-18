@@ -6,13 +6,15 @@ import { getProfile } from "../../redux/actions/profileActions";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import Loading from "../Loading/Loading";
+import "./Profile.scss";
+
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const Profile: React.FC = () => {
   const { profileId } = useParams<{ profileId?: string }>();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, id, username } = useSelector(
+  const { loading, username } = useSelector(
     (state: RootState) => state.profile
   );
   const { userInfo } = useSelector((state: RootState) => state.auth);
@@ -29,14 +31,13 @@ const Profile: React.FC = () => {
     <div className="profile-container">
       <h1>{isOwnProfile ? "My Profile" : `${username}'s Profile`}</h1>
 
-      <p>
-        <strong>Username:</strong> {username}
-      </p>
-      <p>
-        <strong>User ID:</strong> {id}
-      </p>
+      <div className="profile-info">
+        <p>
+          <strong>Username:</strong> {username}
+        </p>
+      </div>
 
-      {isOwnProfile && <button>Edit Profile</button>}
+      {/* Edit profile functionality coming soon */}
     </div>
   );
 };

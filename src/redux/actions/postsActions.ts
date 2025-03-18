@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import axios from "../../helpers/axios";
 import {
   CLEAR_POSTS,
+  CLEAR_CURRENT_POST,
   FETCH_CATEGORIES_SUCCESS,
   FETCH_POST_FAILURE,
   FETCH_POST_REQUEST,
@@ -113,3 +114,4 @@ export const savePost =
   };
 
 export const clearPosts = () => ({ type: CLEAR_POSTS });
+export const clearCurrentPost = () => ({ type: CLEAR_CURRENT_POST });

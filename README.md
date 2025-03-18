@@ -1,46 +1,89 @@
-# Getting Started with Create React App
+# Pixel Pursuit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Pixel Pursuit](public/og-image.png)
 
-## Available Scripts
+A modern, minimalist blogging platform built with React, TypeScript, and Redux. Pixel Pursuit offers a clean, intuitive interface for creating and sharing blog posts with rich text editing capabilities.
 
-In the project directory, you can run:
+## 🌟 Features
 
-### `npm start`
+- **Rich Text Editor**: Create beautiful posts with a powerful WYSIWYG editor
+- **Image Support**: Upload and manage images within your posts
+- **Category Management**: Organize posts with customizable categories
+- **Responsive Design**: Seamless experience across all devices
+- **User Authentication**: Secure user accounts and post management
+- **Dynamic Table of Contents**: Automatically generated for each post
+- **Modern UI/UX**: Clean, minimalist design with smooth transitions
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🛠️ Tech Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Frontend**:
 
-### `npm test`
+  - React
+  - TypeScript
+  - Redux (State Management)
+  - SCSS (Styling)
+  - React Router (Navigation)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Key Libraries**:
+  - TinyMCE (Rich Text Editing)
+  - React Icons
+  - Redux Thunk (Async Actions)
 
-### `npm run build`
+## 🎯 Core Functionality
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Post Management**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  - Create, edit, and delete posts
+  - Rich text formatting
+  - Image uploads
+  - Category tagging
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **User Features**:
 
-### `npm run eject`
+  - User authentication
+  - Profile management
+  - Personalized post management
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **UI/UX**:
+  - Responsive navbar with mobile menu
+  - Dynamic table of contents
+  - Category filtering
+  - Infinite scroll for posts
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🖼️ Screenshots
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 📝 Project Structure
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+src/
+├── components/     # React components
+├── redux/         # Redux state management
+│   ├── actions/   # Action creators
+│   ├── reducers/  # State reducers
+│   └── store.ts   # Redux store configuration
+├── types/         # TypeScript type definitions
+├── styles/        # SCSS styles
+└── utils/         # Utility functions
+```
 
-## Learn More
+## 🎨 Design Choices
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Minimalist UI**: Clean, distraction-free interface focusing on content
+- **Typography**: Carefully selected fonts for optimal readability
+- **Responsive Design**: Mobile-first approach ensuring compatibility across devices
+- **Color Scheme**: Subtle, professional palette enhancing readability
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
+
+Your Name
+
+- GitHub: [@akashramesh13](https://github.com/akashramesh13)
+- Portfolio: [akashramesh.in](https://www.akashramesh.in)
+
+---
+
+_Built with ❤️ using React and TypeScript_

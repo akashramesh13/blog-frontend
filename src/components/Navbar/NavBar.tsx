@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Navbar.scss";
 import { Link, useLocation } from "react-router-dom";
 import { logout } from "../../redux/actions/authActions";
+import { clearCurrentPost } from "../../redux/actions/postsActions";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { CgProfile } from "react-icons/cg";
@@ -29,6 +30,11 @@ const NavBar: React.FC = () => {
     setIsProfileDropDownOpen((prev) => !prev);
   };
 
+  const handleAddNewPost = () => {
+    dispatch(clearCurrentPost());
+    closeNavbar();
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -51,16 +57,11 @@ const NavBar: React.FC = () => {
             Pixel Pursuit
           </Link>
         </div>
-        <div className={`navbar__links ${isOpen ? "active" : ""}`}>
-          <Link to="/home" onClick={closeNavbar}>
-            Home
-          </Link>
-        </div>
       </div>
 
       <div className={`navbar__right ${isOpen ? "active" : ""}`}>
         {userInfo && (
-          <Link to="/post/new" onClick={closeNavbar}>
+          <Link to="/post/new" onClick={handleAddNewPost}>
             <span id="add-post">+ Add new post</span>
           </Link>
         )}
@@ -75,7 +76,10 @@ const NavBar: React.FC = () => {
               <div className="profile-dropdown">
                 <Link
                   to="/profile"
-                  onClick={() => setIsProfileDropDownOpen(false)}
+                  onClick={() => {
+                    setIsProfileDropDownOpen(false);
+                    closeNavbar();
+                  }}
                 >
                   My Profile
                 </Link>
@@ -100,7 +104,11 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="navbar__toggle" onClick={toggleNavbar}>
-        ☰
+        <div className={`hamburger ${isOpen ? "active" : ""}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </nav>
   );
