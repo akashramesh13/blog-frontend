@@ -2,8 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f4f4f4;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .login-card {
@@ -11,33 +13,60 @@
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  width: 100%;
+  max-width: 350px;
   text-align: center;
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+  }
 }
 
 h1 {
   margin-bottom: 1rem;
   font-size: 1.8rem;
   color: #333;
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 }
 
 .error {
-  color: red;
+  color: #dc3545;
   margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #f8d7da;
+  border-radius: 4px;
 }
 
 .input-group {
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 2rem;
+  }
 }
 
 input {
   width: 100%;
   padding: 0.8rem;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
 }
 
 .password-group {
@@ -48,8 +77,17 @@ input {
 .password-toggle {
   position: absolute;
   right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
   color: #777;
+  z-index: 1;
+  padding: 5px;
+
+  @media (max-width: 480px) {
+    right: 8px;
+    padding: 4px;
+  }
 }
 
 .password-toggle:hover {
@@ -65,15 +103,23 @@ input {
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease, border 0.3s ease;
-}
+  transition: all 0.3s ease;
+  margin-top: 1rem;
 
-.login-button:hover {
-  background-color: #555;
-  border: 1px solid #555;
-}
+  &:hover:not(:disabled) {
+    background-color: #555;
+    border: 1px solid #555;
+  }
 
-.login-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+  &:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
 }

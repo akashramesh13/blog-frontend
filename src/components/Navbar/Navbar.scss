@@ -3,6 +3,13 @@ body {
   font-family: "Varela", sans-serif;
   background-color: #fff;
   color: #000;
+  
+  &.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .navbar {
@@ -16,6 +23,12 @@ body {
   top: 0;
   z-index: 100;
   height: 64px;
+  width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 .navbar a {
@@ -233,6 +246,15 @@ body {
     z-index: 200;
     padding: 10px 0;
 
+    @media (max-width: 768px) {
+      position: static;
+      width: 100%;
+      box-shadow: none;
+      background: transparent;
+      padding: 0;
+      margin-top: 10px;
+    }
+
     a,
     button {
       text-align: left;
@@ -245,11 +267,21 @@ body {
       transition: background 0.3s ease;
       text-decoration: none;
       color: #000;
+
+      @media (max-width: 768px) {
+        font-size: 1.2rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+      }
     }
 
     a:hover,
     button:hover {
       background: #f0f0f0;
+
+      @media (max-width: 768px) {
+        background: transparent;
+      }
     }
 
     button {

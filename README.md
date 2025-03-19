@@ -25,7 +25,7 @@ A modern, minimalist blogging platform built with React, TypeScript, and Redux. 
   - React Router (Navigation)
 
 - **Key Libraries**:
-  - TinyMCE (Rich Text Editing)
+  - React Quill (Rich Text Editing)
   - React Icons
   - Redux Thunk (Async Actions)
 

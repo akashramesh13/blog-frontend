@@ -8,6 +8,7 @@ import { RootState } from "../../redux/reducers";
 import { CgProfile } from "react-icons/cg";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
+import { useAuthCheck } from '../../hooks/useAuthCheck';
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const NavBar: React.FC = () => {
@@ -18,8 +19,17 @@ const NavBar: React.FC = () => {
   const location = useLocation();
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const toggleNavbar = () => setIsOpen(!isOpen);
-  const closeNavbar = () => setIsOpen(false);
+  useAuthCheck();
+
+  const toggleNavbar = () => {
+    setIsOpen(!isOpen);
+    document.body.classList.toggle('menu-open');
+  };
+  
+  const closeNavbar = () => {
+    setIsOpen(false);
+    document.body.classList.remove('menu-open');
+  };
 
   const handleLogout = async () => {
     await dispatch(logout());

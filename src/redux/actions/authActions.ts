@@ -20,7 +20,8 @@ export const login =
 
       dispatch({ type: LOGIN_SUCCESS, payload: data });
 
-      sessionStorage.setItem("userInfo", JSON.stringify(data));
+      // Store in localStorage instead of sessionStorage for cross-tab persistence
+      localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
       console.error("Login failed", error);
       dispatch({
@@ -33,18 +34,20 @@ export const login =
 export const logout = () => async (dispatch: Dispatch) => {
   try {
     await axios.post("/logout");
-
+    
+    // Clear storage
+    localStorage.removeItem("userInfo");
+    
+    // Dispatch logout action
     dispatch({ type: LOGOUT });
 
-    sessionStorage.removeItem("userInfo");
-    localStorage.removeItem("userInfo");
-
+    // Redirect to home page
     window.location.href = "/";
   } catch (error) {
     console.error("Logout failed:", error);
-    dispatch({ type: LOGOUT });
-    sessionStorage.removeItem("userInfo");
+    // Even if the API call fails, we should still logout locally
     localStorage.removeItem("userInfo");
+    dispatch({ type: LOGOUT });
     window.location.href = "/";
   }
 };
@@ -55,11 +58,12 @@ export const register =
     try {
       dispatch({ type: REGISTER_REQUEST });
 
-      const { data } = await axios.post("/register", { username, password });
+      await axios.post("/register", { username, password });
 
-      dispatch({ type: REGISTER_SUCCESS, payload: data });
+      dispatch({ type: REGISTER_SUCCESS });
 
-      history.push("/");
+      // Redirect to login page after successful registration
+      history.push("/login");
     } catch (error) {
       console.error("Registration failed", error);
       dispatch({

@@ -12,7 +12,7 @@ import { AuthActionTypes, AuthState } from "../../types/authTypes";
 
 const initialState: AuthState = {
   loading: false,
-  userInfo: JSON.parse(sessionStorage.getItem("userInfo") || "null"),
+  userInfo: JSON.parse(localStorage.getItem("userInfo") || "null"),
   error: undefined,
 };
 
@@ -26,12 +26,17 @@ export const authReducer = (
       return { ...state, loading: true, error: undefined };
 
     case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
-      sessionStorage.setItem("userInfo", JSON.stringify(action.payload));
       return {
         ...state,
         loading: false,
         userInfo: action.payload,
+        error: undefined,
+      };
+
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         error: undefined,
       };
 
@@ -40,7 +45,6 @@ export const authReducer = (
       return { ...state, loading: false, error: action.payload };
 
     case LOGOUT:
-      sessionStorage.removeItem("userInfo");
       return { ...state, userInfo: undefined, error: undefined };
 
     default:
