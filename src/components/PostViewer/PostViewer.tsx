@@ -44,6 +44,32 @@ const PostViewer: React.FC = () => {
       `<div>${post.content}</div>`,
       "text/html"
     );
+
+    const cleanContent = (element: Element) => {
+      element.querySelectorAll("p").forEach((p) => {
+        if (!p.textContent?.trim()) {
+          p.remove();
+        }
+      });
+
+      element.querySelectorAll("*").forEach((el) => {
+        if (el.tagName === "P" || el.tagName === "DIV") {
+          const style = window.getComputedStyle(el);
+          const marginTop = parseFloat(style.marginTop);
+          const marginBottom = parseFloat(style.marginBottom);
+
+          if (marginTop > 1.5) {
+            (el as HTMLElement).style.marginTop = "1.5em";
+          }
+          if (marginBottom > 1.5) {
+            (el as HTMLElement).style.marginBottom = "1.5em";
+          }
+        }
+      });
+    };
+
+    cleanContent(doc.body);
+
     const headingElements = doc.querySelectorAll("h1, h2, h3");
 
     console.log("📌 Extracted Headings:", headingElements);
