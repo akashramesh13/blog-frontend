@@ -17,7 +17,6 @@ export interface AuthState {
   error?: string;
 }
 
-// 🔹 Login Action Interfaces
 export interface LoginRequestAction {
   type: typeof LOGIN_REQUEST;
 }
@@ -35,7 +34,6 @@ export interface LoginFailureAction {
   payload: string;
 }
 
-// 🔹 Register Action Interfaces
 export interface RegisterRequestAction {
   type: typeof REGISTER_REQUEST;
 }
@@ -53,12 +51,10 @@ export interface RegisterFailureAction {
   payload: string;
 }
 
-// 🔹 Logout Action Interface
 export interface LogoutAction {
   type: typeof LOGOUT;
 }
 
-// 🔹 Combine All Auth Actions
 export type AuthActionTypes =
   | LoginRequestAction
   | LoginSuccessAction

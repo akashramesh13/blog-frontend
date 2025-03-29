@@ -28,7 +28,7 @@ export interface IPost {
 }
 
 export interface ICategory {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -41,7 +41,6 @@ export interface PostState {
   totalPages: number;
 }
 
-// Action Interfaces
 export interface FetchPostsRequestAction {
   type: typeof FETCH_POSTS_REQUEST;
 }

@@ -100,7 +100,6 @@ const Register: React.FC = () => {
     if (usernameValidation.isValid && passwordValidation.isValid) {
       await dispatch(register(username, password, history));
       setRegistrationSuccess(true);
-      // Redirect after a short delay to show success message
       setTimeout(() => {
         history.push("/login");
       }, 2000);

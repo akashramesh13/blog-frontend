@@ -13,6 +13,8 @@ import {
   SAVE_POST_FAILURE,
   SAVE_POST_REQUEST,
   SAVE_POST_SUCCESS,
+  FETCH_CATEGORIES_FAILURE,
+  FETCH_CATEGORIES_REQUEST,
 } from "../constants/postConstants";
 import { ICategory, IPost } from "../../types/postsTypes";
 
@@ -89,10 +91,14 @@ export const deletePost = (postId: string) => async (dispatch: Dispatch) => {
 
 export const fetchCategories = () => async (dispatch: Dispatch) => {
   try {
-    const { data } = await axios.get<ICategory[]>("/category/");
-    dispatch({ type: FETCH_CATEGORIES_SUCCESS, payload: data });
+    dispatch({ type: FETCH_CATEGORIES_REQUEST });
+    const response = await axios.get("/category/");
+    dispatch({ type: FETCH_CATEGORIES_SUCCESS, payload: response.data });
+    return response.data;
   } catch (error) {
-    console.error("Error fetching categories", error);
+    console.error("Error fetching categories:", error);
+    dispatch({ type: FETCH_CATEGORIES_FAILURE, payload: "Failed to fetch categories" });
+    throw error;
   }
 };
 

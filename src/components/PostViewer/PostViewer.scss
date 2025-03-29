@@ -257,16 +257,25 @@
   background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     padding: 8px;
     margin-bottom: 0.8rem;
+    max-height: 200px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
 .toc-sidebar h3 {
   margin: 0;
   font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  background: #f9f9f9;
+  padding: 8px 0;
+  z-index: 1;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -277,6 +286,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
@@ -285,6 +295,7 @@
 
 .toc-sidebar li {
   margin: 5px 0;
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     margin: 3px 0;
@@ -302,6 +313,9 @@
   width: 100%;
   text-decoration: underline;
   text-transform: none;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 0.9rem;

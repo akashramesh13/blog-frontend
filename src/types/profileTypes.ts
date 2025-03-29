@@ -2,7 +2,7 @@ import {
   PROFILE_FAILURE,
   PROFILE_REQUEST,
   PROFILE_SUCCESS,
-} from '../redux/constants/profileConstants';
+} from "../redux/constants/profileConstants";
 
 export interface ProfileState {
   loading: boolean;
@@ -10,7 +10,6 @@ export interface ProfileState {
   username?: string;
 }
 
-// Action Interfaces
 export interface ProfileRequestAction {
   type: typeof PROFILE_REQUEST;
 }
@@ -27,5 +26,7 @@ export interface ProfileFailureAction {
   type: typeof PROFILE_FAILURE;
 }
 
-// Union Type for Profile Actions
-export type ProfileActionTypes = ProfileRequestAction | ProfileSuccessAction | ProfileFailureAction;
+export type ProfileActionTypes =
+  | ProfileRequestAction
+  | ProfileSuccessAction
+  | ProfileFailureAction;

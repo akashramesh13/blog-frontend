@@ -86,4 +86,4 @@ Your Name
 
 ---
 
-_Built with ❤️ using React and TypeScript_
+Built with :heart: using React and TypeScript

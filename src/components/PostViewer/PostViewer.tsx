@@ -7,7 +7,10 @@ import { deletePost, fetchPost } from "../../redux/actions/postsActions";
 import Loading from "../Loading/Loading";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
+import DeleteModal from "../DeleteModal/DeleteModal";
+
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
+
 interface TOCItem {
   level: number;
   text: string;
@@ -19,6 +22,7 @@ const PostViewer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { post, loading, error } = useSelector(
     (state: RootState) => state.posts
@@ -115,7 +119,11 @@ const PostViewer: React.FC = () => {
     setUpdatedPostContent(doc.body.innerHTML);
   }, [post?.content]);
 
-  const handleDeleteButtonClick = async () => {
+  const handleDeleteButtonClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
     await dispatch(deletePost(id));
     history.push("/");
   };
@@ -151,7 +159,7 @@ const PostViewer: React.FC = () => {
               <p className="post-view__title">{post.title}</p>
               {post.coverImage && (
                 <img
-                  src={`data:image/png;base64,${post.coverImage}`}
+                  src={`${post.coverImage}`}
                   alt="Cover"
                   className="post-cover-image"
                 />
@@ -247,6 +255,12 @@ const PostViewer: React.FC = () => {
                   </button>
                 </div>
               )}
+              <DeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteConfirm}
+                title={post.title}
+              />
             </>
           ) : (
             <div>Post not found</div>

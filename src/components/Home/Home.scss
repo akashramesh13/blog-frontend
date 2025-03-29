@@ -15,6 +15,11 @@ html {
 }
 
 .home {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 60px - 60px);
+
   &-container {
     display: flex;
     justify-content: flex-start;
@@ -39,49 +44,32 @@ html {
 
   &__header {
     text-align: center;
-    margin-bottom: 20px;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-bottom: 3rem;
 
     @media (max-width: 768px) {
-      margin-bottom: 10px;
-      min-height: 60px;
+      margin-bottom: 2rem;
     }
   }
 
   &__title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.25rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
 
     @media (max-width: 768px) {
-      font-size: 1.5rem;
-      gap: 0.15rem;
-      flex-direction: column;
-      align-items: center;
+      font-size: 2rem;
+    }
+
+    .welcome-text {
+      // color: #666;
+      font-weight: bold;
     }
   }
 
   &__posts {
     display: flex;
     flex-direction: column;
-    max-width: 1000px;
-    width: 50vw;
-    min-width: 300px;
     gap: 1.5rem;
-
-    @media (max-width: 768px) {
-      max-width: 100%;
-      width: 100%;
-      min-width: 280px;
-      gap: 1rem;
-    }
   }
 
   &__post {
@@ -156,8 +144,9 @@ html {
 
     @media (max-width: 768px) {
       flex-direction: row;
-      overflow-x: auto;
-      white-space: nowrap;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
       padding: 0.5rem;
     }
   }
@@ -176,10 +165,18 @@ html {
       padding: 0.5rem 1rem;
       border-bottom: none;
       font-size: 0.9rem;
+      background-color: #fff;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #f0f0f0;
+        transform: translateY(-1px);
+      }
     }
   }
 }
-
 
 .selected-category {
   display: flex;
@@ -193,7 +190,6 @@ html {
     font-size: 0.9rem;
   }
 }
-
 
 .clear-category {
   font-size: 14px;
@@ -211,7 +207,6 @@ html {
   }
 }
 
-
 #home__blog-title {
   color: #555555be;
   font-family: "Catamaran";
@@ -225,7 +220,6 @@ html {
     margin: 0.5rem 0;
   }
 }
-
 
 .no-posts {
   text-align: center;

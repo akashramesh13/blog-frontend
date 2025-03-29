@@ -13,13 +13,12 @@ axios.interceptors.response.use(
       error.response &&
       (error.response.status === 401 || error.response.status === 403)
     ) {
-      // Only handle session timeout if we have a userInfo in storage
       const userInfo = sessionStorage.getItem("userInfo");
       if (userInfo) {
         clearSession();
-        // Dispatch logout action to update Redux state
+
         store.dispatch({ type: LOGOUT });
-        // Redirect to login page
+
         window.location.href = "/login";
       }
     }
