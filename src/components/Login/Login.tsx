@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
@@ -8,12 +8,15 @@ import { login } from "../../redux/actions/authActions";
 import Loading from "../Loading/Loading";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
+import useInputRef from "../../hooks/useInputRef";
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const inputRef = useInputRef();
+
   const { userInfo, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
@@ -41,6 +44,7 @@ const Login: React.FC = () => {
                 type="text"
                 placeholder="Username"
                 value={username}
+                ref={inputRef}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />

@@ -9,6 +9,7 @@ import "./Register.scss";
 import Loading from "../Loading/Loading";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
+import useInputRef from "../../hooks/useInputRef";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
@@ -34,6 +35,8 @@ const Register: React.FC = () => {
   const { userInfo, loading, error } = useSelector(
     (state: RootState) => state.auth
   );
+
+  const inputRef = useInputRef();
 
   const validateUsername = (value: string) => {
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_-]{2,19}$/;
@@ -126,6 +129,7 @@ const Register: React.FC = () => {
               type="text"
               placeholder="Username"
               value={username}
+              ref={inputRef}
               onChange={(e) => setUsername(e.target.value)}
               className={
                 username && (usernameValidation.isValid ? "valid" : "invalid")

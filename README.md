@@ -2,7 +2,7 @@
 
 ![Pixel Pursuit](public/og-image.png)
 
-A modern, minimalist blogging platform built with React, TypeScript, and Redux. Pixel Pursuit offers a clean, intuitive interface for creating and sharing blog posts with rich text editing capabilities.
+A minimalist blogging platform built from scratch using React and TypeScript — designed to showcase real-world app architecture, state management, and custom hooks.
 
 ## 🌟 Features
 
@@ -87,3 +87,5 @@ Your Name
 ---
 
 Built with :heart: using React and TypeScript
+
+> This project was built as a personal side project to sharpen my React + TypeScript skills and demonstrate clean architecture, custom hooks, and Redux-based state management.
