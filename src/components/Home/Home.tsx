@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
@@ -25,17 +25,23 @@ const Home: React.FC = () => {
     (state: RootState) => state.posts
   );
 
-  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
-    null
-  );
-  const [page, setPage] = React.useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [showTyped, setShowTyped] = useState(false);
+
   const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
 
   const typedElement = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (!loading && typedElement.current) {
+    if (!loading && posts.length > 0) {
+      setShowTyped(true);
+    }
+  }, [loading, posts]);
+
+  useEffect(() => {
+    if (showTyped && typedElement.current) {
       const typed = new Typed(typedElement.current, {
         strings: ["Pixel Pursuit"],
         typeSpeed: 75,
@@ -46,7 +52,7 @@ const Home: React.FC = () => {
 
       return () => typed.destroy();
     }
-  }, [loading]);
+  }, [showTyped]);
 
   useEffect(() => {
     dispatch(clearPosts());
@@ -125,7 +131,7 @@ const Home: React.FC = () => {
           <h1 className="home__title">
             <span className="welcome-text">Welcome to</span>{" "}
             <span id="home__blog-title" ref={typedElement}>
-              பிக்ஸல் பர்ஸ்யூட்
+              {!showTyped ? "பிக்ஸல் பர்ஸ்யூட்" : ""}
             </span>
           </h1>
         </div>
