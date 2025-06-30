@@ -35,18 +35,18 @@ const Home: React.FC = () => {
   const typedElement = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (typedElement.current) {
+    if (!loading && typedElement.current) {
       const typed = new Typed(typedElement.current, {
         strings: ["Pixel Pursuit"],
         typeSpeed: 75,
         backSpeed: 30,
-        startDelay: 1500,
+        startDelay: 500,
         showCursor: false,
       });
 
       return () => typed.destroy();
     }
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     dispatch(clearPosts());

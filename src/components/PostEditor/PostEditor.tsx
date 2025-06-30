@@ -40,7 +40,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
     }
   };
 
-  const titleRef = !readOnly ? useInputRef() : null;
+  const titleRef = useInputRef();
 
   return (
     <div className="editor-container">
@@ -51,7 +51,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           disabled={readOnly}
-          ref={titleRef!}
+          ref={!readOnly ? titleRef : null}
           className="editor-container__editor-title"
           autoFocus
         />
