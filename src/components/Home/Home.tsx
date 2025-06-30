@@ -131,7 +131,7 @@ const Home: React.FC = () => {
           <h1 className="home__title">
             <span className="welcome-text">Welcome to</span>{" "}
             <span id="home__blog-title" ref={typedElement}>
-              {!showTyped ? "பிக்ஸல் பர்ஸ்யூட்" : ""}
+              {"பிக்ஸல் பர்ஸ்யூட்"}
             </span>
           </h1>
         </div>
