@@ -155,12 +155,7 @@ const PostEditorPage: React.FC = () => {
       return;
     }
 
-    let imageBase64: string | null = null;
-
-    if (coverImage) {
-      const file = base64ToFile(coverImage, "cover.jpg");
-      imageBase64 = await cropAndResizeImage(file);
-    }
+   let imageBase64: string | null = coverImage;
 
     const newPost: IPost = {
       id: id ?? uuid(),
