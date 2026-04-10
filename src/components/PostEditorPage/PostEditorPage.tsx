@@ -26,15 +26,18 @@ const PostEditorPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
 
   const { post, categories, loading } = useSelector(
-    (state: RootState) => state.posts
+    (state: RootState) => state.posts,
   );
 
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<any>({ ops: [{ insert: "\n" }] });
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [category, setCategory] = useState<ICategory | null>(null);
 
@@ -85,7 +88,7 @@ const PostEditorPage: React.FC = () => {
             0,
             0,
             BANNER_WIDTH,
-            BANNER_HEIGHT
+            BANNER_HEIGHT,
           );
 
           resolve(canvas.toDataURL("image/jpeg"));
@@ -116,7 +119,18 @@ const PostEditorPage: React.FC = () => {
   useEffect(() => {
     if (post) {
       setTitle(post.title);
-      setContent(post.content);
+
+      try {
+        const parsed =
+          typeof post.content === "string"
+            ? JSON.parse(post.content)
+            : post.content;
+
+        setContent(parsed);
+      } catch {
+        setContent({ ops: [{ insert: "\n" }] });
+      }
+
       setCategory(post.category);
       setCoverImage(post.coverImage ?? null);
     }
@@ -132,18 +146,28 @@ const PostEditorPage: React.FC = () => {
     setIsAddingCategory(true);
     try {
       await dispatch(addCategory(categoryName));
-      const updatedCategories = await dispatch(fetchCategories()) as ICategory[];
-      
-      const newCategory = updatedCategories.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
+      const updatedCategories = (await dispatch(
+        fetchCategories(),
+      )) as ICategory[];
+
+      const newCategory = updatedCategories.find(
+        (cat) => cat.name.toLowerCase() === categoryName.toLowerCase(),
+      );
       if (newCategory) {
         setCategory(newCategory);
-        setToast({ message: 'Category added successfully!', type: 'success' });
+        setToast({ message: "Category added successfully!", type: "success" });
         setIsCategoryModalOpen(false);
       } else {
-        setToast({ message: 'Category added but not found. Please select it manually.', type: 'info' });
+        setToast({
+          message: "Category added but not found. Please select it manually.",
+          type: "info",
+        });
       }
     } catch (error) {
-      setToast({ message: 'Failed to add category. Please try again.', type: 'error' });
+      setToast({
+        message: "Failed to add category. Please try again.",
+        type: "error",
+      });
     } finally {
       setIsAddingCategory(false);
     }
@@ -155,12 +179,12 @@ const PostEditorPage: React.FC = () => {
       return;
     }
 
-   let imageBase64: string | null = coverImage;
+    let imageBase64: string | null = coverImage;
 
     const newPost: IPost = {
       id: id ?? uuid(),
       title,
-      content,
+      content: JSON.stringify(content),
       category,
       coverImage: imageBase64,
       user: { id: uuid(), username: "" },
@@ -175,7 +199,7 @@ const PostEditorPage: React.FC = () => {
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = e.target.value;
-    const selectedCategory = categories.find(cat => cat.id === selectedId);
+    const selectedCategory = categories.find((cat) => cat.id === selectedId);
     if (selectedCategory) {
       setCategory(selectedCategory);
     }
@@ -183,7 +207,7 @@ const PostEditorPage: React.FC = () => {
 
   if (loading) return <Loading />;
 
-  const existingCategoryNames = categories.map(cat => cat.name.toLowerCase());
+  const existingCategoryNames = categories.map((cat) => cat.name.toLowerCase());
 
   return (
     <div className="post-editor-page">
@@ -202,12 +226,12 @@ const PostEditorPage: React.FC = () => {
       <div className="category-selector">
         <div className="category-header">
           <label>Category:</label>
-          <button 
+          <button
             className="add-category-button"
             onClick={() => setIsCategoryModalOpen(true)}
             disabled={isAddingCategory}
           >
-            {isAddingCategory ? 'Adding...' : '+ Add New'}
+            {isAddingCategory ? "Adding..." : "+ Add New"}
           </button>
         </div>
         <select
@@ -215,7 +239,9 @@ const PostEditorPage: React.FC = () => {
           onChange={handleCategoryChange}
           disabled={isAddingCategory}
         >
-          <option value="" disabled>Select a category</option>
+          <option value="" disabled>
+            Select a category
+          </option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
@@ -228,7 +254,7 @@ const PostEditorPage: React.FC = () => {
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}
         onAdd={handleAddCategory}
-        existingCategories={categories.map(cat => cat.name.toLowerCase())}
+        existingCategories={categories.map((cat) => cat.name.toLowerCase())}
         isLoading={isAddingCategory}
       />
 

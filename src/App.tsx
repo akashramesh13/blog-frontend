@@ -9,6 +9,7 @@ import Home from './components/Home/Home';
 import Footer from './components/Footer/Footer';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Profile from './components/Profile/Profile';
+import "./App.scss";
 
 const App: React.FC = () => {
   return (

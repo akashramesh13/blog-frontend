@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
 import useInputRef from "../../hooks/useInputRef";
 
 interface PostEditorProps {
-  content: string;
-  setContent: (content: string) => void;
+  content: any;
+  setContent: (content: any) => void;
   saveBlog: () => void;
   title: string;
   setTitle: (title: string) => void;
@@ -27,6 +27,9 @@ const PostEditor: React.FC<PostEditorProps> = ({
   readOnly,
   isEditing,
 }) => {
+  const titleRef = useInputRef();
+  const quillRef = useRef<ReactQuill | null>(null);
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -40,8 +43,6 @@ const PostEditor: React.FC<PostEditorProps> = ({
     }
   };
 
-  const titleRef = useInputRef();
-
   return (
     <div className="editor-container">
       {!readOnly ? (
@@ -50,8 +51,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
           placeholder="Enter Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          disabled={readOnly}
-          ref={!readOnly ? titleRef : null}
+          ref={titleRef}
           className="editor-container__editor-title"
           autoFocus
         />
@@ -60,7 +60,10 @@ const PostEditor: React.FC<PostEditorProps> = ({
       )}
 
       {!readOnly && (
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+        <label className="image-upload">
+          <span>+ Add cover image</span>
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+        </label>
       )}
 
       {coverImage && (
@@ -72,20 +75,26 @@ const PostEditor: React.FC<PostEditorProps> = ({
       )}
 
       <ReactQuill
-        key={readOnly ? "readOnly" : "editable"}
-        value={content}
-        onChange={readOnly ? () => {} : setContent}
+        ref={quillRef}
+        value={content} // ✅ THIS WAS MISSING
+        onChange={(value, delta, source, editor) => {
+          if (!readOnly) {
+            setContent(editor.getContents());
+          }
+        }}
         modules={{
-          toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            ["bold", "italic", "underline", "strike"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["blockquote", "code-block"],
-            [{ indent: "-1" }, { indent: "+1" }],
-            [{ align: [] }],
-            ["link"],
-            ["clean"],
-          ],
+          toolbar: readOnly
+            ? false
+            : [
+                [{ header: [1, 2, 3, false] }],
+                ["bold", "italic", "underline", "strike"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["blockquote", "code-block"],
+                [{ indent: "-1" }, { indent: "+1" }],
+                [{ align: [] }],
+                ["link"],
+                ["clean"],
+              ],
         }}
         formats={[
           "header",
@@ -101,7 +110,6 @@ const PostEditor: React.FC<PostEditorProps> = ({
           "link",
           "image",
           "code-block",
-          "script",
         ]}
         readOnly={readOnly}
         placeholder="Write something amazing..."

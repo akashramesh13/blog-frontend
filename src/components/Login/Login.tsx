@@ -18,7 +18,7 @@ const Login: React.FC = () => {
   const inputRef = useInputRef();
 
   const { userInfo, loading, error } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
         <Loading />
       ) : (
         <div className="login-card">
-          <h1>Login</h1>
+          <h1>Sign in</h1>
           {error && <p className="error">{error}</p>}
           <form onSubmit={handleSubmit}>
             <div className="input-group">
