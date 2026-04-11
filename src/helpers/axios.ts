@@ -4,7 +4,7 @@ import { LOGOUT } from "../redux/constants/authConstants";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =
-  "https://blog-backend.akashramesh.in";
+  process.env.REACT_APP_BACKEND_URL || "https://blog-backend.akashramesh.in";
 
 axios.interceptors.response.use(
   (response) => response,
@@ -23,7 +23,7 @@ axios.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 function clearSession() {

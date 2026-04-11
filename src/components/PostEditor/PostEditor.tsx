@@ -30,32 +30,40 @@ const PostEditor: React.FC<PostEditorProps> = ({
 }) => {
   const titleRef = useInputRef();
   const quillRef = useRef<ReactQuill | null>(null);
-  const isDirtyRef = useRef(false);
   const history = useHistory();
 
+  const isDirtyRef = useRef(false);
+  const isSavingRef = useRef(false);
+
   const handleSave = useCallback(() => {
-    saveBlog();
+    isSavingRef.current = true;
     isDirtyRef.current = false;
+    saveBlog();
   }, [saveBlog]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          setCoverImage(reader.result.split(",")[1]);
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setCoverImage(reader.result);
+        if (!isSavingRef.current) {
           isDirtyRef.current = true;
         }
-      };
-    }
+      }
+    };
   };
 
   useEffect(() => {
     if (readOnly) return;
 
     const unblock = history.block(() => {
+      if (isSavingRef.current) return;
+
       if (!isDirtyRef.current) return;
 
       return "You have unsaved changes. Are you sure you want to leave?";
@@ -70,21 +78,18 @@ const PostEditor: React.FC<PostEditorProps> = ({
     const handleSaveShortcut = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
         e.preventDefault();
-        if (!readOnly) {
-          handleSave();
-        }
+        if (!readOnly) handleSave();
       }
     };
 
     window.addEventListener("keydown", handleSaveShortcut);
-
-    return () => {
-      window.removeEventListener("keydown", handleSaveShortcut);
-    };
+    return () => window.removeEventListener("keydown", handleSaveShortcut);
   }, [readOnly, handleSave]);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isSavingRef.current) return;
+
       if (!isDirtyRef.current) return;
 
       e.preventDefault();
@@ -92,14 +97,12 @@ const PostEditor: React.FC<PostEditorProps> = ({
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
   return (
     <div className="editor-container">
+      {/* TITLE */}
       {!readOnly ? (
         <input
           type="text"
@@ -107,7 +110,10 @@ const PostEditor: React.FC<PostEditorProps> = ({
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
-            isDirtyRef.current = true;
+
+            if (!isSavingRef.current) {
+              isDirtyRef.current = true;
+            }
           }}
           ref={titleRef}
           className="editor-container__editor-title"
@@ -117,6 +123,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
         <h1>{title}</h1>
       )}
 
+      {/* IMAGE UPLOAD */}
       {!readOnly && (
         <label className="image-upload">
           <span>+ Add cover image</span>
@@ -124,21 +131,22 @@ const PostEditor: React.FC<PostEditorProps> = ({
         </label>
       )}
 
+      {/* IMAGE PREVIEW */}
       {coverImage && (
-        <img
-          src={`data:image/png;base64,${coverImage}`}
-          alt="Cover"
-          className="cover-preview"
-        />
+        <img src={coverImage} alt="Cover" className="cover-preview" />
       )}
 
+      {/* EDITOR */}
       <ReactQuill
         ref={quillRef}
         value={content}
         onChange={(value, delta, source, editor) => {
-          if (!readOnly) {
+          if (!readOnly && !isSavingRef.current) {
             setContent(editor.getContents());
-            isDirtyRef.current = true;
+
+            if (source === "user") {
+              isDirtyRef.current = true;
+            }
           }
         }}
         modules={{
@@ -174,6 +182,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
         placeholder="Write something amazing..."
       />
 
+      {/* SAVE BUTTON */}
       {!readOnly && (
         <button className="save-button" onClick={handleSave}>
           {isEditing ? "Update Post" : "Publish Post"}
