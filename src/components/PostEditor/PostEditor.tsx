@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
 import useInputRef from "../../hooks/useInputRef";
+import { useHistory } from "react-router-dom";
 
 interface PostEditorProps {
   content: any;
@@ -29,6 +30,8 @@ const PostEditor: React.FC<PostEditorProps> = ({
 }) => {
   const titleRef = useInputRef();
   const quillRef = useRef<ReactQuill | null>(null);
+  const isDirtyRef = useRef(false);
+  const history = useHistory();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -38,9 +41,63 @@ const PostEditor: React.FC<PostEditorProps> = ({
       reader.onload = () => {
         if (typeof reader.result === "string") {
           setCoverImage(reader.result.split(",")[1]);
+          isDirtyRef.current = true;
         }
       };
     }
+  };
+
+  useEffect(() => {
+    if (readOnly) return;
+
+    const unblock = history.block(() => {
+      if (!isDirtyRef.current) return;
+
+      return "You have unsaved changes. Are you sure you want to leave?";
+    });
+
+    return () => {
+      unblock();
+    };
+  }, [history, readOnly]);
+
+  useEffect(() => {
+    const handleSaveShortcut = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        if (!readOnly) {
+          handleSave();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleSaveShortcut);
+
+    return () => {
+      window.removeEventListener("keydown", handleSaveShortcut);
+    };
+  }, [readOnly, saveBlog]);
+
+  // 🔥 refresh / close warning
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!isDirtyRef.current) return;
+
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  // 🔥 wrapped save (reset dirty)
+  const handleSave = () => {
+    saveBlog();
+    isDirtyRef.current = false;
   };
 
   return (
@@ -50,7 +107,10 @@ const PostEditor: React.FC<PostEditorProps> = ({
           type="text"
           placeholder="Enter Title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            isDirtyRef.current = true;
+          }}
           ref={titleRef}
           className="editor-container__editor-title"
           autoFocus
@@ -80,6 +140,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
         onChange={(value, delta, source, editor) => {
           if (!readOnly) {
             setContent(editor.getContents());
+            isDirtyRef.current = true;
           }
         }}
         modules={{
@@ -116,7 +177,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
       />
 
       {!readOnly && (
-        <button className="save-button" onClick={saveBlog}>
+        <button className="save-button" onClick={handleSave}>
           {isEditing ? "Update Post" : "Publish Post"}
         </button>
       )}

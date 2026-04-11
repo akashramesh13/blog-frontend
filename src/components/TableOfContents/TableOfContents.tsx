@@ -21,29 +21,34 @@ const TableOfContents = ({ content }: any) => {
     const headings: TocItem[] = [];
     let counter = 0;
 
-    let buffer = "";
+    content.ops.forEach((op: any, index: number) => {
+      if (op.insert === "\n" && op.attributes?.header) {
+        let text = "";
 
-    content.ops.forEach((op: any) => {
-      if (typeof op.insert === "string") {
-        buffer += op.insert;
-      }
+        let i = index - 1;
 
-      // newline = end of block
-      if (op.insert === "\n") {
-        if (op.attributes?.header) {
-          const text = buffer.replace(/\n/g, "").trim();
+        while (i >= 0 && typeof content.ops[i].insert === "string") {
+          text = content.ops[i].insert + text;
 
-          if (text) {
-            headings.push({
-              id: `heading-${counter++}`,
-              text,
-              level: op.attributes.header,
-            });
-          }
+          if (content.ops[i].insert.includes("\n")) break;
+
+          i--;
         }
 
-        // reset buffer after each block
-        buffer = "";
+        // 🔥 KEY FIX: take LAST line only
+        const lines = text
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean);
+        const headingText = lines[lines.length - 1];
+
+        if (headingText) {
+          headings.push({
+            id: `heading-${counter++}`,
+            text: headingText,
+            level: op.attributes.header,
+          });
+        }
       }
     });
 
@@ -79,9 +84,12 @@ const TableOfContents = ({ content }: any) => {
 
     setActiveId(id);
 
-    el.scrollIntoView({
+    const yOffset = -80;
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({
+      top: y,
       behavior: "smooth",
-      block: "start",
     });
   };
 

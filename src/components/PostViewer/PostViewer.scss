@@ -7,18 +7,17 @@
 
   .post-header {
     display: flex;
-    position: relative;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
 
     &__left {
       max-width: 680px;
     }
 
     @media (max-width: 768px) {
-      gap: 0.5rem;
+      gap: 0.4rem;
 
       &__left {
         max-width: 100%;
@@ -30,15 +29,15 @@
 
   &__title {
     font-family: "Playfair Display", serif;
-    font-size: 3.1rem;
+    font-size: 3rem;
     font-weight: 500;
-    letter-spacing: -0.5px;
-    margin: 0 0 0.8rem;
+    letter-spacing: -0.4px;
+    margin: 0 0 0.6rem;
     line-height: 1.2;
-    color: #111;
+    color: #000000;
 
     @media (max-width: 768px) {
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       line-height: 1.25;
     }
   }
@@ -68,8 +67,8 @@
   .post-actions {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-top: 8px;
+    gap: 10px;
+    margin-top: 6px;
     font-size: 0.8rem;
 
     button {
@@ -99,13 +98,13 @@
     width: 100%;
     margin: 2rem auto;
 
-    /* FIX: remove broken full-bleed on mobile */
+    /* full bleed desktop */
     margin-left: -1rem;
     margin-right: -1rem;
 
     img {
       width: 100%;
-      max-height: 400px;
+      max-height: 380px;
       object-fit: cover;
       border-radius: 6px;
       display: block;
@@ -116,8 +115,8 @@
       margin-right: 0;
 
       img {
+        max-height: 240px;
         border-radius: 4px;
-        max-height: 250px;
       }
     }
   }
@@ -125,49 +124,65 @@
   /* ---------------- TOC ---------------- */
 
   .toc {
-    margin: 3rem auto;
-    padding: 12px;
+    margin: 2.5rem auto;
+    padding: 1rem 1.2rem;
     border: 1px solid #eee;
+    border-radius: 6px;
 
-    h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
+    &-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
       margin-bottom: 0.6rem;
-      color: #555;
     }
 
-    ul {
+    &-list {
+      list-style: none;
       padding: 0;
       margin: 0;
-    }
 
-    li {
-      list-style: none;
-      margin: 4px 0;
-      padding: 4px 8px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-
-      &:hover {
-        border-left: 2px solid #000;
-        padding-left: 12px;
+      ul {
+        margin-left: 12px;
+        border-left: 1px solid #eee;
+        padding-left: 6px;
       }
     }
 
-    a {
-      color: #222;
-      text-decoration: none;
-      font-size: 0.95rem;
+    &-item {
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 0.92rem;
+      color: #555;
+      transition: all 0.15s ease;
 
       &:hover {
         color: #000;
-        text-decoration: underline;
+        background: rgba(0, 0, 0, 0.03);
       }
 
       &.active {
         font-weight: 600;
         color: #000;
       }
+    }
+
+    /* levels */
+    .level-1 {
+      font-weight: 600;
+      color: #111;
+      margin-top: 8px;
+    }
+
+    .level-2 {
+      margin-left: 10px;
+      font-size: 0.9rem;
+    }
+
+    .level-3 {
+      margin-left: 18px;
+      font-size: 0.88rem;
+      color: #777;
     }
   }
 
@@ -176,39 +191,72 @@
   &__body {
     font-family: "Libre Baskerville", serif;
     font-size: 1.05rem;
-    line-height: 1.85;
-    color: #222;
+    line-height: 1.7;
+    color: #151515;
 
+    /* headings */
     h1,
     h2,
     h3 {
       font-family: "Playfair Display", serif;
-      margin-top: 2.2rem;
-      margin-bottom: 0.6rem;
+      margin-top: 1.8rem;
+      margin-bottom: 0.4rem;
       font-weight: 600;
     }
 
+    /* paragraphs */
     p {
-      margin: 1rem 0;
+      margin: 0.6rem 0;
     }
 
+    /* REMOVE empty spacing from Quill */
+    p:empty {
+      display: none;
+    }
+
+    /* lists */
+    ul,
+    ol {
+      margin: 0.5rem 0 0.8rem;
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin: 0.2rem 0;
+    }
+
+    /* fix paragraph → list spacing */
+    p + ul,
+    p + ol {
+      margin-top: 0.3rem;
+    }
+
+    ul + p,
+    ol + p {
+      margin-top: 0.5rem;
+    }
+
+    /* blockquote */
     blockquote {
       border-left: 3px solid #ddd;
       padding-left: 1rem;
+      margin: 1rem 0;
       color: #666;
       font-style: italic;
     }
 
+    /* code */
     pre {
       background: #f6f6f6;
       padding: 12px;
       border-radius: 6px;
       overflow-x: auto;
+      margin: 1rem 0;
     }
 
     @media (max-width: 768px) {
       font-size: 1rem;
-      line-height: 1.75;
+      line-height: 1.65;
     }
   }
 }
