@@ -7,15 +7,15 @@ $size: 50px;
   position: fixed;
   top: 30%; /* Adjusted to be in the middle horizontally, not vertically */
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1px;
   background-color: $color-black;
-  width: 100px;
-  height: 100px;
+  width: 160px;
+  height: 160px;
   padding: 30px;
   border-radius: 50%;
   z-index: 1000;
@@ -236,4 +236,5 @@ $size: 50px;
   display: flex;
   flex-direction: row;
   color: $color-white;
+  font-size: 0.65rem;
 }
