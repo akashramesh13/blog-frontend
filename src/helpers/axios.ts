@@ -4,7 +4,7 @@ import { LOGOUT } from "../redux/constants/authConstants";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL =
-  process.env.REACT_APP_BACKEND_URL || "https://blog-backend.akashramesh.in";
+  "https://blog-backend.akashramesh.in";
 
 axios.interceptors.response.use(
   (response) => response,

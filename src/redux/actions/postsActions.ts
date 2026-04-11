@@ -16,7 +16,7 @@ import {
   FETCH_CATEGORIES_FAILURE,
   FETCH_CATEGORIES_REQUEST,
 } from "../constants/postConstants";
-import { ICategory, IPost } from "../../types/postsTypes";
+import { IPost } from "../../types/postsTypes";
 
 export const fetchPosts =
   (page = 0, size = 5, category: string | null = null, reset = false) =>
@@ -97,7 +97,10 @@ export const fetchCategories = () => async (dispatch: Dispatch) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
-    dispatch({ type: FETCH_CATEGORIES_FAILURE, payload: "Failed to fetch categories" });
+    dispatch({
+      type: FETCH_CATEGORIES_FAILURE,
+      payload: "Failed to fetch categories",
+    });
     throw error;
   }
 };

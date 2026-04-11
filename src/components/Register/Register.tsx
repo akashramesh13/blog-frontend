@@ -24,16 +24,16 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [usernameValidation, setUsernameValidation] = useState<ValidationState>(
-    { isValid: false, message: "" }
+    { isValid: false, message: "" },
   );
   const [passwordValidation, setPasswordValidation] = useState<ValidationState>(
-    { isValid: false, message: "" }
+    { isValid: false, message: "" },
   );
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
 
   const { userInfo, loading, error } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const inputRef = useInputRef();
@@ -116,7 +116,7 @@ const Register: React.FC = () => {
   return (
     <div className="register-container">
       <div className="register-card">
-        <h1>Register</h1>
+        <h1>Create account</h1>
         {error && <p className="error">{error}</p>}
         {registrationSuccess && (
           <p className="success">

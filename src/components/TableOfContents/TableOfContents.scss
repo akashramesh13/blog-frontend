@@ -1,0 +1,52 @@
+.toc-title {
+  font-size: 1.2rem;
+}
+
+.toc-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc-list ul {
+  margin-left: 14px;
+  padding-left: 0;
+  border-left: 1px solid #eee;
+}
+
+/* item */
+.toc-item {
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 0.95rem;
+  color: #555;
+  transition: all 0.15s ease;
+}
+
+/* hover */
+.toc-item:hover {
+  color: #000;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* active */
+.toc-item.active {
+  font-weight: 600;
+  color: #000;
+}
+
+/* levels */
+.level-1 {
+  font-weight: 600;
+  color: #111;
+  margin-top: 10px;
+}
+
+.level-2 {
+  font-size: 0.92rem;
+}
+
+.level-3 {
+  font-size: 0.9rem;
+  color: #666;
+}

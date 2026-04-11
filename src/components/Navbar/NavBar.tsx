@@ -8,7 +8,7 @@ import { RootState } from "../../redux/reducers";
 import { CgProfile } from "react-icons/cg";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
-import { useAuthCheck } from '../../hooks/useAuthCheck';
+import { useAuthCheck } from "../../hooks/useAuthCheck";
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const NavBar: React.FC = () => {
@@ -23,12 +23,12 @@ const NavBar: React.FC = () => {
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
-    document.body.classList.toggle('menu-open');
+    document.body.classList.toggle("menu-open");
   };
-  
+
   const closeNavbar = () => {
     setIsOpen(false);
-    document.body.classList.remove('menu-open');
+    document.body.classList.remove("menu-open");
   };
 
   const handleLogout = async () => {
@@ -71,8 +71,8 @@ const NavBar: React.FC = () => {
 
       <div className={`navbar__right ${isOpen ? "active" : ""}`}>
         {userInfo && (
-          <Link to="/post/new" onClick={handleAddNewPost}>
-            <span id="add-post">+ Add new post</span>
+          <Link id="add-post" to="/post/new" onClick={handleAddNewPost}>
+            Write
           </Link>
         )}
 
