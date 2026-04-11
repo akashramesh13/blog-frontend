@@ -1,6 +1,6 @@
 # Pixel Pursuit
 
-![Pixel Pursuit](public/og-image.png)
+![Pixel Pursuit](public/blog-image.png)
 
 A minimalist blogging platform built from scratch using React and TypeScript — designed to showcase real-world app architecture, state management, and custom hooks.
 
