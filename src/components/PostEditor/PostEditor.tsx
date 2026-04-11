@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
@@ -32,6 +32,11 @@ const PostEditor: React.FC<PostEditorProps> = ({
   const quillRef = useRef<ReactQuill | null>(null);
   const isDirtyRef = useRef(false);
   const history = useHistory();
+
+  const handleSave = useCallback(() => {
+    saveBlog();
+    isDirtyRef.current = false;
+  }, [saveBlog]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -76,9 +81,8 @@ const PostEditor: React.FC<PostEditorProps> = ({
     return () => {
       window.removeEventListener("keydown", handleSaveShortcut);
     };
-  }, [readOnly, saveBlog]);
+  }, [readOnly, handleSave]);
 
-  // 🔥 refresh / close warning
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (!isDirtyRef.current) return;
@@ -93,12 +97,6 @@ const PostEditor: React.FC<PostEditorProps> = ({
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-
-  // 🔥 wrapped save (reset dirty)
-  const handleSave = () => {
-    saveBlog();
-    isDirtyRef.current = false;
-  };
 
   return (
     <div className="editor-container">

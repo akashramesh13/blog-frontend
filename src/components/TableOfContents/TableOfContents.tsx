@@ -35,7 +35,6 @@ const TableOfContents = ({ content }: any) => {
           i--;
         }
 
-        // 🔥 KEY FIX: take LAST line only
         const lines = text
           .split("\n")
           .map((l) => l.trim())
