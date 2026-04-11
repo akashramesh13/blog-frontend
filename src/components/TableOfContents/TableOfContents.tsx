@@ -21,12 +21,17 @@ const TableOfContents = ({ content }: any) => {
     const headings: TocItem[] = [];
     let counter = 0;
 
-    content.ops.forEach((op: any, index: number) => {
-      if (op.attributes?.header) {
-        const prev = content.ops[index - 1];
+    let buffer = "";
 
-        if (prev?.insert) {
-          const text = prev.insert.replace(/\n/g, "").trim();
+    content.ops.forEach((op: any) => {
+      if (typeof op.insert === "string") {
+        buffer += op.insert;
+      }
+
+      // newline = end of block
+      if (op.insert === "\n") {
+        if (op.attributes?.header) {
+          const text = buffer.replace(/\n/g, "").trim();
 
           if (text) {
             headings.push({
@@ -36,6 +41,9 @@ const TableOfContents = ({ content }: any) => {
             });
           }
         }
+
+        // reset buffer after each block
+        buffer = "";
       }
     });
 
