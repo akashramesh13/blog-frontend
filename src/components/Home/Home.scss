@@ -4,115 +4,165 @@
   padding: 2rem 1rem;
 }
 
-/* ---------------- CATEGORIES TOP ---------------- */
-
-.categories-inline {
-  display: flex;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-
-.categories-inline span {
-  font-size: 0.85rem;
-  color: #666;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  background: #f3f3f3;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.categories-inline span:hover {
-  background: #e8e8e8;
-  color: #000;
-}
-
-.categories-inline span.active {
-  background: #111;
-  color: #fff;
-}
-
-/* ---------------- HOME ---------------- */
-
 .home {
   width: 100%;
-  min-width: 700px; // 🔥 prevents tiny squish
-  max-width: 1000px; // 🔥 wider than before
+  max-width: 1000px;
   margin: 0 auto;
-}
 
-.home__header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
+  /* ---------------- HEADER ---------------- */
 
-.home__title {
-  font-size: 3.2rem;
-  font-family: "Playfair Display", serif;
-  font-weight: 600;
-  color: #111;
-  text-align: center;
-  line-height: 1.2;
+  &__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  &__title {
+    font-size: 3.2rem;
+    font-family: "Playfair Display", serif;
+    font-weight: 600;
+    color: #111;
+    line-height: 1.2;
 
-.welcome-text {
-  font-size: 1.6rem; // 🔥 bigger
-  color: #000000;
-  margin-bottom: 0.4rem;
-  font-weight: 400;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-/* ---------------- POSTS ---------------- */
+  /* welcome text stays separate (not BEM) */
+  .welcome-text {
+    font-size: 1.6rem;
+    color: #000;
+    margin-bottom: 0.4rem;
+    font-weight: 400;
+  }
 
-.home__posts {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  min-width: 55vw;
-  padding: 1.6rem 2rem;
-}
+  /* ---------------- CATEGORIES ---------------- */
 
-/* 🔥 MUCH BETTER CARD */
+  .categories-inline {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
 
-.home__post {
-  padding: 1.5rem 1.8rem;
-  border-radius: 12px;
-  background: #fff;
-  border: 1px solid #eee;
-  transition: all 0.2s ease;
-}
+    span {
+      font-size: 0.85rem;
+      color: #666;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      background: #f3f3f3;
+      cursor: pointer;
+      transition: all 0.2s ease;
 
-.home__post:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-}
+      &:hover {
+        background: #e8e8e8;
+        color: #000;
+      }
 
-.home__post-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-}
+      &.active {
+        background: #111;
+        color: #fff;
+      }
+    }
+  }
 
-.home__post-excerpt {
-  color: #555;
-}
+  /* ---------------- POSTS ---------------- */
 
-.home__post-date {
-  font-size: 0.85rem;
-  color: #999;
-}
+  &__posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 1.6rem 0;
+  }
 
-/* ---------------- EMPTY ---------------- */
+  /* ---------------- POST CARD ---------------- */
 
-.no-posts {
-  text-align: center;
-  color: #888;
+  &__post {
+    padding: 1.5rem 1.8rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+
+    &-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    &-excerpt {
+      color: #555;
+    }
+
+    &-date {
+      font-size: 0.85rem;
+      color: #999;
+    }
+  }
+
+  /* ---------------- EMPTY ---------------- */
+
+  .no-posts {
+    text-align: center;
+    color: #888;
+  }
+
+  /* ================= RESPONSIVE ================= */
+
+  @media (max-width: 768px) {
+    &__title {
+      font-size: 2.2rem;
+    }
+
+    .welcome-text {
+      font-size: 1.2rem;
+    }
+
+    &__posts {
+      gap: 1.2rem;
+    }
+
+    &__post {
+      padding: 1.2rem;
+      border-radius: 10px;
+
+      &-title {
+        font-size: 1.2rem;
+      }
+
+      &-excerpt {
+        font-size: 0.95rem;
+      }
+    }
+
+    .categories-inline span {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__title {
+      font-size: 1.9rem;
+    }
+
+    .welcome-text {
+      font-size: 1.05rem;
+    }
+
+    &__post {
+      padding: 1rem;
+
+      &-title {
+        font-size: 1.1rem;
+      }
+    }
+  }
 }

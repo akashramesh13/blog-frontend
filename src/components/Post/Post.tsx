@@ -1,6 +1,6 @@
 import React from "react";
-import moment from "moment";
 import { IPost } from "../../types/postsTypes";
+import { formatDate } from "../../utils/formatDate";
 
 const getPreview = (content: any, maxLength: number = 120) => {
   try {
@@ -36,9 +36,7 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick }) => {
 
       {preview && <p className="home__post-excerpt">{preview}</p>}
 
-      <span className="home__post-date">
-        {moment(post.createdAt).format("DD MMM, YY")}
-      </span>
+      <span className="home__post-date">{formatDate(post.createdAt)}</span>
     </div>
   );
 };

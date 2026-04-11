@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./PostViewer.scss";
@@ -10,6 +10,7 @@ import { AnyAction } from "redux";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import TableOfContents from "../TableOfContents/TableOfContents";
 import ReactQuill from "react-quill";
+import { formatDate } from "../../utils/formatDate";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
@@ -24,26 +25,25 @@ const PostViewer: React.FC = () => {
     (state: RootState) => state.posts,
   );
 
-  // ✅ FETCH POST
+  // FETCH
   useEffect(() => {
     if (id) dispatch(fetchPost(id));
   }, [id, dispatch]);
 
-  // ✅ PARSE CONTENT
-  let parsedContent: any = { ops: [] };
+  // PARSE CONTENT (supports string + object)
+  const parsedContent = useMemo(() => {
+    if (!post?.content) return { ops: [] };
 
-  if (post?.content) {
     try {
-      parsedContent =
-        typeof post.content === "string"
-          ? JSON.parse(post.content)
-          : post.content;
+      return typeof post.content === "string"
+        ? JSON.parse(post.content)
+        : post.content;
     } catch {
-      parsedContent = { ops: [] };
+      return { ops: [] };
     }
-  }
+  }, [post?.content]);
 
-  // ✅ ADD IDS (HOOK MUST BE BEFORE RETURN)
+  // ADD IDs FOR TOC SCROLL
   useEffect(() => {
     const headings = document.querySelectorAll(
       ".post-view__body h1, .post-view__body h2, .post-view__body h3",
@@ -59,7 +59,6 @@ const PostViewer: React.FC = () => {
     history.push("/");
   };
 
-  // ✅ RETURNS AFTER HOOKS
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -68,39 +67,53 @@ const PostViewer: React.FC = () => {
         <Loading />
       ) : post ? (
         <>
-          <h1 className="post-view__title">{post.title}</h1>
+          {post.coverImage && (
+            <div className="post-cover">
+              <img src={post.coverImage} alt={post.title} />
+            </div>
+          )}
+          {/* HEADER */}
+          <div className="post-header">
+            <div className="post-header__left">
+              <h1 className="post-view__title">{post.title}</h1>
 
-          <div className="post-meta">
-            <span className="author">{post.user?.username || "Unknown"}</span>
-            <span className="dot">·</span>
+              <div className="post-meta">
+                <span className="author">
+                  {post.user?.username || "Unknown"}
+                </span>
+                <span className="dot">·</span>
+                <span>{formatDate(post.createdAt)}</span>
+              </div>
 
-            <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+              {post.owner && (
+                <div className="post-actions">
+                  <button
+                    className="post-view__edit-button"
+                    onClick={() => history.push(`/post/edit/${id}`)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="post-view__delete-button"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
+          {/* TOC */}
           <TableOfContents content={parsedContent} />
 
+          {/* CONTENT */}
           <div className="post-view__body">
             <ReactQuill value={parsedContent} readOnly theme="bubble" />
           </div>
 
-          {post.owner && (
-            <div className="post-actions">
-              <button
-                className="post-view__edit-button"
-                onClick={() => history.push(`/post/edit/${id}`)}
-              >
-                Edit
-              </button>
-
-              <button
-                className="post-view__delete-button"
-                onClick={() => setIsDeleteModalOpen(true)}
-              >
-                Delete
-              </button>
-            </div>
-          )}
-
+          {/* MODAL */}
           <DeleteModal
             isOpen={isDeleteModalOpen}
             onClose={() => setIsDeleteModalOpen(false)}

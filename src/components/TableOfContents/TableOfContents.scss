@@ -1,67 +1,52 @@
-/* ---------------- TOC ---------------- */
-
-.toc {
-  position: relative;
-  z-index: 10;
-}
-
-.toc-item {
-  display: block;
-  cursor: pointer;
-  user-select: none;
-  font-size: 0.95rem;
-  padding: 4px 0;
-  color: #555;
-  transition: all 0.2s ease;
-}
-
 .toc-title {
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #999;
-  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
 }
 
-/* list reset */
 .toc-list {
   list-style: none;
-  padding: 0;
+  padding-left: 0;
   margin: 0;
+}
+
+.toc-list ul {
+  margin-left: 14px;
+  padding-left: 0;
+  border-left: 1px solid #eee;
+}
+
+/* item */
+.toc-item {
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 0.95rem;
+  color: #555;
+  transition: all 0.15s ease;
 }
 
 /* hover */
 .toc-item:hover {
   color: #000;
-  cursor: pointer !important;
-  transform: translateX(2px); /* 🔥 subtle movement */
+  background: rgba(0, 0, 0, 0.03);
 }
 
-/* LEVEL STYLING */
+/* active */
+.toc-item.active {
+  font-weight: 600;
+  color: #000;
+}
 
-/* H1 */
+/* levels */
 .level-1 {
   font-weight: 600;
   color: #111;
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
-/* H2 */
 .level-2 {
-  margin-left: 12px;
   font-size: 0.92rem;
 }
 
-/* H3 */
 .level-3 {
-  margin-left: 24px;
   font-size: 0.9rem;
-  color: #777;
-}
-
-/* H4 */
-.level-4 {
-  margin-left: 36px;
-  font-size: 0.88rem;
-  color: #999;
+  color: #666;
 }

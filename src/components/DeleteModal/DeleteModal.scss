@@ -1,100 +1,102 @@
+/* ---------------- OVERLAY ---------------- */
+
 .delete-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
   z-index: 1000;
   padding: 1rem;
 }
 
+/* ---------------- MODAL ---------------- */
+
 .delete-modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  max-width: 90%;
-  width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border-radius: 8px;
 
-  h2 {
-    margin: 0 0 1rem 0;
-    color: #333;
-    font-size: 1.5rem;
-  }
+  max-width: 420px;
+  width: 100%;
 
-  p {
-    margin: 0.5rem 0;
-    color: #666;
-    line-height: 1.5;
-  }
+  padding: 1.8rem 1.6rem;
 
-  .warning {
-    color: #e31b2c;
-    font-weight: 500;
-  }
-
-  &__buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-
-    button {
-      flex: 1;
-      padding: 0.8rem;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-1px);
-      }
-    }
-  }
-
-  @media (max-width: 480px) {
-    padding: 1.5rem;
-    width: 100%;
-
-    h2 {
-      font-size: 1.3rem;
-    }
-
-    p {
-      font-size: 0.95rem;
-    }
-
-    &__buttons {
-      flex-direction: column;
-      gap: 0.8rem;
-
-      button {
-        padding: 0.7rem;
-        font-size: 0.95rem;
-      }
-    }
-  }
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.cancel-button {
-  background-color: #f0f0f0;
-  color: #333;
+/* ---------------- TITLE ---------------- */
 
-  &:hover {
-    background-color: #e0e0e0;
-  }
+.delete-modal h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #111;
+
+  margin-bottom: 0.8rem;
 }
 
+/* ---------------- TEXT ---------------- */
+
+.delete-modal p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* subtle warning (NOT red) */
+.delete-modal .warning {
+  color: #999;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* ---------------- BUTTONS ---------------- */
+
+.delete-modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  margin-top: 1.8rem;
+}
+
+/* base button */
+.delete-modal__buttons button {
+  background: none;
+  border: none;
+
+  font-size: 0.9rem;
+  color: #777;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* cancel */
+.cancel-button:hover {
+  color: #111;
+}
+
+/* delete (subtle emphasis) */
 .delete-button {
-  background-color: #e31b2c;
-  color: white;
+  font-weight: 500;
+  color: #aaa;
+}
 
-  &:hover {
-    background-color: #c41929;
+.delete-button:hover {
+  color: #000;
+}
+
+/* mobile */
+@media (max-width: 480px) {
+  .delete-modal {
+    padding: 1.4rem;
   }
-} 
+
+  .delete-modal__buttons {
+    justify-content: space-between;
+  }
+}

@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
+import "./TableOfContents.scss";
 
 interface TocItem {
   id: string;
   text: string;
   level: number;
+}
+
+interface TocNode extends TocItem {
+  children: TocNode[];
 }
 
 const TableOfContents = ({ content }: any) => {
@@ -37,6 +42,29 @@ const TableOfContents = ({ content }: any) => {
     setItems(headings);
   }, [content]);
 
+  const buildTree = (items: TocItem[]): TocNode[] => {
+    const tree: TocNode[] = [];
+    const stack: TocNode[] = [];
+
+    items.forEach((item) => {
+      const node: TocNode = { ...item, children: [] };
+
+      while (stack.length && stack[stack.length - 1].level >= item.level) {
+        stack.pop();
+      }
+
+      if (stack.length === 0) {
+        tree.push(node);
+      } else {
+        stack[stack.length - 1].children.push(node);
+      }
+
+      stack.push(node);
+    });
+
+    return tree;
+  };
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -49,25 +77,35 @@ const TableOfContents = ({ content }: any) => {
     });
   };
 
+  const renderTree = (nodes: TocNode[]) => {
+    return (
+      <ul className="toc-list">
+        {nodes.map((node) => (
+          <li key={node.id}>
+            <div
+              className={`toc-item level-${node.level} ${
+                activeId === node.id ? "active" : ""
+              }`}
+              onClick={() => scrollTo(node.id)}
+            >
+              {node.text}
+            </div>
+
+            {node.children.length > 0 && renderTree(node.children)}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   if (!items.length) return null;
+
+  const tree = buildTree(items);
 
   return (
     <div className="toc">
       <div className="toc-title">Contents</div>
-
-      <ul className="toc-list">
-        {items.map((item) => (
-          <li
-            key={item.id}
-            className={`toc-item level-${item.level} ${
-              activeId === item.id ? "active" : ""
-            }`}
-            onClick={() => scrollTo(item.id)}
-          >
-            {item.text}
-          </li>
-        ))}
-      </ul>
+      {renderTree(tree)}
     </div>
   );
 };

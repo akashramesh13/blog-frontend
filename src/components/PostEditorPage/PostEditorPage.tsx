@@ -41,76 +41,6 @@ const PostEditorPage: React.FC = () => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [category, setCategory] = useState<ICategory | null>(null);
 
-  const cropAndResizeImage = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-
-          if (!ctx) {
-            reject("Canvas context not supported");
-            return;
-          }
-
-          const BANNER_WIDTH = 1584;
-          const BANNER_HEIGHT = 396;
-
-          const aspectRatio = img.width / img.height;
-          let newWidth = BANNER_WIDTH;
-          let newHeight = BANNER_WIDTH / aspectRatio;
-
-          if (newHeight < BANNER_HEIGHT) {
-            newHeight = BANNER_HEIGHT;
-            newWidth = BANNER_HEIGHT * aspectRatio;
-          }
-
-          const tempCanvas = document.createElement("canvas");
-          tempCanvas.width = newWidth;
-          tempCanvas.height = newHeight;
-          const tempCtx = tempCanvas.getContext("2d");
-          if (tempCtx) {
-            tempCtx.drawImage(img, 0, 0, newWidth, newHeight);
-          }
-
-          canvas.width = BANNER_WIDTH;
-          canvas.height = BANNER_HEIGHT;
-          ctx.drawImage(
-            tempCanvas,
-            (newWidth - BANNER_WIDTH) / 2,
-            (newHeight - BANNER_HEIGHT) / 2,
-            BANNER_WIDTH,
-            BANNER_HEIGHT,
-            0,
-            0,
-            BANNER_WIDTH,
-            BANNER_HEIGHT,
-          );
-
-          resolve(canvas.toDataURL("image/jpeg"));
-        };
-        img.onerror = () => reject("Image load error");
-      };
-      reader.onerror = () => reject("File read error");
-    });
-  };
-
-  const base64ToFile = (base64String: string, filename: string): File => {
-    const byteCharacters = atob(base64String);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: "image/jpeg" });
-
-    return new File([blob], filename, { type: "image/jpeg" });
-  };
-
   useEffect(() => {
     dispatch(fetchCategories());
     if (id !== null) dispatch(fetchPost(id));
@@ -140,7 +70,7 @@ const PostEditorPage: React.FC = () => {
     if (categories.length > 0 && !category && !id) {
       setCategory(categories[0]);
     }
-  }, [categories, id]);
+  }, [categories, id, category]);
 
   const handleAddCategory = async (categoryName: string) => {
     setIsAddingCategory(true);
@@ -206,8 +136,6 @@ const PostEditorPage: React.FC = () => {
   };
 
   if (loading) return <Loading />;
-
-  const existingCategoryNames = categories.map((cat) => cat.name.toLowerCase());
 
   return (
     <div className="post-editor-page">

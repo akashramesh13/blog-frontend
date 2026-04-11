@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-between;
 
-  width: 100%; // 🔥 CRITICAL
+  width: 100%;
   padding: 0 2.5rem;
 
   height: 60px;
@@ -44,7 +44,7 @@
   align-items: center;
   gap: 1.5rem;
 
-  margin-left: auto; // 🔥 forces it fully right
+  margin-left: auto;
 }
 
 /* ---------------- WRITE ---------------- */
@@ -71,7 +71,7 @@
 /* ---------------- PROFILE ---------------- */
 
 .profile-icon {
-  font-size: 26px; // 🔥 bigger
+  font-size: 26px;
   color: #666;
   cursor: pointer;
 

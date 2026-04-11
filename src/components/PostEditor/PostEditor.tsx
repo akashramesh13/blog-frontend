@@ -76,7 +76,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
 
       <ReactQuill
         ref={quillRef}
-        value={content} // ✅ THIS WAS MISSING
+        value={content}
         onChange={(value, delta, source, editor) => {
           if (!readOnly) {
             setContent(editor.getContents());
