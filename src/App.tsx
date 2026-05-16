@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import PostEditorPage from './components/PostEditorPage/PostEditorPage';
 import PostViewer from './components/PostViewer/PostViewer';
 import NavBar from './components/Navbar/NavBar';
@@ -28,6 +29,7 @@ const App: React.FC = () => {
         <Redirect to="/" />
       </Switch>
       <Footer />
+      <Analytics />
     </Router>
   );
 };
