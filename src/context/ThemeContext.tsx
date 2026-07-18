@@ -30,6 +30,40 @@ function applyTheme(theme: Theme): void {
   });
 }
 
+function updateFavicon(themeName: "light" | "dark" | "terminal"): void {
+  let accentColor = "#f5a97f"; // Catppuccin peach (dark default)
+  let bgColor = "#1E1E1E";
+  let textColor = "#ffffff";
+
+  if (themeName === "light") {
+    accentColor = "#f97316";
+    bgColor = "#fcfcfc";
+    textColor = "#18181b";
+  } else if (themeName === "terminal") {
+    accentColor = "#22c55e";
+    bgColor = "#0A0A0A";
+    textColor = "#ffffff";
+  }
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" rx="24" fill="${bgColor}" />
+  <text x="50" y="68" font-family="monospace, system-ui, -apple-system, sans-serif" font-size="46" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="-2">
+    <tspan fill="${accentColor}">&lt;</tspan>P<tspan fill="${accentColor}">/&gt;</tspan>
+  </text>
+</svg>`.trim();
+
+  const blob = new Blob([svg], { type: "image/svg+xml" });
+  const url = URL.createObjectURL(blob);
+  let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null;
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  link.href = url;
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -60,6 +94,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const theme = themeMap[resolvedTheme];
     applyTheme(theme);
     document.documentElement.setAttribute("data-theme", resolvedTheme);
+    updateFavicon(resolvedTheme);
   }, [resolvedTheme]);
 
   const setThemeMode = (mode: ThemeMode) => {
