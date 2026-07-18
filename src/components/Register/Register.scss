@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 /* ---------------- ROOT ---------------- */
 
 .register-container {
@@ -6,7 +8,7 @@
   align-items: center;
   min-height: 100vh;
 
-  background: #fafafa;
+  background: $background;
   padding: 1rem;
 }
 
@@ -32,7 +34,7 @@
   font-family: "Playfair Display", serif;
   font-size: 2.2rem;
   font-weight: 600;
-  color: #111;
+  color: $text;
 
   margin-bottom: 2rem;
   text-align: left;
@@ -56,7 +58,7 @@ input {
   padding: 0.6rem 0;
 
   border: none;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid $border;
   background: transparent;
 
   transition: all 0.2s ease;
@@ -64,29 +66,29 @@ input {
 
 /* placeholder */
 input::placeholder {
-  color: #bbb;
+  color: $text-placeholder;
 }
 
 /* hover */
 input:hover {
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid $border-hover;
 }
 
 /* focus */
 input:focus {
   outline: none;
   box-shadow: none;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid $text;
 }
 
 /* valid / invalid (SUBTLE) */
 
 input.valid {
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid $text-muted;
 }
 
 input.invalid {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid $border-hover;
 }
 
 /* ---------------- VALIDATION ---------------- */
@@ -94,16 +96,16 @@ input.invalid {
 .validation-message {
   font-size: 0.8rem;
   margin-top: 6px;
-  color: #888;
+  color: $text-muted;
   line-height: 1.4;
 }
 
 .validation-message.valid {
-  color: #777;
+  color: $text-muted;
 }
 
 .validation-message.invalid {
-  color: #aaa;
+  color: $text-muted;
 }
 
 /* ---------------- PASSWORD ---------------- */
@@ -119,12 +121,12 @@ input.invalid {
   transform: translateY(-50%);
 
   cursor: pointer;
-  color: #999;
+  color: $text-muted;
   font-size: 0.9rem;
 }
 
 .password-toggle:hover {
-  color: #111;
+  color: $text;
 }
 
 /* ---------------- BUTTON ---------------- */
@@ -135,13 +137,13 @@ input.invalid {
   align-self: flex-start;
 
   background: transparent;
-  border: 1px solid #ddd;
+  border: 1px solid $border;
 
   padding: 8px 14px;
 
   font-family: "Libre Baskerville", serif;
   font-size: 0.9rem;
-  color: #111;
+  color: $text;
 
   cursor: pointer;
   transition: all 0.2s ease;
@@ -149,8 +151,8 @@ input.invalid {
 
 /* hover */
 .register-button:hover:not(:disabled) {
-  background: #f5f5f5;
-  border-color: #bbb;
+  background: $surface2;
+  border-color: $border-hover;
 }
 
 /* disabled */
@@ -170,11 +172,11 @@ input.invalid {
 
 /* remove loud colors */
 .error {
-  color: #999;
+  color: $text-muted;
 }
 
 .success {
-  color: #777;
+  color: $text-muted;
 }
 
 /* ---------------- RESPONSIVE ---------------- */

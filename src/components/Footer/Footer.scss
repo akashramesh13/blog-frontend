@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 html,
 body {
   min-height: 100vh;
@@ -14,8 +16,7 @@ body {
 }
 
 .heart {
-  // color: #ff4d4d;
-  color: #000000;
+  color: $text;
 }
 
 .main-content {
@@ -27,12 +28,13 @@ body {
 .footer {
   flex-shrink: 0;
   width: 100%;
-  background-color: white;
-  color: #808080;
-  border-top: 1px solid #ddd;
+  background-color: $surface;
+  color: $text-muted;
+  border-top: 1px solid $border;
   text-align: center;
   padding: 1rem;
   margin-top: auto;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 
   p {
     margin: 0;

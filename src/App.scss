@@ -1,14 +1,17 @@
+@use './styles/theme' as *;
+
 body {
   margin: 0;
   font-family: "Libre Baskerville", serif;
-  background-color: #fff;
-  color: #000;
+  background-color: $background;
+  color: $text;
   overflow-x: hidden;
   width: 100%;
   position: relative;
   -webkit-text-size-adjust: 100%;
   line-height: 1.7;
   letter-spacing: 0.2px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 *,
@@ -18,8 +21,8 @@ body {
 }
 
 ::selection {
-  background: #222;
-  color: #fff;
+  background: $selection;
+  color: $selection-text;
 }
 
 button:focus {
@@ -30,13 +33,30 @@ input:focus,
 textarea:focus {
   outline: none;
   box-shadow: none;
-  border-color: #999;
+  border-color: $text-muted;
 }
 
 a,
 a:visited,
 a:hover,
 a:active {
-  color: #111;
+  color: $text;
   text-decoration: none;
+}
+
+/* Global input/textarea theming */
+input,
+textarea,
+select {
+  color: $text;
+}
+
+/* Fix browser autofill background for dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: $text;
+  -webkit-box-shadow: 0 0 0 1000px $background inset;
+  transition: background-color 5000s ease-in-out 0s;
 }

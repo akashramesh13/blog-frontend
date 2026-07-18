@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 .category-modal-overlay {
   position: fixed;
   top: 0;
@@ -13,7 +15,7 @@
 }
 
 .category-modal {
-  background: white;
+  background: $surface;
   padding: 2rem;
   border-radius: 10px;
   max-width: 90%;
@@ -22,7 +24,7 @@
 
   h2 {
     margin: 0 0 1.5rem 0;
-    color: #333;
+    color: $text;
     font-size: 1.5rem;
   }
 
@@ -32,21 +34,21 @@
     label {
       display: block;
       margin-bottom: 0.5rem;
-      color: #666;
+      color: $text-secondary;
       font-weight: 500;
     }
 
     input {
       width: 100%;
       padding: 0.8rem;
-      border: 1px solid #ddd;
+      border: 1px solid $border;
       border-radius: 5px;
       font-size: 1rem;
       transition: border-color 0.2s ease;
 
       &:focus {
         outline: none;
-        border-color: #333;
+        border-color: $text;
       }
     }
 
@@ -105,19 +107,19 @@
 }
 
 .cancel-button {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: $surface2;
+  color: $text;
 
   &:hover {
-    background-color: #e0e0e0;
+    background-color: $border;
   }
 }
 
 .submit-button {
-  background-color: #333;
-  color: white;
+  background-color: $text;
+  color: $background;
 
   &:hover {
-    background-color: #444;
+    background-color: $text-secondary;
   }
-} 
+}

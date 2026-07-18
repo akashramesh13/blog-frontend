@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 .home-container {
   max-width: 1200px;
   min-width: 1200px;
@@ -24,7 +26,7 @@
     font-size: 3.2rem;
     font-family: "Playfair Display", serif;
     font-weight: 600;
-    color: #111;
+    color: $text;
     line-height: 1.2;
 
     display: flex;
@@ -35,7 +37,7 @@
   /* welcome text stays separate (not BEM) */
   .welcome-text {
     font-size: 1.6rem;
-    color: #000;
+    color: $text;
     margin-bottom: 0.4rem;
     font-weight: 400;
   }
@@ -51,21 +53,21 @@
 
     span {
       font-size: 0.85rem;
-      color: #666;
+      color: $category-text;
       padding: 0.3rem 0.8rem;
       border-radius: 20px;
-      background: #f3f3f3;
+      background: $category-bg;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        background: #e8e8e8;
-        color: #000;
+        background: $category-hover-bg;
+        color: $text;
       }
 
       &.active {
-        background: #111;
-        color: #fff;
+        background: $category-active-bg;
+        color: $category-active-text;
       }
     }
   }
@@ -85,8 +87,8 @@
   &__post {
     padding: 1.5rem 1.8rem;
     border-radius: 12px;
-    background: #fff;
-    border: 1px solid #eee;
+    background: $surface;
+    border: 1px solid $border;
     transition: all 0.2s ease;
 
     &:hover {
@@ -102,12 +104,12 @@
     }
 
     &-excerpt {
-      color: #555;
+      color: $text-secondary;
     }
 
     &-date {
       font-size: 0.85rem;
-      color: #999;
+      color: $text-muted;
     }
   }
 
@@ -115,7 +117,7 @@
 
   .no-posts {
     text-align: center;
-    color: #888;
+    color: $text-muted;
   }
 
   /* ================= RESPONSIVE ================= */

@@ -6,9 +6,12 @@ import { clearCurrentPost } from "../../redux/actions/postsActions";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { CgProfile } from "react-icons/cg";
+import { FiSun, FiMoon, FiMonitor, FiTerminal } from "react-icons/fi";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { useAuthCheck } from "../../hooks/useAuthCheck";
+import { useTheme } from "../../context/ThemeContext";
+import { ThemeMode } from "../../types/theme";
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const NavBar: React.FC = () => {
@@ -20,6 +23,37 @@ const NavBar: React.FC = () => {
   const profileRef = useRef<HTMLDivElement>(null);
 
   useAuthCheck();
+
+  const { themeMode, setThemeMode } = useTheme();
+
+  const cycleTheme = () => {
+    // We use the actual OS preference here because resolvedTheme changes 
+    // when themeMode changes, which would cause the cycle array to mutate mid-cycle!
+    const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    // If OS is light: System (Light) -> Dark -> Terminal -> Light -> System
+    // If OS is dark: System (Dark) -> Terminal -> Light -> Dark -> System
+    const themeCycle: ThemeMode[] = isSystemDark
+      ? ["system", "terminal", "light", "dark"]
+      : ["system", "dark", "terminal", "light"];
+
+    const currentIndex = themeCycle.indexOf(themeMode);
+    const nextIndex = (currentIndex + 1) % themeCycle.length;
+    setThemeMode(themeCycle[nextIndex]);
+  };
+
+  const themeIcon = () => {
+    switch (themeMode) {
+      case "light":
+        return FiSun({});
+      case "dark":
+        return FiMoon({});
+      case "terminal":
+        return FiTerminal({});
+      default:
+        return FiMonitor({});
+    }
+  };
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -70,6 +104,15 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className={`navbar__right ${isOpen ? "active" : ""}`}>
+        <button
+          className="theme-toggle"
+          onClick={cycleTheme}
+          title={`Theme: ${themeMode}`}
+          aria-label={`Current theme: ${themeMode}. Click to change.`}
+        >
+          {themeIcon()}
+        </button>
+
         {userInfo && (
           <Link id="add-post" to="/post/new" onClick={handleAddNewPost}>
             Write

@@ -61,10 +61,10 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
             {error && <p className="error">{error}</p>}
           </div>
           <div className="modal-buttons">
-            <button type="button" onClick={onClose} disabled={isLoading}>
+            <button type="button" className="cancel-button" onClick={onClose} disabled={isLoading}>
               Cancel
             </button>
-            <button type="submit" disabled={isLoading}>
+            <button type="submit" className="submit-button" disabled={isLoading}>
               {isLoading ? 'Adding...' : 'Add Category'}
             </button>
           </div>

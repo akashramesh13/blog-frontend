@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 /* ---------------- ROOT ---------------- */
 
 .editor-container {
@@ -23,29 +25,29 @@
   background: transparent;
 
   margin-bottom: 1.5rem;
-  color: #111;
+  color: $text;
 
   width: 100%;
 
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $border;
   padding-bottom: 6px;
 
   transition: all 0.2s ease;
 }
 
 .editor-container__editor-title::placeholder {
-  color: #bbb;
+  color: $text-placeholder;
   font-weight: 400;
 }
 
 /* hover hint */
 .editor-container__editor-title:hover {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid $border;
 }
 
 /* focus */
 .editor-container__editor-title:focus {
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid $text;
 }
 
 /* ---------------- COVER IMAGE ---------------- */
@@ -69,9 +71,97 @@ input[type="file"] {
 
 .ql-toolbar {
   border: none;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $border;
   background: transparent;
   padding: 6px 0;
+}
+
+/* Quill toolbar icon theming */
+.ql-toolbar .ql-stroke {
+  stroke: $text-secondary;
+}
+
+.ql-toolbar .ql-stroke-miter {
+  stroke: $text-secondary;
+}
+
+.ql-toolbar .ql-fill,
+.ql-toolbar .ql-stroke.ql-fill {
+  fill: $text-secondary;
+}
+
+.ql-toolbar .ql-picker-label {
+  color: $text-secondary;
+}
+
+/* Toolbar hover/active states */
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-toolbar button.ql-active .ql-stroke,
+.ql-toolbar .ql-picker-label.ql-active .ql-stroke {
+  stroke: $text;
+}
+
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-toolbar button.ql-active .ql-fill,
+.ql-toolbar .ql-picker-label.ql-active .ql-fill {
+  fill: $text;
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar button.ql-active,
+.ql-toolbar .ql-picker-label.ql-active {
+  color: $text;
+}
+
+/* Picker dropdown */
+.ql-toolbar .ql-picker-options {
+  background: $surface;
+  border-color: $border;
+}
+
+.ql-toolbar .ql-picker.ql-expanded .ql-picker-label {
+  border-color: $border;
+}
+
+.ql-toolbar .ql-picker.ql-expanded .ql-picker-options {
+  border-color: $border;
+}
+
+/* Quill snow tooltip */
+.ql-snow .ql-tooltip {
+  background-color: $surface;
+  border-color: $border;
+  color: $text;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.ql-snow .ql-tooltip input[type="text"] {
+  border-color: $border;
+  color: $text;
+  background: $background;
+}
+
+.ql-snow .ql-tooltip a {
+  color: $text-secondary;
+}
+
+/* Quill snow container border override */
+.ql-container.ql-snow {
+  border: none;
+}
+
+/* Quill code-block override */
+.ql-snow .ql-editor pre.ql-syntax {
+  background: $code-background;
+  color: $text;
+}
+
+/* Disabled/empty state icons */
+.ql-snow .ql-picker.ql-header .ql-picker-item::before {
+  color: $text-secondary;
 }
 
 /* ---------------- QUILL CONTAINER ---------------- */
@@ -89,7 +179,7 @@ input[type="file"] {
 
 .ql-editor {
   font-family: "Libre Baskerville", serif;
-  color: #222;
+  color: $text;
   flex: 1;
   height: 100%;
 }
@@ -98,7 +188,7 @@ input[type="file"] {
 .ql-editor::before {
   padding-top: 10px;
   right: auto;
-  color: #aaa;
+  color: $text-placeholder;
   font-style: italic;
 }
 
@@ -129,15 +219,15 @@ input[type="file"] {
 }
 
 .ql-editor blockquote {
-  border-left: 3px solid #ddd;
+  border-left: 3px solid $border;
   padding-left: 1rem;
-  color: #666;
+  color: $text-secondary;
   margin: 1.2rem 0;
   font-style: italic;
 }
 
 .ql-editor pre {
-  background: #f6f6f6;
+  background: $code-background;
   padding: 12px;
   border-radius: 6px;
   overflow-x: auto;
@@ -145,7 +235,7 @@ input[type="file"] {
 }
 
 .ql-editor a {
-  color: #111;
+  color: $text;
   text-decoration: underline;
 }
 
@@ -163,11 +253,11 @@ input[type="file"] {
   align-self: flex-start;
 
   background: transparent;
-  color: #111;
+  color: $text;
 
   padding: 8px 14px;
   border-radius: 6px;
-  border: 1px solid #ddd;
+  border: 1px solid $border;
 
   font-size: 14px;
   font-weight: 500;
@@ -177,8 +267,8 @@ input[type="file"] {
 }
 
 .save-button:hover {
-  background: #f5f5f5;
-  border-color: #ccc;
+  background: $surface2;
+  border-color: $border-hover;
 }
 
 .image-upload {
@@ -186,20 +276,20 @@ input[type="file"] {
   margin: 1rem 0 1.2rem;
 
   font-size: 0.9rem;
-  color: #666;
+  color: $text-secondary;
 
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .image-upload span {
-  border-bottom: 1px dashed #ccc;
+  border-bottom: 1px dashed $border-hover;
   padding-bottom: 2px;
 }
 
 .image-upload:hover span {
-  color: #000;
-  border-color: #999;
+  color: $text;
+  border-color: $text-muted;
 }
 
 /* hide actual input */
@@ -210,7 +300,7 @@ select {
   font-family: "Libre Baskerville", serif;
   padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #222;
+  border: 1px solid $border;
+  background: $surface;
+  color: $text;
 }

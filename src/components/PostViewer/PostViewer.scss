@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 .post-view {
   max-width: 720px;
   margin: 80px auto;
@@ -34,7 +36,7 @@
     letter-spacing: -0.4px;
     margin: 0 0 0.6rem;
     line-height: 1.2;
-    color: #000000;
+    color: $text;
 
     @media (max-width: 768px) {
       font-size: 2.1rem;
@@ -50,15 +52,15 @@
     align-items: center;
     gap: 6px;
     font-size: 0.85rem;
-    color: #888;
+    color: $text-muted;
 
     .author {
-      color: #111;
+      color: $text;
       font-weight: 500;
     }
 
     .dot {
-      color: #bbb;
+      color: $text-muted;
     }
   }
 
@@ -75,20 +77,20 @@
       background: none;
       border: none;
       padding: 0;
-      color: #888;
+      color: $text-muted;
       cursor: pointer;
       font-size: 0.8rem;
       transition: color 0.15s ease;
 
       &:hover {
-        color: #111;
+        color: $text;
       }
     }
 
     .post-view__edit-button::after {
       content: "·";
       margin-left: 8px;
-      color: #ccc;
+      color: $border-hover;
     }
   }
 
@@ -126,14 +128,14 @@
   .toc {
     margin: 2.5rem auto;
     padding: 1rem 1.2rem;
-    border: 1px solid #eee;
+    border: 1px solid $border;
     border-radius: 6px;
 
     &-title {
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #999;
+      color: $text-muted;
       margin-bottom: 0.6rem;
     }
 
@@ -144,7 +146,7 @@
 
       ul {
         margin-left: 12px;
-        border-left: 1px solid #eee;
+        border-left: 1px solid $border;
         padding-left: 6px;
       }
     }
@@ -153,24 +155,24 @@
       cursor: pointer;
       padding: 4px 6px;
       font-size: 0.92rem;
-      color: #555;
+      color: $text-secondary;
       transition: all 0.15s ease;
 
       &:hover {
-        color: #000;
-        background: rgba(0, 0, 0, 0.03);
+        color: $text;
+        background: $hover-overlay;
       }
 
       &.active {
         font-weight: 600;
-        color: #000;
+        color: $text;
       }
     }
 
     /* levels */
     .level-1 {
       font-weight: 600;
-      color: #111;
+      color: $text;
       margin-top: 8px;
     }
 
@@ -182,7 +184,7 @@
     .level-3 {
       margin-left: 18px;
       font-size: 0.88rem;
-      color: #777;
+      color: $text-muted;
     }
   }
 
@@ -192,7 +194,7 @@
     font-family: "Libre Baskerville", serif;
     font-size: 1.05rem;
     line-height: 1.7;
-    color: #151515;
+    color: $text;
 
     /* headings */
     h1,
@@ -238,20 +240,26 @@
 
     /* blockquote */
     blockquote {
-      border-left: 3px solid #ddd;
+      border-left: 3px solid $border;
       padding-left: 1rem;
       margin: 1rem 0;
-      color: #666;
+      color: $text-secondary;
       font-style: italic;
     }
 
     /* code */
     pre {
-      background: #f6f6f6;
+      background: $code-background;
       padding: 12px;
       border-radius: 6px;
       overflow-x: auto;
       margin: 1rem 0;
+    }
+
+    /* Quill code-block override (bubble theme) */
+    pre.ql-syntax {
+      background: $code-background;
+      color: $text;
     }
 
     @media (max-width: 768px) {

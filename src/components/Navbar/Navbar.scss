@@ -1,3 +1,5 @@
+@use '../../styles/theme' as *;
+
 /* ---------------- NAVBAR ROOT ---------------- */
 
 .navbar {
@@ -10,13 +12,14 @@
 
   height: 60px;
 
-  background: #fff;
-  border-bottom: 1px solid #eee;
+  background: $surface;
+  border-bottom: 1px solid $border;
 
   position: sticky;
   top: 0;
   z-index: 100;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* ---------------- LEFT ---------------- */
@@ -33,7 +36,7 @@
   font-size: 1.35rem;
   font-weight: 600;
 
-  color: #111;
+  color: $text;
   text-decoration: none;
 }
 
@@ -51,7 +54,7 @@
 
 #add-post {
   font-size: 0.95rem;
-  color: #555;
+  color: $text-secondary;
 
   cursor: pointer;
   text-decoration: none !important;
@@ -63,23 +66,23 @@
 }
 
 #add-post:hover {
-  color: #111;
+  color: $text;
   text-decoration: none !important;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid $text;
 }
 
 /* ---------------- PROFILE ---------------- */
 
 .profile-icon {
   font-size: 26px;
-  color: #666;
+  color: $text-secondary;
   cursor: pointer;
 
   transition: color 0.2s ease;
 }
 
 .profile-icon:hover {
-  color: #111;
+  color: $text;
 }
 
 /* ---------------- DROPDOWN ---------------- */
@@ -93,8 +96,8 @@
   right: 0;
   top: 40px;
 
-  background: #fff;
-  border: 1px solid #eee;
+  background: $surface;
+  border: 1px solid $border;
   border-radius: 6px;
 
   padding: 6px 0;
@@ -114,19 +117,43 @@
   text-align: left;
 
   cursor: pointer;
-  color: #555;
+  color: $text-secondary;
 }
 
 .profile-dropdown a:hover,
 .profile-dropdown button:hover {
-  background: #f5f5f5;
-  color: #111;
+  background: $surface2;
+  color: $text;
 }
 
 /* remove red */
 
 .profile-dropdown button {
-  color: #555;
+  color: $text-secondary;
+}
+
+/* ---------------- THEME TOGGLE ---------------- */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+
+  font-size: 18px;
+  color: $text-secondary;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  color: $text;
+  background: $surface2;
 }
 
 /* ---------------- MOBILE ---------------- */
