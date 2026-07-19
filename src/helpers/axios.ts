@@ -13,12 +13,10 @@ axios.interceptors.response.use(
       error.response &&
       (error.response.status === 401 || error.response.status === 403)
     ) {
-      const userInfo = sessionStorage.getItem("userInfo");
-      if (userInfo) {
-        clearSession();
-
-        store.dispatch({ type: LOGOUT });
-
+      clearSession();
+      store.dispatch({ type: LOGOUT });
+      
+      if (window.location.pathname !== "/login") {
         window.location.href = "/login";
       }
     }

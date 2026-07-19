@@ -63,7 +63,7 @@ const PostViewer: React.FC = () => {
 
   return (
     <div className="post-view">
-      {loading ? (
+      {loading && post?.id !== id ? (
         <Loading />
       ) : post ? (
         <>

@@ -38,7 +38,8 @@ export const useAuthCheck = () => {
             (error.response.status === 401 || error.response.status === 403)
           ) {
             console.log("Session expired, logging out");
-            localStorage.removeItem("userInfo");
+            localStorage.clear();
+            sessionStorage.clear();
             dispatch({ type: LOGOUT });
           }
         }

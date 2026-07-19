@@ -16,6 +16,9 @@ export const profileReducer = (state = initialState, action: ProfileActionTypes)
         loading: false,
         id: action.payload.id,
         username: action.payload.username,
+        avatar: action.payload.avatar,
+        bio: action.payload.bio,
+        profileTitle: action.payload.profileTitle,
       };
     case PROFILE_FAILURE:
       return { ...initialState, loading: false };

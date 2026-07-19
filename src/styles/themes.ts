@@ -2,6 +2,7 @@ import { Theme } from "../types/theme";
 
 export const lightTheme: Theme = {
   background: "#FFFFFF",
+  accent: "#f97316",
   surface: "#FFFFFF",
   surface2: "#F5F5F5",
   text: "#111111",
@@ -23,6 +24,7 @@ export const lightTheme: Theme = {
 
 export const darkTheme: Theme = {
   background: "#121212",
+  accent: "#f5a97f",
   surface: "#1E1E1E",
   surface2: "#2A2A2A",
   text: "#E8E8E8",
@@ -44,6 +46,7 @@ export const darkTheme: Theme = {
 
 export const terminalTheme: Theme = {
   background: "#0A0A0A",
+  accent: "#22c55e",
   surface: "#0F0F0F",
   surface2: "#1A1A1A",
   text: "#00FF41",

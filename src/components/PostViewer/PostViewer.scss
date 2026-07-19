@@ -15,7 +15,7 @@
     margin-bottom: 2rem;
 
     &__left {
-      max-width: 680px;
+      max-width: 100%;
     }
 
     @media (max-width: 768px) {
@@ -98,11 +98,7 @@
 
   .post-cover {
     width: 100%;
-    margin: 2rem auto;
-
-    /* full bleed desktop */
-    margin-left: -1rem;
-    margin-right: -1rem;
+    margin: 2rem 0;
 
     img {
       width: 100%;
@@ -113,8 +109,6 @@
     }
 
     @media (max-width: 768px) {
-      margin-left: 0;
-      margin-right: 0;
 
       img {
         max-height: 240px;

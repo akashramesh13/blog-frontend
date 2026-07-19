@@ -19,7 +19,7 @@ import {
 import { IPost } from "../../types/postsTypes";
 
 export const fetchPosts =
-  (page = 0, size = 5, category: string | null = null, reset = false) =>
+  (page = 0, size = 5, category: string | null = null, search: string = "", reset = false) =>
   async (dispatch: Dispatch) => {
     dispatch({ type: FETCH_POSTS_REQUEST });
 
@@ -27,6 +27,9 @@ export const fetchPosts =
       let url = `/posts/?page=${page}&size=${size}`;
       if (category) {
         url += `&category=${encodeURIComponent(category)}`;
+      }
+      if (search) {
+        url += `&search=${encodeURIComponent(search)}`;
       }
 
       const { data } = await axios.get(url);

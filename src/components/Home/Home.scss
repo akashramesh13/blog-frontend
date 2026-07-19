@@ -42,6 +42,32 @@
     font-weight: 400;
   }
 
+  /* ---------------- SEARCH ---------------- */
+  &__search {
+    width: 100%;
+    max-width: 600px;
+    margin: 1.5rem auto 0;
+    padding: 12px 20px;
+    font-family: "Playfair Display", serif;
+    font-size: 1.1rem;
+    border: 1px solid $border;
+    border-radius: 30px;
+    background: $surface;
+    color: $text;
+    outline: none;
+    transition: all 0.2s ease;
+
+    &:focus {
+      border-color: $text-muted;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    &::placeholder {
+      color: $text-placeholder;
+      font-style: italic;
+    }
+  }
+
   /* ---------------- CATEGORIES ---------------- */
 
   .categories-inline {

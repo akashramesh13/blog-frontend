@@ -13,6 +13,7 @@ export interface AuthState {
   userInfo?: {
     username: string;
     id: string;
+    avatar?: string;
   };
   error?: string;
 }
@@ -26,6 +27,7 @@ export interface LoginSuccessAction {
   payload: {
     username: string;
     id: string;
+    avatar?: string;
   };
 }
 
@@ -43,6 +45,7 @@ export interface RegisterSuccessAction {
   payload: {
     username: string;
     id: string;
+    avatar?: string;
   };
 }
 

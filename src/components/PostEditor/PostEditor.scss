@@ -11,10 +11,35 @@
   flex-direction: column;
 }
 
+/* ---------------- HEADER ---------------- */
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1.5rem;
+
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: $background;
+  padding: 1rem 0 0.5rem;
+  border-bottom: 1px solid transparent; /* Can add color on scroll with JS, but transparent is fine */
+
+  h1 {
+    margin: 0;
+    flex: 1;
+    font-size: 2.6rem;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-weight: 600;
+  }
+}
+
 /* ---------------- TITLE ---------------- */
 
 .editor-container__editor-title {
-  font-family: "Playfair Display", serif;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
   font-size: 2.6rem;
   font-weight: 600;
 
@@ -24,10 +49,10 @@
   outline: none;
   background: transparent;
 
-  margin-bottom: 1.5rem;
   color: $text;
 
   width: 100%;
+  flex: 1;
 
   border-bottom: 1px solid $border;
   padding-bottom: 6px;
@@ -72,8 +97,15 @@ input[type="file"] {
 .ql-toolbar {
   border: none;
   border-bottom: 1px solid $border;
-  background: transparent;
-  padding: 6px 0;
+  background: $surface;
+  padding: 10px 0;
+  
+  position: sticky;
+  top: 76px; /* Below the sticky editor-header */
+  z-index: 10;
+  
+  /* Adds a subtle shadow when scrolling for better distinction */
+  box-shadow: 0 4px 6px -6px rgba(0,0,0,0.1);
 }
 
 /* Quill toolbar icon theming */
@@ -178,7 +210,7 @@ input[type="file"] {
 /* ---------------- EDITOR CONTENT ---------------- */
 
 .ql-editor {
-  font-family: "Libre Baskerville", serif;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
   color: $text;
   flex: 1;
   height: 100%;
@@ -245,29 +277,46 @@ input[type="file"] {
   margin-left: 60px;
 }
 
-/* ---------------- BUTTON (CLEAN) ---------------- */
+/* ---------------- HEADER BUTTONS ---------------- */
 
-.save-button {
-  font-family: "Libre Baskerville", serif;
-  margin-top: 2.5rem;
-  align-self: flex-start;
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
-  background: transparent;
-  color: $text;
-
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: 1px solid $border;
-
-  font-size: 14px;
-  font-weight: 500;
-
+.save-button, .discard-button {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  padding: 10px 22px;
+  border-radius: 30px; /* rounded pill shape */
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.save-button {
+  background: $text;
+  color: $background;
+  border: none;
 }
 
 .save-button:hover {
+  background: $text-secondary;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.discard-button {
+  background: transparent;
+  color: $text-muted;
+  border: 1px solid $border;
+}
+
+.discard-button:hover {
   background: $surface2;
+  color: $text;
   border-color: $border-hover;
 }
 
@@ -297,7 +346,7 @@ input[type="file"] {
   display: none;
 }
 select {
-  font-family: "Libre Baskerville", serif;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid $border;

@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
 import useInputRef from "../../hooks/useInputRef";
 import { useHistory } from "react-router-dom";
+import ImageCropper from "../ImageCropper/ImageCropper";
 
 interface PostEditorProps {
   content: any;
@@ -35,6 +36,12 @@ const PostEditor: React.FC<PostEditorProps> = ({
   const isDirtyRef = useRef(false);
   const isSavingRef = useRef(false);
 
+  // Cropper state
+  const [showCropper, setShowCropper] = React.useState(false);
+  const [tempImageSrc, setTempImageSrc] = React.useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleSave = useCallback(() => {
     isSavingRef.current = true;
     isDirtyRef.current = false;
@@ -50,12 +57,26 @@ const PostEditor: React.FC<PostEditorProps> = ({
 
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        setCoverImage(reader.result);
-        if (!isSavingRef.current) {
-          isDirtyRef.current = true;
-        }
+        setTempImageSrc(reader.result);
+        setShowCropper(true);
       }
     };
+    // reset input so the same file can be selected again
+    event.target.value = "";
+  };
+
+  const handleCropComplete = (croppedBase64: string) => {
+    setCoverImage(croppedBase64);
+    if (!isSavingRef.current) {
+      isDirtyRef.current = true;
+    }
+    setShowCropper(false);
+    setTempImageSrc(null);
+  };
+
+  const handleCropCancel = () => {
+    setShowCropper(false);
+    setTempImageSrc(null);
   };
 
   useEffect(() => {
@@ -102,38 +123,67 @@ const PostEditor: React.FC<PostEditorProps> = ({
 
   return (
     <div className="editor-container">
-      {/* TITLE */}
-      {!readOnly ? (
-        <input
-          type="text"
-          placeholder="Enter Title"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
+      {/* HEADER: TITLE + SAVE BUTTON */}
+      <div className="editor-header">
+        {!readOnly ? (
+          <input
+            type="text"
+            placeholder="Enter Title"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
 
-            if (!isSavingRef.current) {
-              isDirtyRef.current = true;
-            }
-          }}
-          ref={titleRef}
-          className="editor-container__editor-title"
-          autoFocus
-        />
-      ) : (
-        <h1>{title}</h1>
-      )}
+              if (!isSavingRef.current) {
+                isDirtyRef.current = true;
+              }
+            }}
+            ref={titleRef}
+            className="editor-container__editor-title"
+            autoFocus
+          />
+        ) : (
+          <h1>{title}</h1>
+        )}
+
+        {/* ACTIONS */}
+        {!readOnly && (
+          <div className="editor-actions">
+            <button className="discard-button" onClick={() => history.push('/')}>
+              Discard
+            </button>
+            <button className="save-button" onClick={handleSave}>
+              {isEditing ? "Update" : "Publish"}
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* IMAGE UPLOAD */}
       {!readOnly && (
         <label className="image-upload">
-          <span>+ Add cover image</span>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <div
+            className="image-upload__placeholder"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <span>{coverImage ? "+ Update Cover Image" : "+ Add Cover Image"}</span>
+          </div>
+          <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
         </label>
       )}
 
       {/* IMAGE PREVIEW */}
       {coverImage && (
         <img src={coverImage} alt="Cover" className="cover-preview" />
+      )}
+
+      {/* CROPPER MODAL */}
+      {showCropper && tempImageSrc && (
+        <ImageCropper
+          imageSrc={tempImageSrc}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+          aspectRatio={21 / 9} // Banner aspect ratio similar to LinkedIn
+        />
       )}
 
       {/* EDITOR */}
@@ -181,13 +231,6 @@ const PostEditor: React.FC<PostEditorProps> = ({
         readOnly={readOnly}
         placeholder="Write something amazing..."
       />
-
-      {/* SAVE BUTTON */}
-      {!readOnly && (
-        <button className="save-button" onClick={handleSave}>
-          {isEditing ? "Update Post" : "Publish Post"}
-        </button>
-      )}
     </div>
   );
 };

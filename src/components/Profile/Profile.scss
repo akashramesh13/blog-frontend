@@ -8,15 +8,280 @@
   padding: 0 1rem;
 }
 
+/* ---------------- HEADER ---------------- */
+
+.profile__header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid $border;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.2rem;
+  }
+}
+
+.profile__avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  .edit-avatar-btn {
+    background: transparent;
+    border: 1px solid $border;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: $text-secondary;
+    transition: all 0.2s;
+    
+    &:hover {
+      background: $surface2;
+      color: $text;
+    }
+  }
+}
+
+.profile__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.profile__info {
+  display: flex;
+  flex-direction: column;
+}
+
 /* ---------------- TITLE ---------------- */
 
 .profile__title {
-  font-family: "Playfair Display", serif;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Zilla Slab', Georgia, serif;
   font-size: 2.8rem;
   font-weight: 600;
-
-  margin-bottom: 2rem;
+  margin: 0 0 0.2rem;
   color: $text;
+}
+
+.profile__title-editor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.5rem;
+  
+  input {
+    font-family: 'Zilla Slab', Georgia, serif;
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid $border;
+    border-radius: 8px;
+    outline: none;
+    width: 300px;
+  }
+  
+  button {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    
+    &.save-btn {
+      background: $text;
+      color: $background;
+    }
+    &.cancel-btn {
+      background: $surface;
+      border: 1px solid $border;
+      color: $text;
+    }
+  }
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: $text-muted;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: $surface2;
+    color: $text;
+  }
+}
+
+.profile__subtitle {
+  color: $text-muted;
+  font-size: 1.1rem;
+  margin: 0 0 1.2rem;
+}
+
+/* ---------------- STATS ---------------- */
+
+.profile__stats {
+  display: flex;
+  gap: 2rem;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
+}
+
+.profile__stats .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile__stats .stat-value {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: $text;
+  font-family: 'Zilla Slab', Georgia, serif;
+}
+
+.profile__stats .stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: $text-muted;
+  margin-top: 4px;
+}
+
+.profile__bio-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  
+  h2 {
+    margin: 0;
+  }
+}
+
+.edit-bio-btn {
+  background: transparent;
+  border: 1px solid $border;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: $text-secondary;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  
+  &:hover {
+    background: $surface2;
+    color: $text;
+  }
+}
+
+.bio-editor {
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 1rem;
+  background: $surface;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  .quill {
+    border: none;
+    color: $text;
+    .ql-container {
+      border: 1px solid $border;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      min-height: 150px;
+      font-size: 1.05rem;
+      color: $text;
+    }
+    .ql-toolbar {
+      border: 1px solid $border;
+      border-radius: 4px;
+      background: $surface2;
+    }
+    .ql-stroke { stroke: $text; }
+    .ql-fill { fill: $text; }
+    .ql-picker { color: $text; }
+  }
+}
+
+.bio-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .cancel-btn {
+    background: $surface;
+    border: 1px solid $border;
+    color: $text;
+    &:hover { background: $surface2; }
+  }
+  
+  .save-btn {
+    background: $text;
+    color: $background;
+    &:hover { opacity: 0.9; }
+  }
+}
+
+.bio-content {
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 2.5rem;
+  background: $surface;
+  color: $text;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  min-height: 100px;
+  line-height: 1.8;
+  font-size: 1.15rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  p:first-child {
+    margin-top: 0;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
 }
 
 /* ---------------- META ---------------- */
@@ -24,10 +289,11 @@
 .profile__meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-
-  font-size: 1rem;
-  margin-bottom: 2rem;
+  gap: 6px;
+  background: $surface;
+  padding: 1.2rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid $border;
 }
 
 /* label (small, subtle) */
@@ -42,27 +308,5 @@
 .profile__meta .value {
   font-size: 1.1rem;
   color: $text;
-}
-
-/* ---------------- OPTIONAL ACTION ---------------- */
-
-.profile button {
-  margin-top: 2rem;
-
-  background: none;
-  border: 1px solid $border;
-  border-radius: 6px;
-
-  padding: 8px 14px;
-
-  font-size: 0.9rem;
-  color: $text;
-
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.profile button:hover {
-  background: $surface2;
-  border-color: $border-hover;
+  font-weight: 500;
 }

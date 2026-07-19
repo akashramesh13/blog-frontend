@@ -26,15 +26,26 @@ const Home: React.FC = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
 
+  // Debounce search query
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
   useEffect(() => {
     dispatch(clearPosts());
     setPage(0);
-    dispatch(fetchPosts(0, size, selectedCategory, true));
-  }, [selectedCategory, dispatch]);
+    dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true));
+  }, [selectedCategory, debouncedSearch, dispatch]);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -59,7 +70,7 @@ const Home: React.FC = () => {
         (entries) => {
           if (entries[0].isIntersecting && page + 1 < totalPages) {
             setPage((prev) => prev + 1);
-            dispatch(fetchPosts(page + 1, size, selectedCategory));
+            dispatch(fetchPosts(page + 1, size, selectedCategory, debouncedSearch));
           }
         },
         { threshold: 1 },
@@ -67,7 +78,7 @@ const Home: React.FC = () => {
 
       if (node) observer.current.observe(node);
     },
-    [loading, page, totalPages, selectedCategory, dispatch],
+    [loading, page, totalPages, selectedCategory, debouncedSearch, dispatch],
   );
 
   return (
@@ -78,6 +89,14 @@ const Home: React.FC = () => {
             <span className="welcome-text">Welcome to</span>
             <span id="home__blog-title">Pixel Pursuit</span>
           </h1>
+
+          <input
+            type="text"
+            className="home__search"
+            placeholder="Search stories by title..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
 
           <div className="categories-inline">
             {categories.map((category) => (
@@ -93,7 +112,7 @@ const Home: React.FC = () => {
         </div>
         <div className="home__posts">
           {posts.length === 0 && !loading ? (
-            <p className="no-posts">No posts found. (404)</p>
+            <p className="no-posts">No posts found.</p>
           ) : (
             posts.map((post, index) => {
               if (index === posts.length - 1) {

@@ -12,6 +12,7 @@ import { AnyAction } from "redux";
 import { useAuthCheck } from "../../hooks/useAuthCheck";
 import { useTheme } from "../../context/ThemeContext";
 import { ThemeMode } from "../../types/theme";
+import AvatarImage from "../AvatarImage/AvatarImage";
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const NavBar: React.FC = () => {
@@ -121,10 +122,15 @@ const NavBar: React.FC = () => {
 
         {userInfo ? (
           <div className="profile-menu" ref={profileRef}>
-            {CgProfile({
-              className: "profile-icon",
-              onClick: handleProfileOnClick,
-            })}
+            <AvatarImage
+              avatarString={userInfo.avatar}
+              size={36}
+              className="navbar-avatar"
+              onClick={handleProfileOnClick}
+              fallback={CgProfile({
+                className: "profile-fallback-icon",
+              })}
+            />
             {isProfileDropDownOpen && (
               <div className="profile-dropdown">
                 <Link

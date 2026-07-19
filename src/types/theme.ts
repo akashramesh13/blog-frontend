@@ -2,6 +2,7 @@ export type ThemeMode = "light" | "dark" | "system" | "terminal";
 
 export type Theme = {
   background: string;
+  accent: string;
   surface: string;
   surface2: string;
   text: string;

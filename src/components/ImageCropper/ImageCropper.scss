@@ -1,0 +1,85 @@
+@use '../../styles/theme' as *;
+
+.image-cropper-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.image-cropper-container {
+  background: $surface;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.cropper-wrap {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #333;
+}
+
+.controls {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  background: $surface;
+  border-bottom: 1px solid $border;
+}
+
+.zoom-range {
+  width: 80%;
+  max-width: 300px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  gap: 12px;
+  background: $surface;
+}
+
+.btn-cancel,
+.btn-confirm {
+  font-family: "Libre Baskerville", serif;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: $text;
+  border: 1px solid $border;
+}
+
+.btn-cancel:hover {
+  background: $surface2;
+}
+
+.btn-confirm {
+  background: $text;
+  color: $background;
+  border: 1px solid $text;
+}
+
+.btn-confirm:hover {
+  opacity: 0.9;
+}

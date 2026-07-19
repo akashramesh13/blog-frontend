@@ -8,6 +8,9 @@ export interface ProfileState {
   loading: boolean;
   id?: string;
   username?: string;
+  avatar?: string;
+  bio?: string;
+  profileTitle?: string;
 }
 
 export interface ProfileRequestAction {
@@ -19,6 +22,9 @@ export interface ProfileSuccessAction {
   payload: {
     id: string;
     username: string;
+    avatar?: string;
+    bio?: string;
+    profileTitle?: string;
   };
 }
 
