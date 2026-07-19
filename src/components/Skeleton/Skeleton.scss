@@ -1,0 +1,71 @@
+@use '../../styles/theme' as *;
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-base {
+  background: linear-gradient(
+    90deg,
+    $surface2 25%,
+    $border 50%,
+    $surface2 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+.skeleton-wrapper {
+  width: 100%;
+}
+
+.skeleton-post-card {
+  padding: 1.5rem 1.8rem;
+  border-radius: 12px;
+  background: $surface;
+  border: 1px solid $border;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-profile {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 1rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid $border;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.2rem;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 600px) {
+      align-items: center;
+    }
+  }
+
+  &__bio {
+    border: 1px solid $border;
+    border-radius: 12px;
+    padding: 2.5rem;
+    background: $surface;
+    min-height: 100px;
+  }
+}

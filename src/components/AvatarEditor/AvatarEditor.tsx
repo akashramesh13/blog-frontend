@@ -10,6 +10,7 @@ import axios from '../../helpers/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers';
 import { getProfile } from '../../redux/actions/profileActions';
+import toast from 'react-hot-toast';
 import './AvatarEditor.scss';
 
 const STYLE_MAP: Record<string, any> = {
@@ -82,10 +83,11 @@ const AvatarEditor: React.FC<AvatarEditorProps> = ({ isOpen, onClose, initialCon
       }
       
       await dispatch(getProfile(profileId));
+      toast.success("Avatar saved successfully!");
       onClose();
     } catch (e) {
       console.error("Failed to save avatar", e);
-      alert("Failed to save avatar");
+      toast.error("Failed to save avatar");
     } finally {
       setIsSaving(false);
     }

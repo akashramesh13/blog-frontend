@@ -11,6 +11,7 @@ import AvatarImage from '../AvatarImage/AvatarImage';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from '../../helpers/axios';
+import toast from 'react-hot-toast';
 import "./Profile.scss";
 
 const EditIcon = () => (
@@ -56,9 +57,10 @@ const Profile: React.FC = () => {
       await axios.put('/profile/bio', { bio: bioContent });
       await dispatch(getProfile(profileId));
       setIsEditingBio(false);
+      toast.success("Bio updated successfully!");
     } catch (e) {
       console.error("Failed to save bio", e);
-      alert("Failed to save bio");
+      toast.error("Failed to save bio");
     } finally {
       setIsSavingBio(false);
     }
@@ -70,9 +72,10 @@ const Profile: React.FC = () => {
       await axios.put('/profile/title', { profileTitle: titleContent });
       await dispatch(getProfile(profileId));
       setIsEditingTitle(false);
+      toast.success("Title updated successfully!");
     } catch (e) {
       console.error("Failed to save title", e);
-      alert("Failed to save title");
+      toast.error("Failed to save title");
     } finally {
       setIsSavingTitle(false);
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { Toaster } from 'react-hot-toast';
 import PostEditorPage from './components/PostEditorPage/PostEditorPage';
 import PostViewer from './components/PostViewer/PostViewer';
 import NavBar from './components/Navbar/NavBar';
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         <Redirect to="/" />
       </Switch>
       <Footer />
+      <Toaster position="bottom-center" toastOptions={{ style: { background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' } }} />
       <Analytics />
     </Router>
   );

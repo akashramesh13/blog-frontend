@@ -1,0 +1,74 @@
+@use '../../styles/theme' as *;
+
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: $hover-overlay;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-modal {
+  background: $surface;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  border: 1px solid $border;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    margin: 0 0 1rem;
+    color: $text;
+  }
+
+  p {
+    color: $text-secondary;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    button {
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .cancel-btn {
+      background: $surface;
+      border: 1px solid $border;
+      color: $text;
+
+      &:hover {
+        background: $surface2;
+      }
+    }
+
+    .confirm-btn {
+      background: $text;
+      color: $background;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

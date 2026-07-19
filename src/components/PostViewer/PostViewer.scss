@@ -69,28 +69,24 @@
   .post-actions {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 6px;
-    font-size: 0.8rem;
+    gap: 12px;
+    margin-top: 12px;
 
     button {
-      background: none;
-      border: none;
-      padding: 0;
-      color: $text-muted;
+      background: $surface;
+      border: 1px solid $border-hover;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      color: $text;
+      font-weight: 500;
       cursor: pointer;
-      font-size: 0.8rem;
-      transition: color 0.15s ease;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
 
       &:hover {
-        color: $text;
+        background: $text;
+        color: $background;
       }
-    }
-
-    .post-view__edit-button::after {
-      content: "·";
-      margin-left: 8px;
-      color: $border-hover;
     }
   }
 

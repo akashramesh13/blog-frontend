@@ -108,6 +108,14 @@
     padding: 1.6rem 0;
   }
 
+  &__skeleton-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+
   /* ---------------- POST CARD ---------------- */
 
   &__post {
@@ -157,7 +165,7 @@
       font-size: 1.2rem;
     }
 
-    &__posts {
+    &__posts, &__skeleton-container {
       gap: 1.2rem;
     }
 

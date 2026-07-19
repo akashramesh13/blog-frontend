@@ -5,6 +5,7 @@ import "./PostEditor.scss";
 import useInputRef from "../../hooks/useInputRef";
 import { useHistory } from "react-router-dom";
 import ImageCropper from "../ImageCropper/ImageCropper";
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
 
 interface PostEditorProps {
   content: any;
@@ -39,6 +40,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
   // Cropper state
   const [showCropper, setShowCropper] = React.useState(false);
   const [tempImageSrc, setTempImageSrc] = React.useState<string | null>(null);
+  const [showConfirmDiscard, setShowConfirmDiscard] = React.useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -148,7 +150,13 @@ const PostEditor: React.FC<PostEditorProps> = ({
         {/* ACTIONS */}
         {!readOnly && (
           <div className="editor-actions">
-            <button className="discard-button" onClick={() => history.push('/')}>
+            <button className="discard-button" onClick={() => {
+              if (isDirtyRef.current) {
+                setShowConfirmDiscard(true);
+              } else {
+                history.push('/');
+              }
+            }}>
               Discard
             </button>
             <button className="save-button" onClick={handleSave}>
@@ -185,6 +193,19 @@ const PostEditor: React.FC<PostEditorProps> = ({
           aspectRatio={21 / 9} // Banner aspect ratio similar to LinkedIn
         />
       )}
+
+      {/* CONFIRM MODAL */}
+      <ConfirmModal 
+         isOpen={showConfirmDiscard} 
+         onClose={() => setShowConfirmDiscard(false)} 
+         onConfirm={() => {
+            isDirtyRef.current = false;
+            history.push('/');
+         }} 
+         title="Discard Changes" 
+         message="Are you sure you want to discard your unsaved changes? This action cannot be undone." 
+         confirmText="Discard" 
+      />
 
       {/* EDITOR */}
       <ReactQuill

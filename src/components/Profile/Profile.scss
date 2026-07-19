@@ -32,19 +32,19 @@
   gap: 1rem;
 
   .edit-avatar-btn {
-    background: transparent;
-    border: 1px solid $border;
-    padding: 0.4rem 0.8rem;
+    background: $surface;
+    border: 1px solid $border-hover;
+    padding: 0.4rem 1rem;
     border-radius: 20px;
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    color: $text-secondary;
+    color: $text;
     transition: all 0.2s;
     
     &:hover {
-      background: $surface2;
-      color: $text;
+      background: $text;
+      color: $background;
     }
   }
 }
@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Zilla Slab', Georgia, serif;
+  font-family: "Playfair Display", serif;
   font-size: 2.8rem;
   font-weight: 600;
   margin: 0 0 0.2rem;
@@ -85,7 +85,7 @@
   margin-bottom: 0.5rem;
   
   input {
-    font-family: 'Zilla Slab', Georgia, serif;
+    font-family: "Playfair Display", serif;
     font-size: 2rem;
     padding: 0.5rem 1rem;
     border: 1px solid $border;
@@ -159,7 +159,7 @@
   font-size: 1.3rem;
   font-weight: 600;
   color: $text;
-  font-family: 'Zilla Slab', Georgia, serif;
+  font-family: "Playfair Display", serif;
 }
 
 .profile__stats .stat-label {
@@ -182,22 +182,22 @@
 }
 
 .edit-bio-btn {
-  background: transparent;
-  border: 1px solid $border;
-  padding: 0.4rem 0.8rem;
+  background: $surface;
+  border: 1px solid $border-hover;
+  padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  color: $text-secondary;
+  color: $text;
   display: flex;
   align-items: center;
   gap: 6px;
   transition: all 0.2s;
   
   &:hover {
-    background: $surface2;
-    color: $text;
+    background: $text;
+    color: $background;
   }
 }
 
