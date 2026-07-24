@@ -74,18 +74,20 @@
 
     button {
       background: $surface;
-      border: 1px solid $border-hover;
+      border: 1px solid $border;
       padding: 0.4rem 1rem;
       border-radius: 20px;
-      color: $text;
+      color: $text-secondary;
       font-weight: 500;
       cursor: pointer;
       font-size: 0.85rem;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
       &:hover {
-        background: $text;
-        color: $background;
+        background: $hover-overlay;
+        color: $accent;
+        border-color: $accent;
+        transform: translateY(-1px);
       }
     }
   }

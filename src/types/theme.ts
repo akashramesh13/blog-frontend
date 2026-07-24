@@ -1,4 +1,4 @@
-export type ThemeMode = "light" | "dark" | "system" | "terminal";
+export type ThemeMode = "light" | "dark" | "catppuccin" | "system";
 
 export type Theme = {
   background: string;

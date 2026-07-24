@@ -91,25 +91,31 @@ const Home: React.FC = () => {
             <span id="home__blog-title">Pixel Pursuit</span>
           </h1>
 
-          <div className="home__filters" style={{ display: 'flex', gap: '1rem', width: '100%', marginBottom: '1rem' }}>
+          <div className="home__search-container" style={{ position: 'relative', width: '100%', maxWidth: '600px', margin: '1.5rem auto 0' }}>
             <input
               type="text"
               className="home__search"
               placeholder="Search stories by title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ flex: 1 }}
+              style={{ margin: 0, paddingRight: '120px' }}
             />
-            
-            <select 
-              value={sortBy} 
+
+            <select
+              value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="home__sort"
-              style={{ 
-                padding: '10px 15px', 
-                borderRadius: '8px', 
-                border: '1px solid #ccc',
-                fontFamily: 'inherit'
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                margin: 0,
+                padding: '4px 8px',
+                fontSize: '0.85rem',
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer'
               }}
             >
               <option value="latest">Latest</option>
@@ -130,7 +136,9 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="home__posts">
-          {posts.length === 0 && !loading ? (
+          {loading && posts.length === 0 ? (
+            <div style={{ height: '300px' }} /> // Spacer while fixed loader plays
+          ) : posts.length === 0 && !loading ? (
             <p className="no-posts">No posts found.</p>
           ) : (
             posts.map((post, index) => {

@@ -7,11 +7,11 @@ import React, {
   useState,
 } from "react";
 import { Theme, ThemeMode } from "../types/theme";
-import { lightTheme, darkTheme, terminalTheme } from "../styles/themes";
+import { lightTheme, darkTheme, catppuccinTheme } from "../styles/themes";
 
 type ThemeContextType = {
   themeMode: ThemeMode;
-  resolvedTheme: "light" | "dark" | "terminal";
+  resolvedTheme: "light" | "dark" | "catppuccin";
   setThemeMode: (mode: ThemeMode) => void;
 };
 
@@ -30,19 +30,19 @@ function applyTheme(theme: Theme): void {
   });
 }
 
-function updateFavicon(themeName: "light" | "dark" | "terminal"): void {
-  let accentColor = "#f5a97f"; // Catppuccin peach (dark default)
-  let bgColor = "#1E1E1E";
-  let textColor = "#ffffff";
+function updateFavicon(themeName: "light" | "dark" | "catppuccin"): void {
+  let accentColor = "#22C55E"; // Black/Green dark accent
+  let bgColor = "#09090B";
+  let textColor = "#E4E4E7";
 
   if (themeName === "light") {
-    accentColor = "#f97316";
-    bgColor = "#fcfcfc";
-    textColor = "#18181b";
-  } else if (themeName === "terminal") {
-    accentColor = "#22c55e";
-    bgColor = "#0A0A0A";
-    textColor = "#ffffff";
+    accentColor = "#F97316";
+    bgColor = "#FCFCFC";
+    textColor = "#18181B";
+  } else if (themeName === "catppuccin") {
+    accentColor = "#F5A97F";
+    bgColor = "#24273A";
+    textColor = "#CAD3F5";
   }
 
   const svg = `
@@ -67,7 +67,7 @@ function updateFavicon(themeName: "light" | "dark" | "terminal"): void {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark" || stored === "system" || stored === "terminal") {
+    if (stored === "light" || stored === "dark" || stored === "catppuccin" || stored === "system") {
       return stored;
     }
     return "system";
@@ -85,12 +85,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const resolvedTheme: "light" | "dark" | "terminal" =
+  const resolvedTheme: "light" | "dark" | "catppuccin" =
     themeMode === "system" ? (systemIsDark ? "dark" : "light") : themeMode;
 
   // Apply CSS custom properties before paint
   useLayoutEffect(() => {
-    const themeMap = { light: lightTheme, dark: darkTheme, terminal: terminalTheme };
+    const themeMap = { light: lightTheme, dark: darkTheme, catppuccin: catppuccinTheme };
     const theme = themeMap[resolvedTheme];
     applyTheme(theme);
     document.documentElement.setAttribute("data-theme", resolvedTheme);

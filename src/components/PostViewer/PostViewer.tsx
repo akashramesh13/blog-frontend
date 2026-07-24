@@ -10,7 +10,6 @@ import { AnyAction } from "redux";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import TableOfContents from "../TableOfContents/TableOfContents";
 import ReactQuill from "react-quill";
-import { formatDate } from "../../utils/formatDate";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
@@ -24,11 +23,14 @@ const PostViewer: React.FC = () => {
   const { post, loading, error } = useSelector(
     (state: RootState) => state.posts,
   );
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
   // FETCH
   useEffect(() => {
-    if (id) dispatch(fetchPost(id));
-  }, [id, dispatch]);
+    if (id && post?.id !== id) {
+      dispatch(fetchPost(id));
+    }
+  }, [id, dispatch, post?.id]);
 
   // PARSE CONTENT (supports string + object)
   const parsedContent = useMemo(() => {
@@ -54,15 +56,48 @@ const PostViewer: React.FC = () => {
     });
   }, [parsedContent]);
 
+  const [isLiked, setIsLiked] = useState(post?.isLiked || false);
+  const [likesCount, setLikesCount] = useState(post?.likesCount || 0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const handleDeleteConfirm = async () => {
     await dispatch(deletePost(id));
     history.push("/");
   };
 
+  // Sync state when post changes
+  useEffect(() => {
+    if (post) {
+      setIsLiked(post.isLiked || false);
+      setLikesCount(post.likesCount || 0);
+    }
+  }, [post]);
+
   const handleLike = async () => {
+    if (!userInfo) {
+      history.push("/login");
+      return;
+    }
+
+    if (isAnimating) return; // Prevent rapid clicking while animating
+
     if (id) {
-      await dispatch(toggleLike(id));
-      dispatch(fetchPost(id)); // Re-fetch to get updated like count and status
+      // Optimistic UI update
+      const newIsLiked = !isLiked;
+      setIsLiked(newIsLiked);
+      setLikesCount(prev => newIsLiked ? prev + 1 : prev - 1);
+      
+      // Animation trigger
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 300);
+
+      try {
+        await dispatch(toggleLike(id));
+      } catch (err) {
+        // Revert on failure
+        setIsLiked(!newIsLiked);
+        setLikesCount(prev => newIsLiked ? prev - 1 : prev + 1);
+      }
     }
   };
 
@@ -89,28 +124,26 @@ const PostViewer: React.FC = () => {
                   {post.user?.username || "Unknown"}
                 </span>
                 <span className="dot">·</span>
-                <span>{formatDate(post.createdAt)}</span>
-                <span className="dot">·</span>
                 <button 
-                  className={`like-button ${post.isLiked ? 'liked' : ''}`}
+                  className={`like-button ${isAnimating ? 'pop-animation' : ''}`}
                   onClick={handleLike}
-                  title={post.isLiked ? "Unlike post" : "Like post"}
+                  title={isLiked ? "Unlike post" : "Like post"}
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', gap: '4px',
-                    color: post.isLiked ? '#e0245e' : 'inherit', padding: 0,
-                    fontFamily: 'inherit', fontSize: '1rem'
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    color: isLiked ? '#ff4d6d' : '#888', padding: 0,
+                    fontFamily: 'inherit', fontSize: '1rem',
+                    transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                   }}
                 >
                   <svg 
-                    width="18" height="18" viewBox="0 0 24 24" 
-                    fill={post.isLiked ? "currentColor" : "none"} 
-                    stroke="currentColor" strokeWidth="2" 
-                    strokeLinecap="round" strokeLinejoin="round"
+                    width="20" height="20" viewBox="0 0 24 24" 
+                    fill={isLiked ? "currentColor" : "none"} 
+                    stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
                   >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                   </svg>
-                  <span>{post.likesCount || 0}</span>
+                  <span style={{ fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
                 </button>
               </div>
 

@@ -43,8 +43,10 @@ const PostEditorPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-    if (id !== null) dispatch(fetchPost(id));
-  }, [id, dispatch]);
+    if (id !== null && post?.id !== id) {
+      dispatch(fetchPost(id));
+    }
+  }, [id, dispatch, post?.id]);
 
   useEffect(() => {
     if (post) {
@@ -142,7 +144,7 @@ const PostEditorPage: React.FC = () => {
     }
   };
 
-  if (loading) return <Loading />;
+  if (loading && post?.id !== id) return <Loading />;
 
   return (
     <div className="post-editor-page">

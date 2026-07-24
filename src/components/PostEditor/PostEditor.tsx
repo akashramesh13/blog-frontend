@@ -2,10 +2,10 @@ import React, { useRef, useEffect, useCallback } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./PostEditor.scss";
-import useInputRef from "../../hooks/useInputRef";
 import { useHistory } from "react-router-dom";
 import ImageCropper from "../ImageCropper/ImageCropper";
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
+import { FiEdit3 } from "react-icons/fi";
 
 import type { DeltaStatic } from "quill";
 
@@ -32,7 +32,6 @@ const PostEditor: React.FC<PostEditorProps> = ({
   readOnly,
   isEditing,
 }) => {
-  const titleRef = useInputRef<HTMLTextAreaElement>();
   const quillRef = useRef<ReactQuill | null>(null);
   const history = useHistory();
 
@@ -43,6 +42,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
   const [showCropper, setShowCropper] = React.useState(false);
   const [tempImageSrc, setTempImageSrc] = React.useState<string | null>(null);
   const [showConfirmDiscard, setShowConfirmDiscard] = React.useState(false);
+  const [pendingLocation, setPendingLocation] = React.useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -86,12 +86,13 @@ const PostEditor: React.FC<PostEditorProps> = ({
   useEffect(() => {
     if (readOnly) return;
 
-    const unblock = history.block(() => {
+    const unblock = history.block((tx) => {
       if (isSavingRef.current) return;
-
       if (!isDirtyRef.current) return;
 
-      return "You have unsaved changes. Are you sure you want to leave?";
+      setPendingLocation(tx.pathname);
+      setShowConfirmDiscard(true);
+      return false; // Block route transition and trigger our custom ConfirmModal
     });
 
     return () => {
@@ -125,13 +126,14 @@ const PostEditor: React.FC<PostEditorProps> = ({
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
-  // Auto-resize title textarea when title changes or on mount
+  const titleHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Sync title prop to contentEditable innerText
   useEffect(() => {
-    if (titleRef.current && !readOnly) {
-      titleRef.current.style.height = "auto";
-      titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+    if (titleHeadingRef.current && titleHeadingRef.current.innerText !== title) {
+      titleHeadingRef.current.innerText = title;
     }
-  }, [title, readOnly, titleRef]);
+  }, [title]);
 
   return (
     <div className="editor-container">
@@ -158,26 +160,24 @@ const PostEditor: React.FC<PostEditorProps> = ({
       {/* HEADER: TITLE */}
       <div className="editor-header">
         {!readOnly ? (
-          <textarea
-            placeholder="Enter Title"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
+          <h1
+            ref={titleHeadingRef}
+            contentEditable
+            suppressContentEditableWarning
+            className="editor-container__editor-title"
+            data-placeholder="Enter Title"
+            onInput={(e) => {
+              const text = e.currentTarget.innerText.replace(/\n/g, "");
+              setTitle(text);
               if (!isSavingRef.current) {
                 isDirtyRef.current = true;
               }
             }}
             onKeyDown={(e) => {
-              // Prevent line breaks in title
               if (e.key === 'Enter') {
                 e.preventDefault();
               }
             }}
-            ref={titleRef}
-            className="editor-container__editor-title"
-            autoFocus
-            rows={1}
-            style={{ resize: 'none', overflow: 'hidden' }}
           />
         ) : (
           <h1>{title}</h1>
@@ -191,7 +191,15 @@ const PostEditor: React.FC<PostEditorProps> = ({
             className="image-upload__placeholder"
             onClick={() => fileInputRef.current?.click()}
           >
-            <span>{coverImage ? "+ Update Cover Image" : "+ Add Cover Image"}</span>
+            <span>
+              {coverImage ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  {FiEdit3({ style: { fontSize: '0.95rem' } })} Update Cover Image
+                </span>
+              ) : (
+                "+ Add Cover Image"
+              )}
+            </span>
           </div>
           <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
         </label>
@@ -215,10 +223,19 @@ const PostEditor: React.FC<PostEditorProps> = ({
       {/* CONFIRM MODAL */}
       <ConfirmModal 
          isOpen={showConfirmDiscard} 
-         onClose={() => setShowConfirmDiscard(false)} 
+         onClose={() => {
+            setShowConfirmDiscard(false);
+            setPendingLocation(null);
+         }} 
          onConfirm={() => {
             isDirtyRef.current = false;
-            history.push('/');
+            setShowConfirmDiscard(false);
+            if (pendingLocation) {
+              history.push(pendingLocation);
+              setPendingLocation(null);
+            } else {
+              history.push('/');
+            }
          }} 
          title="Discard Changes" 
          message="Are you sure you want to discard your unsaved changes? This action cannot be undone." 

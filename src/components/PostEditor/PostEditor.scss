@@ -40,7 +40,7 @@
 /* ---------------- TITLE ---------------- */
 
 .editor-container__editor-title {
-  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-family: "Playfair Display", Georgia, serif;
   font-size: 2.6rem;
   font-weight: 600;
 
@@ -56,17 +56,24 @@
   flex: 1;
 
   border-bottom: 1px solid $border;
-  padding-bottom: 6px;
-  padding-top: 5px;
-  line-height: 1.3;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin: 0;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  line-height: 1.4;
   box-sizing: border-box;
+  word-break: break-word;
+  white-space: pre-wrap;
 
-  transition: all 0.2s ease;
+  transition: border-bottom 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 }
 
-.editor-container__editor-title::placeholder {
+.editor-container__editor-title:empty::before {
+  content: attr(data-placeholder);
   color: $text-placeholder;
   font-weight: 400;
+  cursor: text;
 }
 
 /* hover hint */
@@ -219,7 +226,9 @@ input[type="file"] {
 /* ---------------- EDITOR CONTENT ---------------- */
 
 .ql-editor {
-  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
   color: $text;
   flex: 1;
   height: 100%;
@@ -295,38 +304,40 @@ input[type="file"] {
 }
 
 .save-button, .discard-button {
-  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
-  padding: 10px 22px;
-  border-radius: 30px; /* rounded pill shape */
-  font-size: 15px;
-  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 0.45rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
 
 .save-button {
-  background: $text;
-  color: $background;
-  border: none;
-}
+  background: $accent;
+  color: #ffffff;
+  border: 1px solid $accent;
+  font-weight: 600;
 
-.save-button:hover {
-  background: $text-secondary;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  &:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px var(--color-selection);
+  }
 }
 
 .discard-button {
-  background: transparent;
-  color: $text-muted;
+  background: $surface;
+  color: $text-secondary;
   border: 1px solid $border;
-}
 
-.discard-button:hover {
-  background: $surface2;
-  color: $text;
-  border-color: $border-hover;
+  &:hover {
+    background: $hover-overlay;
+    color: $accent;
+    border-color: $accent;
+    transform: translateY(-1px);
+  }
 }
 
 .image-upload {
@@ -355,7 +366,7 @@ input[type="file"] {
   display: none;
 }
 select {
-  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid $border;

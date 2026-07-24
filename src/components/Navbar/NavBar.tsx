@@ -6,7 +6,12 @@ import { clearCurrentPost } from "../../redux/actions/postsActions";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { CgProfile } from "react-icons/cg";
-import { FiSun, FiMoon, FiMonitor, FiTerminal } from "react-icons/fi";
+import {
+  FiSun,
+  FiMoon,
+  FiMonitor,
+  FiRss,
+} from "react-icons/fi";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { useAuthCheck } from "../../hooks/useAuthCheck";
@@ -28,15 +33,11 @@ const NavBar: React.FC = () => {
   const { themeMode, setThemeMode } = useTheme();
 
   const cycleTheme = () => {
-    // We use the actual OS preference here because resolvedTheme changes 
-    // when themeMode changes, which would cause the cycle array to mutate mid-cycle!
     const isSystemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    // If OS is light: System (Light) -> Dark -> Terminal -> Light -> System
-    // If OS is dark: System (Dark) -> Terminal -> Light -> Dark -> System
     const themeCycle: ThemeMode[] = isSystemDark
-      ? ["system", "terminal", "light", "dark"]
-      : ["system", "dark", "terminal", "light"];
+      ? ["system", "light", "dark", "catppuccin"]
+      : ["system", "dark", "catppuccin", "light"];
 
     const currentIndex = themeCycle.indexOf(themeMode);
     const nextIndex = (currentIndex + 1) % themeCycle.length;
@@ -49,8 +50,21 @@ const NavBar: React.FC = () => {
         return FiSun({});
       case "dark":
         return FiMoon({});
-      case "terminal":
-        return FiTerminal({});
+      case "catppuccin":
+        return (
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3.1-9-7.56c0-1.25.43-2.4 1-3.44 0 0-1.82-6.42-.42-7 1.39-.58 4.64.27 6.42 2.26.65-.17 1.33-.26 2-.26z" />
+          </svg>
+        );
       default:
         return FiMonitor({});
     }
@@ -113,6 +127,18 @@ const NavBar: React.FC = () => {
         >
           {themeIcon()}
         </button>
+
+        <a
+          href={`${process.env.REACT_APP_BACKEND_URL || "https://blog-backend.akashramesh.in"}/rss.xml`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="theme-toggle"
+          title="Subscribe via RSS"
+          aria-label="Subscribe via RSS Feed"
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+        >
+          {FiRss({})}
+        </a>
 
         {userInfo && (
           <Link id="add-post" to="/post/new" onClick={handleAddNewPost}>
