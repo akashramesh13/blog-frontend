@@ -160,25 +160,28 @@ const PostEditor: React.FC<PostEditorProps> = ({
       {/* HEADER: TITLE */}
       <div className="editor-header">
         {!readOnly ? (
-          <h1
-            ref={titleHeadingRef}
-            contentEditable
-            suppressContentEditableWarning
-            className="editor-container__editor-title"
-            data-placeholder="Enter Title"
-            onInput={(e) => {
-              const text = e.currentTarget.innerText.replace(/\n/g, "");
-              setTitle(text);
-              if (!isSavingRef.current) {
-                isDirtyRef.current = true;
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}
-          />
+          <>
+            {/* eslint-disable-next-line jsx-a11y/heading-has-content */}
+            <h1
+              ref={titleHeadingRef}
+              contentEditable
+              suppressContentEditableWarning
+              className="editor-container__editor-title"
+              data-placeholder="Enter Title"
+              onInput={(e) => {
+                const text = e.currentTarget.innerText.replace(/\n/g, "");
+                setTitle(text);
+                if (!isSavingRef.current) {
+                  isDirtyRef.current = true;
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}
+            />
+          </>
         ) : (
           <h1>{title}</h1>
         )}

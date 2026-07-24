@@ -12,6 +12,7 @@ import {
   FiMonitor,
   FiRss,
 } from "react-icons/fi";
+import { FaCat } from "react-icons/fa";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { useAuthCheck } from "../../hooks/useAuthCheck";
@@ -51,20 +52,7 @@ const NavBar: React.FC = () => {
       case "dark":
         return FiMoon({});
       case "catppuccin":
-        return (
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3.1-9-7.56c0-1.25.43-2.4 1-3.44 0 0-1.82-6.42-.42-7 1.39-.58 4.64.27 6.42 2.26.65-.17 1.33-.26 2-.26z" />
-          </svg>
-        );
+        return FaCat({ size: 18 }) as any;
       default:
         return FiMonitor({});
     }

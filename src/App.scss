@@ -5,6 +5,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 16px;
   background-color: $background;
+  background-image: radial-gradient(ellipse 80% 45% at 50% -5%, var(--color-selection), transparent 75%);
+  background-attachment: fixed;
   color: $text;
   overflow-x: hidden;
   width: 100%;
