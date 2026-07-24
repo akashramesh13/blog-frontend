@@ -12,6 +12,9 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from '../../helpers/axios';
 import toast from 'react-hot-toast';
+import { IPost } from '../../types/postsTypes';
+import Post from '../Post/Post';
+import { useHistory } from 'react-router-dom';
 import "./Profile.scss";
 
 const EditIcon = () => (
@@ -39,6 +42,13 @@ const Profile: React.FC = () => {
   const [titleContent, setTitleContent] = React.useState("");
   const [isSavingBio, setIsSavingBio] = React.useState(false);
   const [isSavingTitle, setIsSavingTitle] = React.useState(false);
+  const history = useHistory();
+
+  // Tab State
+  const [activeTab, setActiveTab] = React.useState<"about" | "posts" | "liked">("about");
+  const [userPosts, setUserPosts] = React.useState<IPost[]>([]);
+  const [likedPosts, setLikedPosts] = React.useState<IPost[]>([]);
+  const [loadingPosts, setLoadingPosts] = React.useState(false);
 
   React.useEffect(() => {
     if (bio) setBioContent(bio);
@@ -46,10 +56,25 @@ const Profile: React.FC = () => {
   }, [bio, profileTitle]);
 
   const isOwnProfile = !profileId || profileId === userInfo?.id;
+  const targetProfileId = profileId || userInfo?.id;
 
   useEffect(() => {
-    dispatch(getProfile(profileId));
-  }, [dispatch, profileId]);
+    dispatch(getProfile(targetProfileId));
+  }, [dispatch, targetProfileId]);
+
+  useEffect(() => {
+    if (activeTab === "posts" && targetProfileId) {
+      setLoadingPosts(true);
+      axios.get(`/posts/user/${targetProfileId}?size=50`).then(res => {
+        setUserPosts(res.data.content || []);
+      }).finally(() => setLoadingPosts(false));
+    } else if (activeTab === "liked" && targetProfileId) {
+      setLoadingPosts(true);
+      axios.get(`/posts/liked/${targetProfileId}?size=50`).then(res => {
+        setLikedPosts(res.data.content || []);
+      }).finally(() => setLoadingPosts(false));
+    }
+  }, [activeTab, targetProfileId]);
 
   const handleSaveBio = async () => {
     try {
@@ -126,29 +151,78 @@ const Profile: React.FC = () => {
         </div>
       </div>
 
+      <div className="profile__tabs" style={{ display: 'flex', gap: '2rem', borderBottom: '1px solid #eee', marginBottom: '2rem' }}>
+        <button 
+          onClick={() => setActiveTab("about")}
+          style={{ background: 'none', border: 'none', borderBottom: activeTab === "about" ? '2px solid #333' : '2px solid transparent', padding: '10px 0', fontSize: '1.1rem', cursor: 'pointer', fontWeight: activeTab === "about" ? 600 : 400 }}
+        >
+          About Me
+        </button>
+        <button 
+          onClick={() => setActiveTab("posts")}
+          style={{ background: 'none', border: 'none', borderBottom: activeTab === "posts" ? '2px solid #333' : '2px solid transparent', padding: '10px 0', fontSize: '1.1rem', cursor: 'pointer', fontWeight: activeTab === "posts" ? 600 : 400 }}
+        >
+          Posts
+        </button>
+        <button 
+          onClick={() => setActiveTab("liked")}
+          style={{ background: 'none', border: 'none', borderBottom: activeTab === "liked" ? '2px solid #333' : '2px solid transparent', padding: '10px 0', fontSize: '1.1rem', cursor: 'pointer', fontWeight: activeTab === "liked" ? 600 : 400 }}
+        >
+          Liked Posts
+        </button>
+      </div>
+
       <div className="profile__content">
-        <div className="profile__bio-header">
-          <h2>About Me</h2>
-          {isOwnProfile && !isEditingBio && (
-            <button className="edit-bio-btn" onClick={() => setIsEditingBio(true)}>
-              <EditIcon /> Edit Bio
-            </button>
-          )}
-        </div>
-        
-        {isEditingBio ? (
-          <div className="bio-editor">
-            <ReactQuill theme="snow" value={bioContent} onChange={setBioContent} />
-            <div className="bio-editor-actions">
-              <button className="cancel-btn" onClick={() => { setIsEditingBio(false); setBioContent(bio || ""); }} disabled={isSavingBio}>Cancel</button>
-              <button className="save-btn" onClick={handleSaveBio} disabled={isSavingBio}>{isSavingBio ? "Saving..." : "Save"}</button>
+        {activeTab === "about" && (
+          <>
+            <div className="profile__bio-header">
+              <h2>About {isOwnProfile ? 'Me' : username}</h2>
+              {isOwnProfile && !isEditingBio && (
+                <button className="edit-bio-btn" onClick={() => setIsEditingBio(true)}>
+                  <EditIcon /> Edit Bio
+                </button>
+              )}
             </div>
+            
+            {isEditingBio ? (
+              <div className="bio-editor">
+                <ReactQuill theme="snow" value={bioContent} onChange={setBioContent} />
+                <div className="bio-editor-actions">
+                  <button className="cancel-btn" onClick={() => { setIsEditingBio(false); setBioContent(bio || ""); }} disabled={isSavingBio}>Cancel</button>
+                  <button className="save-btn" onClick={handleSaveBio} disabled={isSavingBio}>{isSavingBio ? "Saving..." : "Save"}</button>
+                </div>
+              </div>
+            ) : (
+              <div 
+                className="bio-content" 
+                dangerouslySetInnerHTML={{ __html: bio || "<p>No bio available.</p>" }} 
+              />
+            )}
+          </>
+        )}
+
+        {activeTab === "posts" && (
+          <div className="profile__posts">
+            {loadingPosts ? <Loading /> : (
+              userPosts.length > 0 ? (
+                userPosts.map(post => <Post key={post.id} post={post} handleOnPostClick={(p) => history.push(`/post/view/${p.id}`)} />)
+              ) : (
+                <p>No posts published yet.</p>
+              )
+            )}
           </div>
-        ) : (
-          <div 
-            className="bio-content" 
-            dangerouslySetInnerHTML={{ __html: bio || "<p>No bio available.</p>" }} 
-          />
+        )}
+
+        {activeTab === "liked" && (
+          <div className="profile__posts">
+            {loadingPosts ? <Loading /> : (
+              likedPosts.length > 0 ? (
+                likedPosts.map(post => <Post key={post.id} post={post} handleOnPostClick={(p) => history.push(`/post/view/${p.id}`)} />)
+              ) : (
+                <p>No liked posts yet.</p>
+              )
+            )}
+          </div>
         )}
       </div>
 

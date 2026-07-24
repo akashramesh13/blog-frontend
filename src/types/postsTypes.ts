@@ -25,6 +25,8 @@ export interface IPost {
   createdAt: string;
   updatedAt: string;
   owner: boolean;
+  likesCount?: number;
+  isLiked?: boolean;
 }
 
 export interface ICategory {

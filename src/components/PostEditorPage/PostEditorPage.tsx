@@ -111,20 +111,27 @@ const PostEditorPage: React.FC = () => {
 
     let imageBase64: string | null = coverImage;
 
-    const newPost: IPost = {
+    const newPost: Partial<IPost> = {
       id: id ?? uuid(),
       title,
       content: JSON.stringify(content),
       category,
       coverImage: imageBase64,
-      user: { id: uuid(), username: "" },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       owner: true,
     };
 
-    await dispatch(savePost(newPost, id ?? undefined));
-    history.push(id ? `/post/view/${id}` : "/");
+    try {
+      await dispatch(savePost(newPost as IPost, id ?? undefined));
+      setToast({ message: "Post saved successfully!", type: "success" });
+      setTimeout(() => history.push(id ? `/post/view/${id}` : "/"), 1000);
+    } catch (error: any) {
+      setToast({
+        message: error?.response?.data?.error || "Failed to save post. Please ensure all fields are filled.",
+        type: "error",
+      });
+    }
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

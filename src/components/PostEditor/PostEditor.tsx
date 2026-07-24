@@ -7,9 +7,11 @@ import { useHistory } from "react-router-dom";
 import ImageCropper from "../ImageCropper/ImageCropper";
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 
+import type { DeltaStatic } from "quill";
+
 interface PostEditorProps {
-  content: any;
-  setContent: (content: any) => void;
+  content: string | DeltaStatic | any;
+  setContent: (content: string | DeltaStatic | any) => void;
   saveBlog: () => void;
   title: string;
   setTitle: (title: string) => void;
@@ -30,7 +32,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
   readOnly,
   isEditing,
 }) => {
-  const titleRef = useInputRef();
+  const titleRef = useInputRef<HTMLTextAreaElement>();
   const quillRef = useRef<ReactQuill | null>(null);
   const history = useHistory();
 
@@ -123,32 +125,19 @@ const PostEditor: React.FC<PostEditorProps> = ({
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
+  // Auto-resize title textarea when title changes or on mount
+  useEffect(() => {
+    if (titleRef.current && !readOnly) {
+      titleRef.current.style.height = "auto";
+      titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+    }
+  }, [title, readOnly, titleRef]);
+
   return (
     <div className="editor-container">
-      {/* HEADER: TITLE + SAVE BUTTON */}
-      <div className="editor-header">
-        {!readOnly ? (
-          <input
-            type="text"
-            placeholder="Enter Title"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-
-              if (!isSavingRef.current) {
-                isDirtyRef.current = true;
-              }
-            }}
-            ref={titleRef}
-            className="editor-container__editor-title"
-            autoFocus
-          />
-        ) : (
-          <h1>{title}</h1>
-        )}
-
-        {/* ACTIONS */}
-        {!readOnly && (
+      {/* GLOBAL ACTIONS */}
+      {!readOnly && (
+        <div className="editor-top-bar">
           <div className="editor-actions">
             <button className="discard-button" onClick={() => {
               if (isDirtyRef.current) {
@@ -163,6 +152,35 @@ const PostEditor: React.FC<PostEditorProps> = ({
               {isEditing ? "Update" : "Publish"}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* HEADER: TITLE */}
+      <div className="editor-header">
+        {!readOnly ? (
+          <textarea
+            placeholder="Enter Title"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              if (!isSavingRef.current) {
+                isDirtyRef.current = true;
+              }
+            }}
+            onKeyDown={(e) => {
+              // Prevent line breaks in title
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}
+            ref={titleRef}
+            className="editor-container__editor-title"
+            autoFocus
+            rows={1}
+            style={{ resize: 'none', overflow: 'hidden' }}
+          />
+        ) : (
+          <h1>{title}</h1>
         )}
       </div>
 

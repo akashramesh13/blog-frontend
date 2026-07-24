@@ -19,7 +19,7 @@ import {
 import { IPost } from "../../types/postsTypes";
 
 export const fetchPosts =
-  (page = 0, size = 5, category: string | null = null, search: string = "", reset = false) =>
+  (page = 0, size = 5, category: string | null = null, search: string = "", reset = false, sortBy: string = "latest") =>
   async (dispatch: Dispatch) => {
     dispatch({ type: FETCH_POSTS_REQUEST });
 
@@ -30,6 +30,9 @@ export const fetchPosts =
       }
       if (search) {
         url += `&search=${encodeURIComponent(search)}`;
+      }
+      if (sortBy && sortBy !== "latest") {
+        url += `&sortBy=${encodeURIComponent(sortBy)}`;
       }
 
       const { data } = await axios.get(url);
@@ -89,6 +92,7 @@ export const deletePost = (postId: string) => async (dispatch: Dispatch) => {
       type: FETCH_POST_FAILURE,
       payload: "Error fetching post",
     });
+    throw error;
   }
 };
 
@@ -122,8 +126,23 @@ export const savePost =
       console.log(error);
 
       dispatch({ type: SAVE_POST_FAILURE, payload: "Error saving post" });
+      throw error;
     }
   };
 
 export const clearPosts = () => ({ type: CLEAR_POSTS });
 export const clearCurrentPost = () => ({ type: CLEAR_CURRENT_POST });
+
+export const toggleLike = (postId: string) => async (dispatch: Dispatch) => {
+  try {
+    const { data } = await axios.post(`/posts/${postId}/like`);
+    // Optimistically/actually update the post in the store
+    // For simplicity, we just fetch it or let the component handle local state,
+    // but the best way is to dispatch an update if the post is in the list
+    dispatch({ type: FETCH_POST_SUCCESS, payload: data });
+    return data;
+  } catch (error) {
+    console.error("Failed to toggle like", error);
+    throw error;
+  }
+};

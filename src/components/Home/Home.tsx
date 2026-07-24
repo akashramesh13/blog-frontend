@@ -27,6 +27,7 @@ const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("latest");
 
   const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
@@ -44,8 +45,8 @@ const Home: React.FC = () => {
   useEffect(() => {
     dispatch(clearPosts());
     setPage(0);
-    dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true));
-  }, [selectedCategory, debouncedSearch, dispatch]);
+    dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true, sortBy));
+  }, [selectedCategory, debouncedSearch, sortBy, dispatch]);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -70,7 +71,7 @@ const Home: React.FC = () => {
         (entries) => {
           if (entries[0].isIntersecting && page + 1 < totalPages) {
             setPage((prev) => prev + 1);
-            dispatch(fetchPosts(page + 1, size, selectedCategory, debouncedSearch));
+            dispatch(fetchPosts(page + 1, size, selectedCategory, debouncedSearch, false, sortBy));
           }
         },
         { threshold: 1 },
@@ -78,7 +79,7 @@ const Home: React.FC = () => {
 
       if (node) observer.current.observe(node);
     },
-    [loading, page, totalPages, selectedCategory, debouncedSearch, dispatch],
+    [loading, page, totalPages, selectedCategory, debouncedSearch, sortBy, dispatch],
   );
 
   return (
@@ -90,13 +91,31 @@ const Home: React.FC = () => {
             <span id="home__blog-title">Pixel Pursuit</span>
           </h1>
 
-          <input
-            type="text"
-            className="home__search"
-            placeholder="Search stories by title..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div className="home__filters" style={{ display: 'flex', gap: '1rem', width: '100%', marginBottom: '1rem' }}>
+            <input
+              type="text"
+              className="home__search"
+              placeholder="Search stories by title..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ flex: 1 }}
+            />
+            
+            <select 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value)}
+              className="home__sort"
+              style={{ 
+                padding: '10px 15px', 
+                borderRadius: '8px', 
+                border: '1px solid #ccc',
+                fontFamily: 'inherit'
+              }}
+            >
+              <option value="latest">Latest</option>
+              <option value="likes">Most Liked</option>
+            </select>
+          </div>
 
           <div className="categories-inline">
             {categories.map((category) => (
