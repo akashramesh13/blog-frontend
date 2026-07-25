@@ -94,7 +94,7 @@
 
     &:hover .hero-title {
       text-decoration: none;
-      color: #8a0322;
+      color: #ca2127;
     }
 
     .hero-content-wrapper {
@@ -225,9 +225,9 @@
     }
 
     &__post--grid {
-      border-bottom: 1px solid #eaeaea;
-      padding-bottom: 2rem;
-      margin-bottom: 2rem;
+      border-bottom: 1px solid #d0d0d0;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
 
       &:last-child {
         border-bottom: none;

@@ -242,12 +242,19 @@
       }
     }
 
+    @media (max-width: 768px) {
+      blockquote {
+        padding: 0.5rem 1rem 0.5rem 4.5rem;
+        font-size: 1.05em;
+      }
+    }
+
     blockquote::before {
-      content: "❝";
+      content: "\201C";
       position: absolute;
-      left: 1.5rem;
-      top: -0.2rem;
-      font-size: 3.5rem;
+      left: 1rem;
+      top: -0.8rem;
+      font-size: 4rem;
       color: #8a0322;
       opacity: 1;
       font-family: var(--font-aeon-serif);
@@ -270,6 +277,14 @@
     
     blockquote + blockquote::before {
       display: none;
+    }
+
+    @media (max-width: 768px) {
+      blockquote::before {
+        left: 0.5rem;
+        top: -0.6rem;
+        font-size: 3.5rem;
+      }
     }
 
     /* Author attribution support */

@@ -20,6 +20,10 @@
     padding: 1.5rem 3.5rem; /* Larger padding initially, shrinks on scroll */
   }
 
+  .navbar__mobile-actions {
+    display: none;
+  }
+
   &--transparent {
     background: transparent;
     border-bottom: none;
@@ -321,6 +325,18 @@
     padding: 1rem 1.2rem;
     position: sticky;
     top: 0;
+  }
+  .navbar--transparent {
+    background: $surface;
+    border-bottom: 1px solid #eaeaea;
+    .navbar__brand a { color: #111 !important; }
+    .navbar__menu-text, .navbar__menu-separator, .aeon-link, .navbar__link-separator {
+      color: #111 !important;
+    }
+    .navbar__search-icon, .social-icon {
+      color: #111 !important;
+    }
+    .hamburger span { background: #111 !important; }
   }
   .navbar--scrolled {
     animation: none;
