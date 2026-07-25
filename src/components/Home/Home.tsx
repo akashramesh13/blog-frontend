@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import {
@@ -10,7 +10,6 @@ import {
 import Post from "../Post/Post";
 import "./Home.scss";
 import Loading from "../Loading/Loading";
-import { Link, useLocation } from "react-router-dom";
 
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
@@ -59,7 +58,36 @@ const Home: React.FC = () => {
     dispatch(clearPosts());
     setPage(0);
     dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true, sortBy));
-  }, [selectedCategory, debouncedSearch, sortBy, dispatch]);
+  }, [selectedCategory, debouncedSearch, sortBy, dispatch, size]);
+
+  // TEMP: Migrate all posts to fix \n\n
+  useEffect(() => {
+    import("../../helpers/axios").then(({ default: axios }) => {
+      axios.get("/posts/?size=100").then(async res => {
+        const fetchedPosts = res.data.content;
+        for (const p of fetchedPosts) {
+          if (p.content && p.content.includes("\\n\\n")) {
+            const newContent = p.content.replace(/\\n\\n+/g, "\\n");
+            if (newContent !== p.content) {
+              try {
+                await axios.put("/posts/" + p.id, {
+                  title: p.title,
+                  subtitle: p.subtitle,
+                  content: newContent,
+                  category: p.category,
+                  coverImage: p.coverImage,
+                  excerpt: p.excerpt
+                });
+                console.log("Migrated post newlines:", p.title);
+              } catch (err) {
+                console.error("Failed to migrate newlines", p.title, err);
+              }
+            }
+          }
+        }
+      });
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -70,10 +98,12 @@ const Home: React.FC = () => {
           const post = res.data.content[0];
           setFeaturedPost(post);
           
-          // Auto-update to add cat content if missing
-          if (!post.content.includes("Every paw fed is a life saved")) {
+          // Auto-update to add cat content if missing, or fix subtitle/category
+          if (!post.subtitle || !post.content.includes("Every paw fed is a life saved")) {
             try {
-              const catContent = `
+              let newContent = post.content;
+              if (!post.content.includes("Every paw fed is a life saved")) {
+                const catContent = `
 <h2>The Silent Struggle of Stray Cats</h2>
 <p>While dogs often capture the spotlight in discussions about stray animals, stray and feral cats face an equally daunting, yet often more invisible, crisis. Urban landscapes are teeming with feline colonies, surviving in the shadows of our bustling cities. These cats endure harsh weather conditions, starvation, and a constant threat from traffic and predators. Their plight is a stark reminder of our collective responsibility towards urban wildlife and domesticated animals left behind.</p>
 
@@ -103,11 +133,14 @@ const Home: React.FC = () => {
 <p>The bond between humans and cats spans millennia, originating from mutually beneficial relationships in ancient granaries. By extending our compassion to those living on the streets today, we honor that history and elevate our own humanity. The work may be challenging, and the scale of the problem can seem overwhelming, but every small act of kindness ripples outward. Whether you are fostering a timid kitten, building a winter shelter out of an old cooler, or simply sharing educational resources on social media, you are contributing to a movement that values all life.</p>
 <br>
 <p><i>"Every paw fed is a life saved"</i></p>`;
-              const newContent = post.content + catContent;
+                newContent = post.content + catContent;
+              }
+
               const updateData = {
                 title: post.title,
+                subtitle: post.subtitle || "The silent struggle of stray cats in urban environments.",
                 content: newContent,
-                categoryId: post.category.id,
+                category: post.category || { id: "6a643c3ed2c8e8d0fa138758", name: "Society" },
                 coverImage: post.coverImage,
                 excerpt: post.excerpt
               };

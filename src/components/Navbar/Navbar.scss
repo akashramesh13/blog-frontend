@@ -14,7 +14,7 @@
   border-bottom: 1px solid transparent;
 
   &--article {
-    position: fixed;
+    position: absolute;
     width: 100%;
     top: 0;
     padding: 1.5rem 3.5rem; /* Larger padding initially, shrinks on scroll */
@@ -35,14 +35,23 @@
   }
 
   &--scrolled {
+    position: fixed;
+    top: 0;
+    width: 100%;
     padding: 0.5rem 3.5rem; /* Even smaller when scrolled */
     border-bottom: 1px solid #eaeaea;
     background: $surface;
+    animation: slideDown 0.3s ease;
     
     .navbar__brand a {
       font-size: 1.8rem; /* Shrink logo slightly */
     }
   }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
 }
 
 .navbar__left, .navbar__center, .navbar__right {

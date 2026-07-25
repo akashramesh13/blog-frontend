@@ -35,12 +35,24 @@ const PostEditorPage: React.FC = () => {
   const { post, categories, loading } = useSelector(
     (state: RootState) => state.posts,
   );
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
-  const [title, setTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
-  const [content, setContent] = useState<any>({ ops: [{ insert: "\n" }] });
-  const [coverImage, setCoverImage] = useState<string | null>(null);
-  const [category, setCategory] = useState<ICategory | null>(null);
+  const [title, setTitle] = useState(post?.id === id ? post?.title : "");
+  const [subtitle, setSubtitle] = useState(post?.id === id ? (post?.subtitle || "") : "");
+  const [content, setContent] = useState<any>(() => {
+    if (post && post.id === id) {
+      let parsed = post.content;
+      if (typeof post.content === "string") {
+        try {
+          parsed = JSON.parse(post.content);
+        } catch {}
+      }
+      return parsed || { ops: [{ insert: "\n" }] };
+    }
+    return { ops: [{ insert: "\n" }] };
+  });
+  const [coverImage, setCoverImage] = useState<string | null>(post?.id === id ? (post?.coverImage ?? null) : null);
+  const [category, setCategory] = useState<ICategory | null>(post?.id === id ? (post?.category ?? null) : null);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -169,6 +181,8 @@ const PostEditorPage: React.FC = () => {
 
   if ((loading && post?.id !== id) || isSaving) return <Loading />;
 
+  const isOwner = post?.owner || (post?.user && userInfo && post.user.id === userInfo.id);
+
   return (
     <div className="post-editor-page">
       <PostEditor
@@ -179,7 +193,7 @@ const PostEditorPage: React.FC = () => {
         setTitle={setTitle}
         subtitle={subtitle}
         setSubtitle={setSubtitle}
-        readOnly={!!id && !post?.owner}
+        readOnly={!!id && !isOwner}
         isEditing={!!id}
         coverImage={coverImage}
         setCoverImage={setCoverImage}

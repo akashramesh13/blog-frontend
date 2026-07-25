@@ -222,13 +222,52 @@
       margin-top: 0.5rem;
     }
 
-    /* blockquote */
+    /* blockquote (Premium Editorial Style) */
     blockquote {
+      position: relative;
+      margin: 2rem auto;
+      padding: 0.5rem 1rem 0.5rem 6rem;
       border-left: 3px solid $border;
-      padding-left: 1rem;
-      margin: 1rem 0;
-      color: $text-secondary;
-      font-style: italic;
+      font-family: var(--font-aeon-serif);
+      font-size: 1.15em;
+      line-height: 1.7;
+      color: $text;
+      font-style: normal;
+      max-width: 90%;
+      clear: both;
+    }
+
+    blockquote::before {
+      content: "❝";
+      position: absolute;
+      left: 1.5rem;
+      top: -0.2rem;
+      font-size: 3.5rem;
+      color: #8a0322;
+      opacity: 1;
+      font-family: var(--font-aeon-serif);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Consecutive blockquotes (multiple paragraphs in a quote) */
+    blockquote + blockquote {
+      margin-top: -2.5rem;
+      border-left: 3px solid transparent; /* Hide border on consecutive to match but keep alignment */
+    }
+    
+    blockquote + blockquote::before {
+      display: none;
+    }
+
+    /* Author attribution support */
+    blockquote.ql-align-right {
+      font-size: 0.85em;
+      opacity: 0.75;
+      margin-top: 1.5rem;
+      font-style: normal;
+      border-left: 3px solid transparent;
     }
 
     /* code */

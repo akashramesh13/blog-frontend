@@ -65,6 +65,15 @@ const PostEditor: React.FC<PostEditorProps> = ({
   const [tempImageSrc, setTempImageSrc] = React.useState<string | null>(null);
   const [showConfirmDiscard, setShowConfirmDiscard] = React.useState(false);
   const [pendingLocation, setPendingLocation] = React.useState<string | null>(null);
+  const [isFloating, setIsFloating] = React.useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsFloating(window.scrollY > 150);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -164,11 +173,46 @@ const PostEditor: React.FC<PostEditorProps> = ({
     }
   }, [title]);
 
+  const modules = React.useMemo(() => ({
+    toolbar: readOnly
+      ? false
+      : [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ color: [] }, { background: [] }],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["blockquote", "code-block", "dropcap"],
+          [{ indent: "-1" }, { indent: "+1" }],
+          [{ align: [] }],
+          ["link", "image"],
+          ["clean"],
+        ]
+  }), [readOnly]);
+
+  const formats = React.useMemo(() => [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "color",
+    "background",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "align",
+    "link",
+    "image",
+    "code-block",
+    "dropcap",
+  ], []);
+
   return (
     <div className="editor-container">
       {/* GLOBAL ACTIONS */}
       {!readOnly && (
-        <div className="editor-top-bar">
+        <div className={`editor-top-bar ${isFloating ? "editor-top-bar--floating" : ""}`}>
           <div className="editor-actions">
             <button className="btn-action" onClick={() => {
               if (isDirtyRef.current) {
@@ -296,44 +340,13 @@ const PostEditor: React.FC<PostEditorProps> = ({
         ref={quillRef}
         value={content}
         onChange={(value, delta, source, editor) => {
-          if (!readOnly && !isSavingRef.current) {
+          if (!readOnly && !isSavingRef.current && source === "user") {
             setContent(editor.getContents());
-
-            if (source === "user") {
-              isDirtyRef.current = true;
-            }
+            isDirtyRef.current = true;
           }
         }}
-        modules={{
-          toolbar: readOnly
-            ? false
-            : [
-                [{ header: [1, 2, 3, false] }],
-                ["bold", "italic", "underline", "strike"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["blockquote", "code-block", "dropcap"],
-                [{ indent: "-1" }, { indent: "+1" }],
-                [{ align: [] }],
-                ["link", "image"],
-                ["clean"],
-              ],
-        }}
-        formats={[
-          "header",
-          "bold",
-          "italic",
-          "underline",
-          "strike",
-          "blockquote",
-          "list",
-          "bullet",
-          "indent",
-          "align",
-          "link",
-          "image",
-          "code-block",
-          "dropcap",
-        ]}
+        modules={modules}
+        formats={formats}
         readOnly={readOnly}
         placeholder="Write something amazing..."
       />
