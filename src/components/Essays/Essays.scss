@@ -1,0 +1,35 @@
+@use '../../styles/theme' as *;
+
+.essays-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+  
+  .essays-header {
+    margin-bottom: 4rem;
+    text-align: center;
+    
+    h1 {
+      font-family: var(--font-aeon-serif);
+      font-size: 4rem;
+      font-weight: 700;
+      color: #111;
+      margin: 0 0 1rem;
+      letter-spacing: -1px;
+    }
+    
+    p {
+      font-family: var(--font-aeon-sans);
+      font-size: 1.1rem;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+  }
+
+  .essays-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 3rem;
+  }
+}

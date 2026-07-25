@@ -23,10 +23,10 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
         <p>Are you sure you want to delete "{title}"?</p>
         <p className="warning">This action cannot be undone.</p>
         <div className="delete-modal__buttons">
-          <button className="cancel-button" onClick={onClose}>
+          <button className="btn-action" onClick={onClose}>
             Cancel
           </button>
-          <button className="delete-button" onClick={onConfirm}>
+          <button className="btn-action" onClick={onConfirm}>
             Delete
           </button>
         </div>

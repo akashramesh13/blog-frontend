@@ -7,7 +7,25 @@ import ImageCropper from "../ImageCropper/ImageCropper";
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import { FiEdit3 } from "react-icons/fi";
 
-import type { DeltaStatic } from "quill";
+import Quill, { DeltaStatic } from "quill";
+
+const Inline = Quill.import('blots/inline') as any;
+class DropcapBlot extends Inline {
+  static create(value: boolean) {
+    let node = super.create();
+    if (value) {
+      node.setAttribute('class', 'dropcap');
+    }
+    return node;
+  }
+  static formats(node: HTMLElement) {
+    return node.classList.contains('dropcap');
+  }
+}
+DropcapBlot.blotName = 'dropcap';
+DropcapBlot.tagName = 'span';
+DropcapBlot.className = 'dropcap';
+Quill.register(DropcapBlot);
 
 interface PostEditorProps {
   content: string | DeltaStatic | any;
@@ -15,6 +33,8 @@ interface PostEditorProps {
   saveBlog: () => void;
   title: string;
   setTitle: (title: string) => void;
+  subtitle: string;
+  setSubtitle: (subtitle: string) => void;
   coverImage: string | null;
   setCoverImage: (image: string | null) => void;
   readOnly: boolean;
@@ -27,6 +47,8 @@ const PostEditor: React.FC<PostEditorProps> = ({
   saveBlog,
   title,
   setTitle,
+  subtitle,
+  setSubtitle,
   coverImage,
   setCoverImage,
   readOnly,
@@ -126,6 +148,13 @@ const PostEditor: React.FC<PostEditorProps> = ({
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
+  useEffect(() => {
+    const dropcapBtn = document.querySelector('.ql-dropcap');
+    if (dropcapBtn && !dropcapBtn.innerHTML) {
+      dropcapBtn.innerHTML = '<span style="font-family: var(--font-aeon-serif); font-weight: bold; font-size: 16px; line-height: 1; color: #888;">D</span>';
+    }
+  }, []);
+
   const titleHeadingRef = useRef<HTMLHeadingElement>(null);
 
   // Sync title prop to contentEditable innerText
@@ -141,23 +170,24 @@ const PostEditor: React.FC<PostEditorProps> = ({
       {!readOnly && (
         <div className="editor-top-bar">
           <div className="editor-actions">
-            <button className="discard-button" onClick={() => {
+            <button className="btn-action" onClick={() => {
               if (isDirtyRef.current) {
                 setShowConfirmDiscard(true);
               } else {
-                history.push('/');
+                if (history.length > 2) history.goBack();
+                else history.push('/');
               }
             }}>
               Discard
             </button>
-            <button className="save-button" onClick={handleSave}>
+            <button className="btn-action" onClick={handleSave}>
               {isEditing ? "Update" : "Publish"}
             </button>
           </div>
         </div>
       )}
 
-      {/* HEADER: TITLE */}
+      {/* HEADER: TITLE & SUBTITLE */}
       <div className="editor-header">
         {!readOnly ? (
           <>
@@ -167,7 +197,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
               contentEditable
               suppressContentEditableWarning
               className="editor-container__editor-title"
-              data-placeholder="Enter Title"
+              data-placeholder="Title"
               onInput={(e) => {
                 const text = e.currentTarget.innerText.replace(/\n/g, "");
                 setTitle(text);
@@ -181,9 +211,24 @@ const PostEditor: React.FC<PostEditorProps> = ({
                 }
               }}
             />
+            <input
+              type="text"
+              className="editor-container__editor-subtitle"
+              placeholder="Subtitle (optional)"
+              value={subtitle}
+              onChange={(e) => {
+                setSubtitle(e.target.value);
+                if (!isSavingRef.current) {
+                  isDirtyRef.current = true;
+                }
+              }}
+            />
           </>
         ) : (
-          <h1>{title}</h1>
+          <>
+            <h1>{title}</h1>
+            {subtitle && <h2 className="editor-container__editor-subtitle-display">{subtitle}</h2>}
+          </>
         )}
       </div>
 
@@ -219,7 +264,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
           imageSrc={tempImageSrc}
           onCropComplete={handleCropComplete}
           onCancel={handleCropCancel}
-          aspectRatio={21 / 9} // Banner aspect ratio similar to LinkedIn
+          aspectRatio={16 / 9} // Full section hero aspect ratio
         />
       )}
 
@@ -237,7 +282,8 @@ const PostEditor: React.FC<PostEditorProps> = ({
               history.push(pendingLocation);
               setPendingLocation(null);
             } else {
-              history.push('/');
+              if (history.length > 2) history.goBack();
+              else history.push('/');
             }
          }} 
          title="Discard Changes" 
@@ -265,10 +311,10 @@ const PostEditor: React.FC<PostEditorProps> = ({
                 [{ header: [1, 2, 3, false] }],
                 ["bold", "italic", "underline", "strike"],
                 [{ list: "ordered" }, { list: "bullet" }],
-                ["blockquote", "code-block"],
+                ["blockquote", "code-block", "dropcap"],
                 [{ indent: "-1" }, { indent: "+1" }],
                 [{ align: [] }],
-                ["link"],
+                ["link", "image"],
                 ["clean"],
               ],
         }}
@@ -286,6 +332,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
           "link",
           "image",
           "code-block",
+          "dropcap",
         ]}
         readOnly={readOnly}
         placeholder="Write something amazing..."

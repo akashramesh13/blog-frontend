@@ -37,6 +37,7 @@ const PostEditorPage: React.FC = () => {
   );
 
   const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState<any>({ ops: [{ insert: "\n" }] });
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [category, setCategory] = useState<ICategory | null>(null);
@@ -51,17 +52,17 @@ const PostEditorPage: React.FC = () => {
   useEffect(() => {
     if (post) {
       setTitle(post.title);
+      setSubtitle(post.subtitle || "");
 
-      try {
-        const parsed =
-          typeof post.content === "string"
-            ? JSON.parse(post.content)
-            : post.content;
-
-        setContent(parsed);
-      } catch {
-        setContent({ ops: [{ insert: "\n" }] });
+      let parsed = post.content;
+      if (typeof post.content === "string") {
+        try {
+          parsed = JSON.parse(post.content);
+        } catch {
+          // If it fails to parse as JSON, keep it as an HTML string
+        }
       }
+      setContent(parsed || { ops: [{ insert: "\n" }] });
 
       setCategory(post.category);
       setCoverImage(post.coverImage ?? null);
@@ -105,9 +106,28 @@ const PostEditorPage: React.FC = () => {
     }
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const handleSave = async () => {
     if (!category) {
-      alert("Please select a category");
+      setToast({ message: "Please select a category", type: "error" });
+      return;
+    }
+    
+    if (!coverImage) {
+      setToast({ message: "Cover image (Hero) is required!", type: "error" });
+      return;
+    }
+
+    let text = "";
+    if (content && content.ops) {
+      text = content.ops.map((op: any) => typeof op.insert === 'string' ? op.insert : '').join(' ');
+    } else if (typeof content === 'string') {
+      text = content.replace(/<[^>]+>/g, " ");
+    }
+    const words = text.trim().split(/\s+/).filter((word: string) => word.length > 0).length;
+    if (words < 100) {
+      setToast({ message: `An article must have a minimum of 100 words. (Currently: ${words})`, type: "error" });
       return;
     }
 
@@ -116,6 +136,7 @@ const PostEditorPage: React.FC = () => {
     const newPost: Partial<IPost> = {
       id: id ?? uuid(),
       title,
+      subtitle,
       content: JSON.stringify(content),
       category,
       coverImage: imageBase64,
@@ -124,6 +145,7 @@ const PostEditorPage: React.FC = () => {
       owner: true,
     };
 
+    setIsSaving(true);
     try {
       await dispatch(savePost(newPost as IPost, id ?? undefined));
       setToast({ message: "Post saved successfully!", type: "success" });
@@ -133,6 +155,7 @@ const PostEditorPage: React.FC = () => {
         message: error?.response?.data?.error || "Failed to save post. Please ensure all fields are filled.",
         type: "error",
       });
+      setIsSaving(false);
     }
   };
 
@@ -144,7 +167,7 @@ const PostEditorPage: React.FC = () => {
     }
   };
 
-  if (loading && post?.id !== id) return <Loading />;
+  if ((loading && post?.id !== id) || isSaving) return <Loading />;
 
   return (
     <div className="post-editor-page">
@@ -154,6 +177,8 @@ const PostEditorPage: React.FC = () => {
         saveBlog={handleSave}
         title={title}
         setTitle={setTitle}
+        subtitle={subtitle}
+        setSubtitle={setSubtitle}
         readOnly={!!id && !post?.owner}
         isEditing={!!id}
         coverImage={coverImage}

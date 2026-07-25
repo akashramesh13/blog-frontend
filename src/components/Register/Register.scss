@@ -31,7 +31,7 @@
 /* ---------------- TITLE ---------------- */
 
 .register-card h1 {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-aeon-serif);
   font-size: 2.2rem;
   font-weight: 600;
   color: $text;
@@ -52,7 +52,7 @@
 input {
   width: 100%;
 
-  font-family: "Libre Baskerville", serif;
+  font-family: var(--font-aeon-serif);
   font-size: 1rem;
 
   padding: 0.6rem 0;
@@ -141,7 +141,7 @@ input.invalid {
 
   padding: 8px 14px;
 
-  font-family: "Libre Baskerville", serif;
+  font-family: var(--font-aeon-serif);
   font-size: 0.9rem;
   color: $text;
 

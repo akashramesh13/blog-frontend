@@ -22,8 +22,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <h2>{title}</h2>
         <p>{message}</p>
         <div className="confirm-modal-actions">
-          <button className="cancel-btn" onClick={onClose}>{cancelText}</button>
-          <button className="confirm-btn" onClick={onConfirm}>{confirmText}</button>
+          <button className="btn-action" onClick={onClose}>{cancelText}</button>
+          <button className="btn-action" onClick={onConfirm}>{confirmText}</button>
         </div>
       </div>
     </div>

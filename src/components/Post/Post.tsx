@@ -28,10 +28,12 @@ const getPreview = (content: any, maxLength: number = 120) => {
 interface PostProps {
   post: IPost;
   handleOnPostClick: (post: IPost) => void;
+  isHero?: boolean;
+  isGridCard?: boolean;
 }
 
-const Post: React.FC<PostProps> = ({ post, handleOnPostClick }) => {
-  const preview = getPreview(post.content);
+const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard }) => {
+  const preview = post.subtitle || getPreview(post.content);
   const dispatch = useDispatch<any>();
   const history = useHistory();
   const { userInfo } = useSelector((state: any) => state.auth);
@@ -48,54 +50,78 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick }) => {
       return;
     }
     
-    if (isAnimating) return; // Prevent rapid clicking while animating
+    if (isAnimating) return;
     
-    // Optimistic UI update
     const newIsLiked = !isLiked;
     setIsLiked(newIsLiked);
     setLikesCount(prev => newIsLiked ? prev + 1 : prev - 1);
     
-    // Animation trigger
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 300);
 
     try {
       await dispatch(toggleLike(post.id!));
     } catch (err) {
-      // Revert on failure
       setIsLiked(!newIsLiked);
       setLikesCount(prev => newIsLiked ? prev - 1 : prev + 1);
     }
   };
 
-  return (
-    <div className="home__post" onClick={() => handleOnPostClick(post)}>
-      <h2 className="home__post-title">{post.title}</h2>
+  const LikeButton = () => (
+    <div 
+      className={`post-likes ${isAnimating ? 'pop-animation' : ''}`} 
+      style={{ 
+        display: 'flex', alignItems: 'center', gap: '6px', 
+        color: isLiked ? '#ff4d6d' : (isHero ? 'rgba(255,255,255,0.8)' : '#888'),
+        cursor: 'pointer',
+        transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+      }}
+      onClick={handleLike} 
+    >
+      <svg 
+        width="18" height="18" viewBox="0 0 24 24" 
+        fill={isLiked ? "currentColor" : "none"} 
+        stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
+      >
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+      </svg>
+      <span style={{ fontSize: '0.95rem', fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
+    </div>
+  );
 
+  const imageUrl = post.thumbnail || post.coverImage;
+
+  if (isHero) {
+    return (
+      <div className="home__post--hero" onClick={() => handleOnPostClick(post)} style={{ 
+        backgroundColor: '#ca2127', 
+        backgroundImage: post.coverImage ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url(${post.coverImage})` : 'none', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center' 
+      }}>
+        <div className="hero-content-wrapper">
+          <h1 className="hero-title">{post.title}</h1>
+          {preview && <p className="hero-excerpt">{preview}</p>}
+          <div className="hero-footer">
+            <span className="hero-date">{formatDate(post.createdAt)}</span>
+            <LikeButton />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`home__post ${isGridCard ? 'home__post--grid' : ''}`} onClick={() => handleOnPostClick(post)}>
+      {isGridCard && post.coverImage && (
+        <div className="grid-image" style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : {}}></div>
+      )}
+      <h2 className="home__post-title">{post.title}</h2>
       {preview && <p className="home__post-excerpt">{preview}</p>}
 
-      <div className="home__post-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="home__post-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
         <span className="home__post-date">{formatDate(post.createdAt)}</span>
-        
-        <div 
-          className={`post-likes ${isAnimating ? 'pop-animation' : ''}`} 
-          style={{ 
-            display: 'flex', alignItems: 'center', gap: '6px', 
-            color: isLiked ? '#ff4d6d' : '#888',
-            cursor: 'pointer',
-            transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-          }}
-          onClick={handleLike} 
-        >
-          <svg 
-            width="18" height="18" viewBox="0 0 24 24" 
-            fill={isLiked ? "currentColor" : "none"} 
-            stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
-          >
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-          </svg>
-          <span style={{ fontSize: '0.95rem', fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
-        </div>
+        <LikeButton />
       </div>
     </div>
   );

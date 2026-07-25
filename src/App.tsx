@@ -11,6 +11,8 @@ import Home from './components/Home/Home';
 import Footer from './components/Footer/Footer';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Profile from './components/Profile/Profile';
+import About from './components/About/About';
+import Essays from './components/Essays/Essays';
 import "./App.scss";
 
 const App: React.FC = () => {
@@ -22,6 +24,8 @@ const App: React.FC = () => {
         <Route path="/register" component={Register} />
         <Route path="/" exact component={Home} />
         <Route path="/home" component={Home} />
+        <Route path="/about" component={About} />
+        <Route path="/essays" component={Essays} />
         <Route path="/post/view/:id" component={PostViewer} />
         <PrivateRoute path="/post/new" component={PostEditorPage} />
         <PrivateRoute path="/post/edit/:id" component={PostEditorPage} />

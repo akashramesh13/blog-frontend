@@ -32,7 +32,7 @@
     margin: 0;
     flex: 1;
     font-size: 2.6rem;
-    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-family: var(--font-aeon-serif);
     font-weight: 600;
   }
 }
@@ -40,7 +40,7 @@
 /* ---------------- TITLE ---------------- */
 
 .editor-container__editor-title {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: var(--font-aeon-serif);
   font-size: 2.6rem;
   font-weight: 600;
 
@@ -55,13 +55,11 @@
   width: 100%;
   flex: 1;
 
-  border-bottom: 1px solid $border;
-  padding-bottom: 10px;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 5px;
   padding-top: 10px;
   margin: 0;
-  padding-bottom: 10px;
-  padding-top: 10px;
-  line-height: 1.4;
+  line-height: 1.2;
   box-sizing: border-box;
   word-break: break-word;
   white-space: pre-wrap;
@@ -78,12 +76,39 @@
 
 /* hover hint */
 .editor-container__editor-title:hover {
-  border-bottom: 1px solid $border;
+  border-bottom: 1px solid transparent;
 }
 
 /* focus */
 .editor-container__editor-title:focus {
-  border-bottom: 1px solid $text;
+  border-bottom: 1px solid transparent;
+}
+
+/* ---------------- SUBTITLE ---------------- */
+
+.editor-container__editor-subtitle {
+  font-family: var(--font-aeon-sans);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: $text-secondary;
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: 5px 0 10px;
+  margin-top: 0.5rem;
+  
+  &::placeholder {
+    color: $text-placeholder;
+  }
+}
+
+.editor-container__editor-subtitle-display {
+  font-family: var(--font-aeon-sans);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: $text-secondary;
+  margin: 0 0 1.5rem;
 }
 
 /* ---------------- COVER IMAGE ---------------- */
@@ -106,16 +131,16 @@ input[type="file"] {
 /* ---------------- QUILL TOOLBAR ---------------- */
 
 .ql-toolbar {
-  border: 1px solid $border;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  border-bottom: 1px solid $border;
+  border: none;
+  border-bottom: 1px solid #eaeaea;
   background: $surface;
   padding: 10px 0;
   
   position: sticky;
-  top: 60px; /* Below the navbar */
+  top: 90px; /* Below the navbar */
   z-index: 10;
+  margin-bottom: 20px;
+  background: $surface;
   
   /* Adds a subtle shadow when scrolling for better distinction */
   box-shadow: 0 4px 6px -6px rgba(0,0,0,0.1);
@@ -195,9 +220,7 @@ input[type="file"] {
 
 /* Quill snow container border override */
 .ql-container.ql-snow {
-  border: 1px solid $border;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  border: none;
 }
 
 /* Quill code-block override */
@@ -213,25 +236,29 @@ input[type="file"] {
 
 /* ---------------- QUILL CONTAINER ---------------- */
 
-.ql-container {
-  border: none;
+.editor-container .ql-container {
+  border: 2px solid #8a0322 !important;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   font-size: 1.05rem;
   line-height: 1.75;
-  min-height: 320px;
+  min-height: 500px;
   background: $surface;
+  overflow: hidden;
 }
 
 /* ---------------- EDITOR CONTENT ---------------- */
 
-.ql-editor {
-  font-family: "Libre Baskerville", Georgia, serif;
+.editor-container .ql-editor {
+  font-family: var(--font-aeon-serif);
   font-size: 1.05rem;
   line-height: 1.75;
   color: $text;
   flex: 1;
   height: 100%;
+  overflow-y: visible;
+  caret-color: #8a0322;
 }
 
 /* 🔥 FIXED placeholder alignment */
@@ -247,7 +274,7 @@ input[type="file"] {
 .ql-editor h1,
 .ql-editor h2,
 .ql-editor h3 {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-aeon-serif);
   margin: 1.4rem 0 0.6rem;
   line-height: 1.3;
 }
@@ -304,39 +331,39 @@ input[type="file"] {
 }
 
 .save-button, .discard-button {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding: 0.45rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.88rem;
-  font-weight: 500;
+  font-family: var(--font-aeon-sans);
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   white-space: nowrap;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .save-button {
-  background: $accent;
-  color: #ffffff;
-  border: 1px solid $accent;
-  font-weight: 600;
+  background: transparent;
+  color: #8a0322;
+  border: 1px solid #8a0322;
 
   &:hover {
-    opacity: 0.92;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px var(--color-selection);
+    background: #8a0322;
+    color: #ffffff;
+    border-color: #8a0322;
   }
 }
 
 .discard-button {
-  background: $surface;
-  color: $text-secondary;
-  border: 1px solid $border;
+  background: transparent;
+  color: #333333;
+  border: 1px solid #333333;
 
   &:hover {
-    background: $hover-overlay;
-    color: $accent;
-    border-color: $accent;
-    transform: translateY(-1px);
+    background: #333333;
+    color: #ffffff;
+    border-color: #333333;
   }
 }
 
@@ -366,10 +393,37 @@ input[type="file"] {
   display: none;
 }
 select {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-aeon-sans);
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid $border;
   background: $surface;
   color: $text;
+}
+
+/* DROP CAP CUSTOM FORMAT */
+.ql-snow .ql-toolbar button.ql-dropcap {
+  width: 28px;
+}
+.ql-snow .ql-toolbar button.ql-dropcap::before {
+  content: "D";
+  font-family: var(--font-aeon-serif);
+  font-weight: bold;
+  font-size: 18px;
+  color: $text-secondary;
+}
+.ql-snow .ql-toolbar button.ql-dropcap:hover::before,
+.ql-snow .ql-toolbar button.ql-dropcap.ql-active::before {
+  color: #8a0322;
+}
+
+.dropcap {
+  float: left;
+  font-size: 4.5rem;
+  line-height: 0.8;
+  padding-top: 0.2rem;
+  padding-right: 0.5rem;
+  font-family: var(--font-aeon-serif);
+  color: #8a0322;
+  font-weight: 700;
 }

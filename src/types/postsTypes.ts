@@ -15,8 +15,10 @@ import {
 export interface IPost {
   id: string | null | undefined;
   title: string;
+  subtitle?: string;
   content: string;
   coverImage: string | null;
+  thumbnail?: string;
   category: ICategory;
   user: {
     id: string;

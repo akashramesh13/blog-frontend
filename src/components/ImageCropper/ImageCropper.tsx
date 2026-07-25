@@ -77,7 +77,7 @@ export default function ImageCropper({
       );
 
       // Extract Base64
-      const base64Image = canvas.toDataURL("image/jpeg", 0.9);
+      const base64Image = canvas.toDataURL("image/jpeg", 1.0);
       onCropComplete(base64Image);
     } catch (e) {
       console.error(e);

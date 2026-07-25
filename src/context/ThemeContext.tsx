@@ -1,21 +1,12 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import React, { createContext, ReactNode, useContext, useLayoutEffect } from "react";
 import { Theme, ThemeMode } from "../types/theme";
-import { lightTheme, darkTheme, catppuccinTheme } from "../styles/themes";
+import { lightTheme } from "../styles/themes";
 
 type ThemeContextType = {
   themeMode: ThemeMode;
   resolvedTheme: "light" | "dark" | "catppuccin";
   setThemeMode: (mode: ThemeMode) => void;
 };
-
-const STORAGE_KEY = "blog-theme-mode";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -30,20 +21,10 @@ function applyTheme(theme: Theme): void {
   });
 }
 
-function updateFavicon(themeName: "light" | "dark" | "catppuccin"): void {
-  let accentColor = "#22C55E"; // Black/Green dark accent
-  let bgColor = "#09090B";
-  let textColor = "#E4E4E7";
-
-  if (themeName === "light") {
-    accentColor = "#F97316";
-    bgColor = "#FCFCFC";
-    textColor = "#18181B";
-  } else if (themeName === "catppuccin") {
-    accentColor = "#F5A97F";
-    bgColor = "#24273A";
-    textColor = "#CAD3F5";
-  }
+function updateFavicon(): void {
+  const accentColor = "#111111"; 
+  const bgColor = "#FFFFFF";
+  const textColor = "#111111";
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
@@ -65,45 +46,14 @@ function updateFavicon(themeName: "light" | "dark" | "catppuccin"): void {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark" || stored === "catppuccin" || stored === "system") {
-      return stored;
-    }
-    return "system";
-  });
-
-  const [systemIsDark, setSystemIsDark] = useState(
-    () => window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
-
-  // Listen for OS theme changes
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e: MediaQueryListEvent) => setSystemIsDark(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+  useLayoutEffect(() => {
+    applyTheme(lightTheme);
+    document.documentElement.setAttribute("data-theme", "light");
+    updateFavicon();
   }, []);
 
-  const resolvedTheme: "light" | "dark" | "catppuccin" =
-    themeMode === "system" ? (systemIsDark ? "dark" : "light") : themeMode;
-
-  // Apply CSS custom properties before paint
-  useLayoutEffect(() => {
-    const themeMap = { light: lightTheme, dark: darkTheme, catppuccin: catppuccinTheme };
-    const theme = themeMap[resolvedTheme];
-    applyTheme(theme);
-    document.documentElement.setAttribute("data-theme", resolvedTheme);
-    updateFavicon(resolvedTheme);
-  }, [resolvedTheme]);
-
-  const setThemeMode = (mode: ThemeMode) => {
-    setThemeModeState(mode);
-    localStorage.setItem(STORAGE_KEY, mode);
-  };
-
   return (
-    <ThemeContext.Provider value={{ themeMode, resolvedTheme, setThemeMode }}>
+    <ThemeContext.Provider value={{ themeMode: "light", resolvedTheme: "light", setThemeMode: () => {} }}>
       {children}
     </ThemeContext.Provider>
   );

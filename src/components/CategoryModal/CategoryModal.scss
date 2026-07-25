@@ -107,19 +107,23 @@
 }
 
 .cancel-button {
-  background-color: $surface2;
-  color: $text;
+  background-color: transparent;
+  color: #333333;
+  border: 1px solid #333333;
 
   &:hover {
-    background-color: $border;
+    background-color: #333333;
+    color: #ffffff;
   }
 }
 
 .submit-button {
-  background-color: $text;
-  color: $background;
+  background-color: transparent;
+  color: #8a0322;
+  border: 1px solid #8a0322;
 
   &:hover {
-    background-color: $text-secondary;
+    background-color: #8a0322;
+    color: #ffffff;
   }
 }

@@ -8,7 +8,6 @@ import Loading from "../Loading/Loading";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import DeleteModal from "../DeleteModal/DeleteModal";
-import TableOfContents from "../TableOfContents/TableOfContents";
 import ReactQuill from "react-quill";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
@@ -34,18 +33,23 @@ const PostViewer: React.FC = () => {
 
   // PARSE CONTENT (supports string + object)
   const parsedContent = useMemo(() => {
-    if (!post?.content) return { ops: [] };
+    if (!post?.content) return "";
 
-    try {
-      return typeof post.content === "string"
-        ? JSON.parse(post.content)
-        : post.content;
-    } catch {
-      return { ops: [] };
+    if (typeof post.content === "string") {
+      try {
+        // Test if it's a JSON Delta object
+        const parsed = JSON.parse(post.content);
+        if (parsed && parsed.ops) return parsed;
+        return post.content;
+      } catch {
+        // If not JSON, return as raw HTML string
+        return post.content;
+      }
     }
+    return post.content;
   }, [post?.content]);
 
-  // ADD IDs FOR TOC SCROLL
+  // ADD IDs FOR TOC SCROLL (Legacy, but keeping for any old links)
   useEffect(() => {
     const headings = document.querySelectorAll(
       ".post-view__body h1, .post-view__body h2, .post-view__body h3",
@@ -54,6 +58,20 @@ const PostViewer: React.FC = () => {
     headings.forEach((el, index) => {
       el.setAttribute("id", `heading-${index}`);
     });
+  }, [parsedContent]);
+
+  const { words, readTime } = useMemo(() => {
+    let text = "";
+    if (parsedContent && parsedContent.ops) {
+      text = parsedContent.ops
+        .map((op: any) => (typeof op.insert === "string" ? op.insert : ""))
+        .join(" ");
+    } else if (typeof parsedContent === "string") {
+      text = parsedContent.replace(/<[^>]+>/g, " ");
+    }
+    const w = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    const rt = Math.max(1, Math.ceil(w / 200));
+    return { words: w, readTime: rt };
   }, [parsedContent]);
 
   const [isLiked, setIsLiked] = useState(post?.isLiked || false);
@@ -104,75 +122,73 @@ const PostViewer: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="post-view">
+    <div className="post-view-container">
       {loading && post?.id !== id ? (
         <Loading />
       ) : post ? (
         <>
-          {post.coverImage && (
-            <div className="post-cover">
-              <img src={post.coverImage} alt={post.title} />
-            </div>
-          )}
-          {/* HEADER */}
-          <div className="post-header">
-            <div className="post-header__left">
-              <h1 className="post-view__title">{post.title}</h1>
-
-              <div className="post-meta">
-                <span className="author">
-                  {post.user?.username || "Unknown"}
-                </span>
-                <span className="dot">·</span>
-                <button 
-                  className={`like-button ${isAnimating ? 'pop-animation' : ''}`}
-                  onClick={handleLike}
-                  title={isLiked ? "Unlike post" : "Like post"}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    color: isLiked ? '#ff4d6d' : '#888', padding: 0,
-                    fontFamily: 'inherit', fontSize: '1rem',
-                    transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                  }}
-                >
-                  <svg 
-                    width="20" height="20" viewBox="0 0 24 24" 
-                    fill={isLiked ? "currentColor" : "none"} 
-                    stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
-                  >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                  </svg>
-                  <span style={{ fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
-                </button>
-              </div>
-
-              {post.owner && (
-                <div className="post-actions">
-                  <button
-                    className="post-view__edit-button"
-                    onClick={() => history.push(`/post/edit/${id}`)}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    className="post-view__delete-button"
-                    onClick={() => setIsDeleteModalOpen(true)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
+          <div 
+            className={`post-hero ${!post.coverImage ? 'post-hero--no-image' : ''}`} 
+            style={post.coverImage ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${post.coverImage})` } : {}}
+          >
+            <div className="post-hero__content">
+              <h1 className="post-hero__title">{post.title}</h1>
+              {post.subtitle && <p className="post-hero__subtitle">{post.subtitle}</p>}
             </div>
           </div>
 
-          {/* TOC */}
-          <TableOfContents content={parsedContent} />
+          <div className="post-view">
+            {/* SIDEBAR */}
+            <div className="post-view__sidebar">
+              <div className="sidebar-meta">
+                <p className="author-name">Written by <strong>{post.user?.username || "Unknown"}</strong></p>
+                <p className="post-date">{new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                
+                <div style={{ margin: '1.5rem 0', height: '1px', background: '#eaeaea' }}></div>
 
-          {/* CONTENT */}
-          <div className="post-view__body">
-            <ReactQuill value={parsedContent} readOnly theme="bubble" />
+                <p className="read-stats">{words.toLocaleString()} words</p>
+                <p className="read-time">{readTime} minute read</p>
+
+                <div style={{ margin: '1.5rem 0', height: '1px', background: '#eaeaea' }}></div>
+
+                <div className="post-actions-sidebar">
+                  <button 
+                    className={`like-button ${isAnimating ? 'pop-animation' : ''}`}
+                    onClick={handleLike}
+                    title={isLiked ? "Unlike post" : "Like post"}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      color: isLiked ? '#8a0322' : '#888', padding: 0,
+                      fontFamily: 'inherit', fontSize: '1rem',
+                      transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                    }}
+                  >
+                    <svg 
+                      width="22" height="22" viewBox="0 0 24 24" 
+                      fill={isLiked ? "currentColor" : "none"} 
+                      stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
+                    >
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    </svg>
+                    <span style={{ fontWeight: isLiked ? '600' : '400', fontSize: '1.1rem' }}>{likesCount}</span>
+                  </button>
+
+                  { (post.owner || (post.user && userInfo && post.user.id === userInfo.id)) && (
+                    <div className="owner-actions" style={{ display: 'flex', gap: '10px', marginTop: '1rem', flexWrap: 'wrap' }}>
+                      <button onClick={() => history.push(`/post/edit/${id}`)} className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>Edit</button>
+                      <button onClick={() => setIsDeleteModalOpen(true)} className="btn-action" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>Delete</button>
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            </div>
+
+            {/* CONTENT */}
+            <div className="post-view__body">
+              <ReactQuill value={parsedContent} readOnly theme="bubble" />
+            </div>
           </div>
 
           {/* MODAL */}
