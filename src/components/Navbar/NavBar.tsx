@@ -156,11 +156,18 @@ const NavBar: React.FC = () => {
       </div>
 
       {/* Mobile hamburger overlay if needed */}
-      <div className="navbar__toggle" onClick={toggleNavbar}>
-        <div className={`hamburger ${isOpen ? "active" : ""}`}>
-          <span></span>
-          <span></span>
-          <span></span>
+      <div className="navbar__mobile-actions">
+        {userInfo && (
+          <Link to="/post/new" className="mobile-write-icon" onClick={handleAddNewPost} style={{fontFamily: 'var(--font-aeon-sans)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '1.5px', textTransform: 'uppercase', textDecoration: 'none'}}>
+            WRITE
+          </Link>
+        )}
+        <div className="navbar__toggle" onClick={toggleNavbar}>
+          <div className={`hamburger ${isOpen ? "active" : ""}`}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
       </div>
 
@@ -178,6 +185,23 @@ const NavBar: React.FC = () => {
             <div className="mega-menu__col mega-menu__col--secondary">
               <Link to="/essays" onClick={closeNavbar}>Essays</Link>
               <Link to="/about" onClick={closeNavbar}>About</Link>
+              
+              <div className="mega-menu__divider" style={{ margin: '1rem 0', height: '1px', background: '#eaeaea', width: '50px' }}></div>
+              
+              {userInfo ? (
+                <div className="mega-menu__auth-buttons">
+                  <Link to="/post/new" className="btn-action" onClick={handleAddNewPost}>Write</Link>
+                  <Link to="/profile" className="btn-secondary" onClick={closeNavbar}>Profile</Link>
+                  <span className="btn-secondary" onClick={handleLogout}>Sign Out</span>
+                </div>
+              ) : (
+                <div className="mega-menu__auth-buttons">
+                  <Link to="/login" className="btn-action" onClick={closeNavbar}>Sign In</Link>
+                  {location.pathname !== "/register" && (
+                    <Link to="/register" className="btn-secondary" onClick={closeNavbar}>Register</Link>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

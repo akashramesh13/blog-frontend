@@ -221,6 +221,18 @@
     &__grid {
       grid-template-columns: 1fr;
       padding: 0 1.5rem 4rem;
+      gap: 0;
+    }
+
+    &__post--grid {
+      border-bottom: 1px solid #eaeaea;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
     }
 
     &__post--hero {

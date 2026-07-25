@@ -38,6 +38,27 @@
   flex-direction: column;
 }
 
+@media (max-width: 768px) {
+  .editor-top-bar {
+    &--floating {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      z-index: auto;
+      
+      .editor-actions {
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+      
+      .btn-action {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
 /* ---------------- HEADER ---------------- */
 
 .editor-header {

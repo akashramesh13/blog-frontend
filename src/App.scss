@@ -21,6 +21,11 @@ body {
   line-height: 1.6;
   letter-spacing: 0.1px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
 }
 
 body.menu-open {

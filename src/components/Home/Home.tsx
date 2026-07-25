@@ -53,7 +53,7 @@ const Home: React.FC = () => {
   // eslint-disable-next-line
   const [featuredPost, setFeaturedPost] = useState<IPost | null>(null);
 
-  const size = (!debouncedSearch && !selectedCategory) ? 3 : 4; // 3 for default home, 4 for category/search to ensure 1 hero + 3 grid
+  const size = 4;
 
   useEffect(() => {
     dispatch(clearPosts());

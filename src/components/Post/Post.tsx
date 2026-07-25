@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { toggleLike } from "../../redux/actions/postsActions";
 import { IPost } from "../../types/postsTypes";
 import { formatDate } from "../../utils/formatDate";
@@ -35,18 +34,19 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard }) => {
   const preview = post.subtitle || getPreview(post.content);
   const dispatch = useDispatch<any>();
-  const history = useHistory();
   const { userInfo } = useSelector((state: any) => state.auth);
 
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likesCount, setLikesCount] = useState(post.likesCount || 0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showLoginMsg, setShowLoginMsg] = useState(false);
 
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     
     if (!userInfo) {
-      history.push("/login");
+      setShowLoginMsg(true);
+      setTimeout(() => setShowLoginMsg(false), 2500);
       return;
     }
     
@@ -68,24 +68,47 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
   };
 
   const LikeButton = () => (
-    <div 
-      className={`post-likes ${isAnimating ? 'pop-animation' : ''}`} 
-      style={{ 
-        display: 'flex', alignItems: 'center', gap: '6px', 
-        color: isLiked ? '#ff4d6d' : (isHero ? 'rgba(255,255,255,0.8)' : '#888'),
-        cursor: 'pointer',
-        transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-      }}
-      onClick={handleLike} 
-    >
-      <svg 
-        width="18" height="18" viewBox="0 0 24 24" 
-        fill={isLiked ? "currentColor" : "none"} 
-        stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div 
+        className={`post-likes ${isAnimating ? 'pop-animation' : ''}`} 
+        style={{ 
+          display: 'flex', alignItems: 'center', gap: '6px', 
+          color: isLiked ? '#ff4d6d' : (isHero ? 'rgba(255,255,255,0.8)' : '#888'),
+          cursor: 'pointer',
+          transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+        }}
+        onClick={handleLike} 
       >
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-      </svg>
-      <span style={{ fontSize: '0.95rem', fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
+        <svg 
+          width="18" height="18" viewBox="0 0 24 24" 
+          fill={isLiked ? "currentColor" : "none"} 
+          stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
+        >
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+        </svg>
+        <span style={{ fontSize: '0.95rem', fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
+      </div>
+      {showLoginMsg && (
+        <div style={{
+          position: 'absolute',
+          bottom: '100%',
+          right: '50%',
+          transform: 'translateX(50%)',
+          marginBottom: '8px',
+          background: '#222',
+          color: '#fff',
+          padding: '6px 12px',
+          borderRadius: '4px',
+          fontSize: '0.75rem',
+          fontFamily: 'var(--font-aeon-sans)',
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+          zIndex: 10
+        }}>
+          Login required to like
+        </div>
+      )}
     </div>
   );
 
