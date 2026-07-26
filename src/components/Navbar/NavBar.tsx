@@ -95,7 +95,7 @@ const NavBar: React.FC = () => {
           </div>
           <div className="navbar__menu-bottom">
             <a href="https://github.com/akashramesh13" target="_blank" rel="noopener noreferrer">{FaGithub({ className: "social-icon" }) as any}</a>
-            <a href="https://linkedin.com/in/akashramesh13" target="_blank" rel="noopener noreferrer">{FaLinkedin({ className: "social-icon" }) as any}</a>
+            <a href="https://www.linkedin.com/in/akashramesh1999/" target="_blank" rel="noopener noreferrer">{FaLinkedin({ className: "social-icon" }) as any}</a>
             <a href="https://leetcode.com/u/akashramesh13/" target="_blank" rel="noopener noreferrer">{SiLeetcode({ className: "social-icon" }) as any}</a>
           </div>
         </div>
