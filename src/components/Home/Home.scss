@@ -91,7 +91,7 @@
     color: #fff;
     cursor: pointer;
     padding: 4rem 2rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
     position: relative;
     background-color: #c32128;
     
@@ -114,6 +114,9 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
       letter-spacing: -1px;
       color: #fff;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hero-excerpt {

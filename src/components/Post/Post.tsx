@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike } from "../../redux/actions/postsActions";
 import { IPost } from "../../types/postsTypes";
-import { formatDate } from "../../utils/formatDate";
+import moment from "moment";
 
 const getPreview = (content: any, maxLength: number = 120) => {
   try {
@@ -21,6 +21,20 @@ const getPreview = (content: any, maxLength: number = 120) => {
     return text.substring(0, maxLength).trim() + "...";
   } catch {
     return "";
+  }
+};
+
+const getReadTime = (content: any) => {
+  try {
+    const delta = typeof content === "string" ? JSON.parse(content) : content;
+    const text = delta.ops
+      .map((op: any) => (typeof op.insert === "string" ? op.insert : ""))
+      .join(" ");
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / 200);
+    return Math.max(1, minutes);
+  } catch {
+    return 3;
   }
 };
 
@@ -67,8 +81,14 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
     }
   };
 
+  const readTime = getReadTime(post.content);
+
   const LikeButton = () => (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <span style={{ fontSize: '0.9rem', color: isHero ? 'rgba(255,255,255,0.8)' : '#888', fontWeight: 500, fontFamily: 'var(--font-aeon-sans)' }}>
+        {readTime} min read &bull;
+      </span>
+      <div style={{ position: 'relative', display: 'inline-block' }}>
       <div 
         className={`post-likes ${isAnimating ? 'pop-animation' : ''}`} 
         style={{ 
@@ -109,6 +129,7 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
           Login required to like
         </div>
       )}
+      </div>
     </div>
   );
 
@@ -118,15 +139,17 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
     return (
       <div className="home__post--hero" onClick={() => handleOnPostClick(post)} style={{ 
         backgroundColor: '#ca2127', 
-        backgroundImage: post.coverImage ? `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url(${post.coverImage})` : 'none', 
+        backgroundImage: post.coverImage ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url(${post.coverImage})` : 'none', 
         backgroundSize: 'cover', 
         backgroundPosition: 'center' 
       }}>
         <div className="hero-content-wrapper">
+          <div style={{ fontFamily: 'var(--font-aeon-sans)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.5rem', color: 'rgba(255,255,255,0.85)', fontWeight: 600 }}>
+            {post.category?.name || 'Essay'} &bull; {moment(post.createdAt).format('MMMM YYYY')}
+          </div>
           <h1 className="hero-title">{post.title}</h1>
           {preview && <p className="hero-excerpt">{preview}</p>}
           <div className="hero-footer">
-            <span className="hero-date">{formatDate(post.createdAt)}</span>
             <LikeButton />
           </div>
         </div>
@@ -139,11 +162,13 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
       {isGridCard && post.coverImage && (
         <div className="grid-image" style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : {}}></div>
       )}
+      <div style={{ fontFamily: 'var(--font-aeon-sans)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '0.8rem', color: '#8a0322', fontWeight: 600 }}>
+        {post.category?.name || 'Essay'} &bull; {moment(post.createdAt).format('MMMM YYYY')}
+      </div>
       <h2 className="home__post-title">{post.title}</h2>
       {preview && <p className="home__post-excerpt">{preview}</p>}
 
-      <div className="home__post-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-        <span className="home__post-date">{formatDate(post.createdAt)}</span>
+      <div className="home__post-footer" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto' }}>
         <LikeButton />
       </div>
     </div>
