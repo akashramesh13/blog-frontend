@@ -1,87 +1,74 @@
 @use '../../styles/theme' as *;
 
-/* ---------------- ROOT ---------------- */
-
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-
+  min-height: calc(100vh - 100px);
   background: $background;
-  padding: 1rem;
+  padding: 2rem 1.5rem;
 }
-
-/* ---------------- CARD ---------------- */
 
 .login-card {
   width: 100%;
-  max-width: 420px;
-
-  padding: 2rem 1.5rem;
-
+  max-width: 460px;
   background: transparent;
-  border: none;
-  box-shadow: none;
-
   display: flex;
   flex-direction: column;
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-/* ---------------- TITLE ---------------- */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .login-card h1 {
   font-family: var(--font-aeon-serif);
-  font-size: 2.2rem;
-  font-weight: 600;
+  font-size: 3.5rem;
+  font-weight: 400;
   color: $text;
-
-  margin-bottom: 2rem;
-  text-align: left;
+  margin-bottom: 3rem;
+  text-align: center;
+  letter-spacing: -1px;
 }
 
-/* ---------------- INPUT GROUP ---------------- */
-
 .input-group {
-  margin-bottom: 1.8rem;
+  margin-bottom: 2.5rem;
   position: relative;
 }
 
-/* ---------------- INPUT ---------------- */
-
 input {
   width: 100%;
-
-  font-family: var(--font-aeon-serif);
-  font-size: 1rem;
-
-  padding: 0.6rem 0;
-
+  font-family: var(--font-aeon-sans);
+  font-size: 1.1rem;
+  padding: 0.8rem 0;
   border: none;
-  border-bottom: 1px solid $border;
+  border-bottom: 1px solid #d0d0d0;
   background: transparent;
-
-  transition: all 0.2s ease;
+  color: $text;
+  transition: all 0.3s ease;
 }
 
-/* placeholder */
 input::placeholder {
-  color: $text-placeholder;
+  color: #a0a0a0;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
-/* hover */
 input:hover {
-  border-bottom: 1px solid $border-hover;
+  border-bottom-color: #8a0322;
 }
 
-/* focus */
 input:focus {
   outline: none;
-  box-shadow: none;
-  border-bottom: 1px solid $text;
+  border-bottom-color: #8a0322;
+  box-shadow: 0 1px 0 0 #8a0322;
 }
-
-/* ---------------- PASSWORD ---------------- */
 
 .password-group {
   position: relative;
@@ -92,65 +79,61 @@ input:focus {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-
   cursor: pointer;
-  color: $text-muted;
-  font-size: 0.9rem;
+  color: #a0a0a0;
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
 }
 
 .password-toggle:hover {
-  color: $text;
+  color: #8a0322;
 }
-
-/* ---------------- BUTTON ---------------- */
 
 .login-button {
-  margin-top: 2rem;
-
-  align-self: flex-start;
-
-  background: transparent;
-  border: 1px solid $border;
-
-  padding: 8px 14px;
-
-  font-family: var(--font-aeon-serif);
-  font-size: 0.9rem;
-  color: $text;
-
+  margin-top: 1rem;
+  width: 100%;
+  background: #8a0322;
+  border: 1px solid #8a0322;
+  padding: 16px 24px;
+  font-family: var(--font-aeon-sans);
+  font-size: 1rem;
+  color: #fff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* hover */
 .login-button:hover:not(:disabled) {
-  background: $surface2;
-  border-color: $border-hover;
+  background: #a8042c;
+  border-color: #a8042c;
+  color: #fff;
 }
 
-/* disabled */
 .login-button:disabled {
-  opacity: 0.4;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
-/* ---------------- ERROR ---------------- */
-
 .error {
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-  color: $text-muted;
-  line-height: 1.5;
+  font-family: var(--font-aeon-sans);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  color: #8a0322;
+  text-align: center;
+  padding: 12px;
+  background: rgba(138, 3, 34, 0.05);
+  border-left: 3px solid #8a0322;
 }
 
-/* ---------------- RESPONSIVE ---------------- */
-
-@media (max-width: 480px) {
-  .login-card {
-    padding: 1.5rem 1rem;
-  }
-
+@media (max-width: 600px) {
   .login-card h1 {
-    font-size: 1.8rem;
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
   }
 }

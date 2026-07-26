@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import "./Login.scss";
 import { RootState } from "../../redux/reducers";
@@ -26,50 +26,49 @@ const Login: React.FC = () => {
     await dispatch(login(username, password));
   };
 
+  const location = useLocation<{ from?: string }>();
+  const from = location.state?.from || "/";
+
   if (userInfo) {
-    return <Redirect to="/" />;
+    return <Redirect to={from} />;
   }
 
   return (
     <div className="login-container">
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className="login-card">
-          <h1>Sign in</h1>
-          {error && <p className="error">{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                ref={inputRef}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group password-group">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <span
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? FaIcons.FaEyeSlash({}) : FaIcons.FaEye({})}{" "}
-              </span>
-            </div>
-            <button type="submit" className="login-button" disabled={loading}>
-              {"Login"}
-            </button>
-          </form>
-        </div>
-      )}
+      <div className="login-card">
+        <h1>Sign in</h1>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              ref={inputRef}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group password-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? FaIcons.FaEyeSlash({}) : FaIcons.FaEye({})}{" "}
+            </span>
+          </div>
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? <Loading inline /> : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

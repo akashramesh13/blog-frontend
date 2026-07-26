@@ -66,7 +66,6 @@ button:focus {
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: #8a0322;
 }
 
 /* GLOBAL BUTTON STYLES */
@@ -84,9 +83,14 @@ textarea:focus {
   border-radius: 4px;
   font-weight: 600;
 
+  &, &:visited, &:link {
+    color: #fff;
+  }
+
   &:hover {
-    background: transparent;
-    color: #8a0322;
+    background: #a8042c;
+    border-color: #a8042c;
+    color: #fff;
   }
 
   &:disabled {
@@ -109,9 +113,13 @@ textarea:focus {
   border-radius: 4px;
   font-weight: 600;
 
+  &, &:visited, &:link {
+    color: #8a0322;
+  }
+
   &:hover {
-    background: #8a0322;
-    color: #fff;
+    background: rgba(138, 3, 34, 0.05);
+    color: #8a0322;
   }
 
   &:disabled {

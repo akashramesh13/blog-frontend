@@ -9,7 +9,6 @@ import {
   REGISTER_SUCCESS,
 } from "../constants/authConstants";
 import { Dispatch } from "redux";
-import { History } from "history";
 
 export const login =
   (username: string, password: string) => async (dispatch: Dispatch) => {
@@ -49,21 +48,22 @@ export const logout = () => async (dispatch: Dispatch) => {
 };
 
 export const register =
-  (username: string, password: string, history: History<unknown>) =>
-  async (dispatch: Dispatch) => {
-    try {
-      dispatch({ type: REGISTER_REQUEST });
+  (username: string, password: string) =>
+    async (dispatch: Dispatch) => {
+      try {
+        dispatch({ type: REGISTER_REQUEST });
 
-      await axios.post("/register", { username, password });
+        await axios.post("/register", { username, password });
 
-      dispatch({ type: REGISTER_SUCCESS });
+        dispatch({ type: REGISTER_SUCCESS });
 
-      history.push("/login");
-    } catch (error) {
-      console.error("Registration failed", error);
-      dispatch({
-        type: REGISTER_FAILURE,
-        payload: "Registration failed!",
-      });
-    }
-  };
+        return true;
+      } catch (error) {
+        console.error("Registration failed", error);
+        dispatch({
+          type: REGISTER_FAILURE,
+          payload: "Registration failed!",
+        });
+        return false;
+      }
+    };

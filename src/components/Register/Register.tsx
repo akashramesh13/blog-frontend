@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 
 import { register } from "../../redux/actions/authActions";
@@ -98,19 +98,24 @@ const Register: React.FC = () => {
     setPasswordValidation(validatePassword(password));
   }, [password]);
 
+  const location = useLocation<{ from?: string }>();
+  const from = location.state?.from || "/";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (usernameValidation.isValid && passwordValidation.isValid) {
-      await dispatch(register(username, password, history));
-      setRegistrationSuccess(true);
-      setTimeout(() => {
-        history.push("/login");
-      }, 2000);
+      const isSuccess = await dispatch(register(username, password) as any);
+      if (isSuccess) {
+        setRegistrationSuccess(true);
+        setTimeout(() => {
+          history.push({ pathname: "/login", state: { from } });
+        }, 2000);
+      }
     }
   };
 
   if (userInfo) {
-    return <Redirect to="/" />;
+    return <Redirect to={from} />;
   }
 
   return (
@@ -182,7 +187,7 @@ const Register: React.FC = () => {
               !passwordValidation.isValid
             }
           >
-            {loading ? <Loading /> : "Register"}
+            {loading ? <Loading inline /> : "Register"}
           </button>
         </form>
       </div>

@@ -15,6 +15,14 @@
   align-items: center;
   justify-content: center;
 
+  @media (max-width: 900px) {
+    height: 60vh;
+  }
+
+  @media (max-width: 600px) {
+    height: 50vh;
+  }
+
   &--no-image {
     height: 50vh;
     background-color: #ca2127;
@@ -198,6 +206,15 @@
     /* REMOVE empty spacing from Quill */
     p:empty {
       display: none;
+    }
+
+    /* Images */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 1.5rem 0;
+      display: block;
     }
 
     /* lists */

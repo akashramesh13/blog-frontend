@@ -39,23 +39,14 @@
   }
 
   &--scrolled {
-    position: fixed;
-    top: 0;
-    width: 100%;
     padding: 0.5rem 3.5rem; /* Even smaller when scrolled */
     border-bottom: 1px solid #eaeaea;
     background: $surface;
-    animation: slideDown 0.3s ease;
     
     .navbar__brand a {
       font-size: 1.8rem; /* Shrink logo slightly */
     }
   }
-}
-
-@keyframes slideDown {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
 }
 
 .navbar__left, .navbar__center, .navbar__right {
@@ -134,6 +125,11 @@
   text-decoration: none;
   line-height: 1;
   letter-spacing: -2px;
+  transition: font-size 0.3s ease, color 0.3s ease, opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 .navbar__inline-search {
@@ -255,7 +251,7 @@
       &:hover { opacity: 0.8; }
     }
 
-    &--secondary a, &--secondary .mega-menu__action {
+    &--secondary a:not(.btn-action):not(.btn-secondary), &--secondary .mega-menu__action {
       font-family: var(--font-aeon-sans);
       font-size: 1.4rem;
       font-weight: 400;

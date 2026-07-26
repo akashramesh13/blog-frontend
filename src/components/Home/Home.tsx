@@ -42,6 +42,9 @@ const Home: React.FC = () => {
   const [sortBy, setSortBy] = useState("latest");
   // Debounce search query
   const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
+  const isSearchOrFilter = !!(debouncedSearch || selectedCategory);
+  
+  const [visibleCount, setVisibleCount] = useState(isSearchOrFilter ? 6 : 4);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -53,13 +56,12 @@ const Home: React.FC = () => {
   // eslint-disable-next-line
   const [featuredPost, setFeaturedPost] = useState<IPost | null>(null);
 
-  const size = 4;
-
   useEffect(() => {
     dispatch(clearPosts());
     setPage(0);
-    dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true, sortBy));
-  }, [selectedCategory, debouncedSearch, sortBy, dispatch, size]);
+    setVisibleCount(isSearchOrFilter ? 6 : 4);
+    dispatch(fetchPosts(0, 12, selectedCategory, debouncedSearch, true, sortBy));
+  }, [selectedCategory, debouncedSearch, sortBy, dispatch, isSearchOrFilter]);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -74,6 +76,11 @@ const Home: React.FC = () => {
       setSelectedCategory("");
     } else setSelectedCategory(categoryName);
   };
+
+  const displayedPosts = posts.slice(0, visibleCount);
+  const hasMoreToDisplay = visibleCount < posts.length;
+  const hasMoreToFetch = page < totalPages - 1;
+  const showLoadMore = hasMoreToDisplay || hasMoreToFetch;
 
   return (
     <div className="home-container">
@@ -136,20 +143,20 @@ const Home: React.FC = () => {
             <p className="no-posts">No posts found.</p>
           ) : (
             <>
-              {posts.length > 0 && (
+              {!isSearchOrFilter && displayedPosts.length > 0 && (
                 <div className="home__hero">
                   <Post
-                    post={(!debouncedSearch && !selectedCategory && featuredPost) ? featuredPost : posts[0]}
+                    post={featuredPost ? featuredPost : displayedPosts[0]}
                     handleOnPostClick={handleOnPostClick}
                     isHero={true}
                   />
                 </div>
               )}
-              {(posts.length > 1 || (featuredPost && posts.length > 0)) && (
+              {(displayedPosts.length > (isSearchOrFilter ? 0 : 1) || (featuredPost && displayedPosts.length > 0)) && (
                 <div className="home__grid">
-                  {posts
-                    .filter(p => !(!debouncedSearch && !selectedCategory && featuredPost && p.id === featuredPost.id))
-                    .filter((p, idx) => (!debouncedSearch && !selectedCategory && featuredPost) ? true : idx > 0)
+                  {displayedPosts
+                    .filter(p => !(featuredPost && !isSearchOrFilter && p.id === featuredPost.id))
+                    .filter((p, idx) => (isSearchOrFilter || featuredPost) ? true : idx > 0)
                     .map((post, index) => {
                       return (
                         <div key={post.id} className="grid-item-wrapper" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -159,24 +166,23 @@ const Home: React.FC = () => {
                     })}
                 </div>
               )}
-              {page < totalPages - 1 && (
+              {showLoadMore && (
                 <div className="load-more-container" style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                  {loading ? (
-                    <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
-                      <Loading />
-                    </div>
-                  ) : (
-                    <button
-                      className="btn-secondary"
-                      onClick={() => {
+                  <button
+                    className="btn-secondary load-more-btn"
+                    disabled={loading}
+                    onClick={() => {
+                      const nextVisibleCount = visibleCount + 3;
+                      setVisibleCount(nextVisibleCount);
+                      if (nextVisibleCount > posts.length && hasMoreToFetch) {
                         const nextPage = page + 1;
                         setPage(nextPage);
-                        dispatch(fetchPosts(nextPage, size, selectedCategory, debouncedSearch, false, sortBy));
-                      }}
-                    >
-                      Load More Articles
-                    </button>
-                  )}
+                        dispatch(fetchPosts(nextPage, 12, selectedCategory, debouncedSearch, false, sortBy));
+                      }
+                    }}
+                  >
+                    {loading ? <Loading inline /> : "Load More Articles"}
+                  </button>
                 </div>
               )}
             </>

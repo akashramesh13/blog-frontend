@@ -22,7 +22,7 @@
 
   &--floating {
     position: fixed;
-    top: 100px;
+    bottom: 2rem;
     right: 2rem;
     z-index: 1000;
     padding: 0;
@@ -35,7 +35,12 @@
 }
 
 .editor-top-bar--floating .editor-actions {
-  flex-direction: column;
+  background: $surface;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #eaeaea;
+  flex-direction: row; /* Ensure it stays horizontal */
 }
 
 @media (max-width: 768px) {

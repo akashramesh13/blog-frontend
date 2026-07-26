@@ -118,7 +118,7 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
     return (
       <div className="home__post--hero" onClick={() => handleOnPostClick(post)} style={{ 
         backgroundColor: '#ca2127', 
-        backgroundImage: post.coverImage ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url(${post.coverImage})` : 'none', 
+        backgroundImage: post.coverImage ? `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url(${post.coverImage})` : 'none', 
         backgroundSize: 'cover', 
         backgroundPosition: 'center' 
       }}>

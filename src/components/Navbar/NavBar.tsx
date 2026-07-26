@@ -21,7 +21,6 @@ const NavBar: React.FC = () => {
   const history = useHistory();
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const [menuSearchQuery, setMenuSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [inlineSearchQuery, setInlineSearchQuery] = useState("");
 
@@ -33,17 +32,9 @@ const NavBar: React.FC = () => {
     }
   };
 
-  const handleMenuSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      history.push(`/?search=${encodeURIComponent(menuSearchQuery)}`);
-      closeNavbar();
-    }
-  };
-
   useEffect(() => {
     const handleScroll = () => {
-      const isArticlePage = window.location.pathname.startsWith("/post/view");
-      const threshold = isArticlePage ? window.innerHeight - 100 : 150;
+      const threshold = 50;
       setIsScrolled(window.scrollY > threshold);
     };
     window.addEventListener("scroll", handleScroll);
@@ -113,10 +104,10 @@ const NavBar: React.FC = () => {
       <div className="navbar__center">
         {isSearchOpen ? (
           <div className="navbar__inline-search">
-            <input 
+            <input
               autoFocus
-              type="text" 
-              placeholder="Search stories..." 
+              type="text"
+              placeholder="Search stories..."
               value={inlineSearchQuery}
               onChange={(e) => setInlineSearchQuery(e.target.value)}
               onKeyDown={handleInlineSearch}
@@ -158,7 +149,7 @@ const NavBar: React.FC = () => {
       {/* Mobile hamburger overlay if needed */}
       <div className="navbar__mobile-actions">
         {userInfo && (
-          <Link to="/post/new" className="mobile-write-icon" onClick={handleAddNewPost} style={{fontFamily: 'var(--font-aeon-sans)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '1.5px', textTransform: 'uppercase', textDecoration: 'none'}}>
+          <Link to="/post/new" className="mobile-write-icon" onClick={handleAddNewPost} style={{ fontFamily: 'var(--font-aeon-sans)', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '1.5px', textTransform: 'uppercase', textDecoration: 'none' }}>
             WRITE
           </Link>
         )}
@@ -176,18 +167,18 @@ const NavBar: React.FC = () => {
         <div className="mega-menu__container">
           <div className="mega-menu__grid">
             <div className="mega-menu__col mega-menu__col--primary">
-              <Link to="/?category=Philosophy" onClick={closeNavbar} style={{color: '#06696c'}}>Philosophy</Link>
-              <Link to="/?category=Science" onClick={closeNavbar} style={{color: '#034d60'}}>Science</Link>
-              <Link to="/?category=Psychology" onClick={closeNavbar} style={{color: '#820042'}}>Psychology</Link>
-              <Link to="/?category=Society" onClick={closeNavbar} style={{color: '#a12b10'}}>Society</Link>
-              <Link to="/?category=Culture" onClick={closeNavbar} style={{color: '#b66904'}}>Culture</Link>
+              <Link to="/?category=Philosophy" onClick={closeNavbar} style={{ color: '#06696c' }}>Philosophy</Link>
+              <Link to="/?category=Science" onClick={closeNavbar} style={{ color: '#034d60' }}>Science</Link>
+              <Link to="/?category=Psychology" onClick={closeNavbar} style={{ color: '#820042' }}>Psychology</Link>
+              <Link to="/?category=Society" onClick={closeNavbar} style={{ color: '#a12b10' }}>Society</Link>
+              <Link to="/?category=Culture" onClick={closeNavbar} style={{ color: '#b66904' }}>Culture</Link>
             </div>
             <div className="mega-menu__col mega-menu__col--secondary">
               <Link to="/essays" onClick={closeNavbar}>Essays</Link>
               <Link to="/about" onClick={closeNavbar}>About</Link>
-              
+
               <div className="mega-menu__divider" style={{ margin: '1rem 0', height: '1px', background: '#eaeaea', width: '50px' }}></div>
-              
+
               {userInfo ? (
                 <div className="mega-menu__auth-buttons">
                   <Link to="/post/new" className="btn-action" onClick={handleAddNewPost}>Write</Link>
@@ -196,9 +187,21 @@ const NavBar: React.FC = () => {
                 </div>
               ) : (
                 <div className="mega-menu__auth-buttons">
-                  <Link to="/login" className="btn-action" onClick={closeNavbar}>Sign In</Link>
+                  <Link
+                    to={{ pathname: "/login", state: { from: location.pathname } }}
+                    className="btn-action"
+                    onClick={closeNavbar}
+                  >
+                    Sign In
+                  </Link>
                   {location.pathname !== "/register" && (
-                    <Link to="/register" className="btn-secondary" onClick={closeNavbar}>Register</Link>
+                    <Link
+                      to={{ pathname: "/register", state: { from: location.pathname } }}
+                      className="btn-secondary"
+                      onClick={closeNavbar}
+                    >
+                      Register
+                    </Link>
                   )}
                 </div>
               )}
@@ -210,18 +213,6 @@ const NavBar: React.FC = () => {
               <a href="https://akashramesh.in" target="_blank" rel="noopener noreferrer">PORTFOLIO</a>
               <a href="https://expensify.akashramesh.in" target="_blank" rel="noopener noreferrer">EXPENSIFY</a>
               <a href="https://indecision.akashramesh.in" target="_blank" rel="noopener noreferrer">INDECISION</a>
-            </div>
-            <div className="mega-menu__footer-right">
-              <div className="mega-menu__search">
-                {FiSearch({ className: "search-icon" }) as any}
-                <input 
-                  type="text" 
-                  placeholder="SEARCH" 
-                  value={menuSearchQuery}
-                  onChange={(e) => setMenuSearchQuery(e.target.value)}
-                  onKeyDown={handleMenuSearch}
-                />
-              </div>
             </div>
           </div>
         </div>
