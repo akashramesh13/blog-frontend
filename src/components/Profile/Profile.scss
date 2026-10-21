@@ -260,20 +260,22 @@
 }
 
 .bio-content {
-  border: 1px solid $border;
-  border-radius: 12px;
+  border: 1px solid $glass-border;
+  border-radius: 14px;
   padding: 2.5rem;
-  background: $surface;
+  background: $bg-card;
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
   color: $text;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 $glass-highlight, 0 4px 20px rgba(0, 0, 0, 0.04);
   min-height: 100px;
   line-height: 1.8;
   font-size: 1.15rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s var(--spring-easing), box-shadow 0.3s ease;
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), inset 0 1px 0 $glass-highlight;
   }
   
   p:first-child {
@@ -290,10 +292,13 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: $surface;
+  background: $bg-card;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: 1.2rem 1.5rem;
-  border-radius: 8px;
-  border: 1px solid $border;
+  border-radius: 12px;
+  border: 1px solid $glass-border;
+  box-shadow: inset 0 1px 0 $glass-highlight;
 }
 
 /* label (small, subtle) */

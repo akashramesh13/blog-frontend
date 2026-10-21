@@ -15,7 +15,6 @@ body {
   min-height: 100vh;
 }
 
-
 .main-content {
   flex: 1 0 auto;
   display: flex;
@@ -25,20 +24,24 @@ body {
 .footer {
   flex-shrink: 0;
   width: 100%;
-  background-color: $surface;
+  background-color: $header-bg;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   color: $text-muted;
-  border-top: 1px solid $border;
+  border-top: 1px solid $glass-border;
   text-align: center;
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   margin-top: auto;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 
   p {
     margin: 0;
-    font-size: 0.9rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
 
     @media (max-width: 768px) {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
   }
 }

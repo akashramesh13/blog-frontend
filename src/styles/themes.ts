@@ -2,21 +2,30 @@ import { Theme } from "../types/theme";
 
 export const lightTheme: Theme = {
   background: "#FCFCFC",
+  bgGradient: "linear-gradient(135deg, #f4f4f5, #ffffff)",
+  bgCard: "linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35))",
   accent: "#F97316",             // Vibrant Orange accent
-  surface: "#FFFFFF",
+  accentSecondary: "#3B82F6",    // Blue secondary
+  surface: "rgba(255, 255, 255, 0.85)",
   surface2: "#F4F4F5",
   text: "#18181B",
   textSecondary: "#52525B",
   textMuted: "#71717A",
   textPlaceholder: "#A1A1AA",
-  border: "#E4E4E7",
+  border: "rgba(0, 0, 0, 0.08)",
   borderHover: "#F97316",
+  gridColor: "rgba(0, 0, 0, 0.04)",
+  glassBorder: "rgba(0, 0, 0, 0.07)",
+  glassHighlight: "rgba(255, 255, 255, 0.9)",
+  headerBg: "rgba(252, 252, 252, 0.8)",
+  tagBg: "rgba(249, 115, 22, 0.08)",
+  tagBorder: "rgba(249, 115, 22, 0.22)",
   codeBackground: "#F4F4F5",
-  selection: "rgba(249, 115, 22, 0.14)", // Soft transparent orange
+  selection: "rgba(249, 115, 22, 0.15)",
   selectionText: "inherit",
-  hoverOverlay: "rgba(249, 115, 22, 0.025)",
-  categoryBg: "#F4F4F5",
-  categoryHoverBg: "rgba(249, 115, 22, 0.08)",
+  hoverOverlay: "rgba(249, 115, 22, 0.03)",
+  categoryBg: "rgba(0, 0, 0, 0.04)",
+  categoryHoverBg: "rgba(249, 115, 22, 0.1)",
   categoryActiveBg: "#F97316",
   categoryActiveText: "#FFFFFF",
   categoryText: "#52525B",
@@ -24,26 +33,31 @@ export const lightTheme: Theme = {
 
 export const darkTheme: Theme = {
   background: "#09090B",
-  accent: "#16a34a",             // Slightly darkened green accent
-  surface: "#0d0f0d",
+  bgGradient: "linear-gradient(135deg, #000000, #09090B)",
+  bgCard: "linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015))",
+  accent: "#16a34a",             // Terminal green accent
+  accentSecondary: "#16a34a",
+  surface: "rgba(18, 20, 18, 0.85)",
   surface2: "#111411",
   text: "#E4E4E7",
   textSecondary: "#A1A1AA",
   textMuted: "#71717A",
   textPlaceholder: "#4B5563",
-  border: "#1f2a1f",
+  border: "rgba(255, 255, 255, 0.08)",
   borderHover: "#16a34a",
+  gridColor: "rgba(22, 163, 74, 0.06)",
+  glassBorder: "rgba(255, 255, 255, 0.05)",
+  glassHighlight: "rgba(255, 255, 255, 0.08)",
+  headerBg: "rgba(9, 9, 11, 0.8)",
+  tagBg: "rgba(22, 163, 74, 0.1)",
+  tagBorder: "rgba(22, 163, 74, 0.3)",
   codeBackground: "#0d0f0d",
-  selection: "rgba(22, 163, 74, 0.18)",
+  selection: "rgba(22, 163, 74, 0.2)",
   selectionText: "inherit",
-  hoverOverlay: "rgba(22, 163, 74, 0.025)",
-  categoryBg: "#111411",
-  categoryHoverBg: "rgba(22, 163, 74, 0.08)",
+  hoverOverlay: "rgba(22, 163, 74, 0.03)",
+  categoryBg: "rgba(255, 255, 255, 0.04)",
+  categoryHoverBg: "rgba(22, 163, 74, 0.12)",
   categoryActiveBg: "#16a34a",
   categoryActiveText: "#09090B",
   categoryText: "#A1A1AA",
 };
-
-// Aliased to darkTheme to ensure no lavender theme is active
-export const catppuccinTheme: Theme = darkTheme;
-

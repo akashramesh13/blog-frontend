@@ -1,8 +1,11 @@
-export type ThemeMode = "light" | "dark" | "catppuccin" | "system";
+export type ThemeMode = "light" | "dark" | "system";
 
 export type Theme = {
   background: string;
+  bgGradient: string;
+  bgCard: string;
   accent: string;
+  accentSecondary: string;
   surface: string;
   surface2: string;
   text: string;
@@ -11,6 +14,12 @@ export type Theme = {
   textPlaceholder: string;
   border: string;
   borderHover: string;
+  gridColor: string;
+  glassBorder: string;
+  glassHighlight: string;
+  headerBg: string;
+  tagBg: string;
+  tagBorder: string;
   codeBackground: string;
   selection: string;
   selectionText: string;

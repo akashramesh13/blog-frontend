@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { Toaster } from 'react-hot-toast';
@@ -16,6 +16,33 @@ import Essays from './components/Essays/Essays';
 import "./App.scss";
 
 const App: React.FC = () => {
+  useEffect(() => {
+    // Global Cursor Tracking for Grid Glow (from akashramesh13.github.io)
+    const handleMouseMove = (e: MouseEvent) => {
+      document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+    };
+
+    // Header Scroll Progress Tracking
+    const handleScroll = () => {
+      const progressBar = document.getElementById('scroll-progress');
+      if (!progressBar) return;
+      const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollTotal > 0) {
+        const scrollPercent = (window.scrollY / scrollTotal) * 100;
+        progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <Router>
       <NavBar />
@@ -34,7 +61,7 @@ const App: React.FC = () => {
         <Redirect to="/" />
       </Switch>
       <Footer />
-      <Toaster position="bottom-center" toastOptions={{ style: { background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' } }} />
+      <Toaster position="bottom-center" toastOptions={{ style: { background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-glass-border)' } }} />
       <Analytics />
     </Router>
   );

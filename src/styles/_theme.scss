@@ -4,9 +4,13 @@
 
 // Core
 $background:        var(--color-background);
+$bg-gradient:       var(--color-bg-gradient);
+$bg-card:           var(--color-bg-card);
 $accent:            var(--color-accent);
+$accent-secondary:  var(--color-accent-secondary);
 $surface:           var(--color-surface);
 $surface2:          var(--color-surface2);
+$grid-color:        var(--color-grid-color);
 
 // Text
 $text:              var(--color-text);
@@ -14,9 +18,16 @@ $text-secondary:    var(--color-text-secondary);
 $text-muted:        var(--color-text-muted);
 $text-placeholder:  var(--color-text-placeholder);
 
-// Borders
+// Borders & Glass
 $border:            var(--color-border);
 $border-hover:      var(--color-border-hover);
+$glass-border:      var(--color-glass-border);
+$glass-highlight:   var(--color-glass-highlight);
+$header-bg:         var(--color-header-bg);
+
+// Tags
+$tag-bg:            var(--color-tag-bg);
+$tag-border:        var(--color-tag-border);
 
 // Special
 $code-background:   var(--color-code-background);

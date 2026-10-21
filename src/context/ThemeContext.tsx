@@ -7,11 +7,11 @@ import React, {
   useState,
 } from "react";
 import { Theme, ThemeMode } from "../types/theme";
-import { lightTheme, darkTheme, catppuccinTheme } from "../styles/themes";
+import { lightTheme, darkTheme } from "../styles/themes";
 
 type ThemeContextType = {
   themeMode: ThemeMode;
-  resolvedTheme: "light" | "dark" | "catppuccin";
+  resolvedTheme: "light" | "dark";
   setThemeMode: (mode: ThemeMode) => void;
 };
 
@@ -30,13 +30,13 @@ function applyTheme(theme: Theme): void {
   });
 }
 
-function updateFavicon(themeName: "light" | "dark" | "catppuccin"): void {
+function updateFavicon(themeName: "light" | "dark"): void {
   let accentColor = "#F97316"; // Orange accent
   let bgColor = "#FCFCFC";
   let textColor = "#18181B";
 
-  if (themeName === "dark" || themeName === "catppuccin") {
-    accentColor = "#F97316";
+  if (themeName === "dark") {
+    accentColor = "#16a34a"; // Terminal green
     bgColor = "#09090B";
     textColor = "#E4E4E7";
   }
@@ -81,12 +81,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const resolvedTheme: "light" | "dark" | "catppuccin" =
-    themeMode === "system" ? (systemIsDark ? "dark" : "light") : (themeMode === "catppuccin" ? "dark" : themeMode);
+  const resolvedTheme: "light" | "dark" =
+    themeMode === "system" ? (systemIsDark ? "dark" : "light") : themeMode;
 
   // Apply CSS custom properties before paint
   useLayoutEffect(() => {
-    const themeMap = { light: lightTheme, dark: darkTheme, catppuccin: catppuccinTheme };
+    const themeMap = { light: lightTheme, dark: darkTheme };
     const theme = themeMap[resolvedTheme];
     applyTheme(theme);
     document.documentElement.setAttribute("data-theme", resolvedTheme);
@@ -112,4 +112,3 @@ export function useTheme(): ThemeContextType {
   }
   return context;
 }
-

@@ -9,17 +9,32 @@
 
   width: 100%;
   padding: 0 2.5rem;
+  height: 64px;
 
-  height: 60px;
-
-  background: $surface;
-  border-bottom: 1px solid $border;
+  background: $header-bg;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-bottom: 1px solid $glass-border;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03), inset 0 1px 0 $glass-highlight;
 
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   box-sizing: border-box;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+/* ---------------- SCROLL PROGRESS BAR ---------------- */
+
+#scroll-progress {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: $accent;
+  transition: width 0.1s ease-out;
+  z-index: 1001;
 }
 
 /* ---------------- LEFT ---------------- */
@@ -29,15 +44,33 @@
   align-items: center;
 }
 
-/* BRAND */
+/* BRAND (Modeled after portfolio logo <A/>) */
 
 .navbar__brand a {
-  font-family: "Playfair Display", serif;
+  font-family: "JetBrains Mono", monospace;
   font-size: 1.35rem;
-  font-weight: 600;
-
+  font-weight: 700;
+  letter-spacing: -0.5px;
   color: $text;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  transition: transform 0.3s var(--spring-easing), color 0.3s ease;
+
+  .bracket {
+    color: $accent;
+    opacity: 0.85;
+    transition: opacity 0.3s ease, color 0.3s ease;
+  }
+
+  &:hover {
+    transform: scale(1.04);
+
+    .bracket {
+      opacity: 1;
+    }
+  }
 }
 
 /* ---------------- RIGHT ---------------- */
@@ -45,37 +78,43 @@
 .navbar__right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-
+  gap: 1.25rem;
   margin-left: auto;
 }
 
 /* ---------------- WRITE ---------------- */
 
 #add-post {
-  font-size: 0.95rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.88rem;
+  font-weight: 600;
   color: $text-secondary;
-
   cursor: pointer;
   text-decoration: none !important;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: $tag-bg;
+  border: 1px solid $tag-border;
+  transition: all 0.25s var(--spring-easing);
 
-  border-bottom: 1px solid transparent;
-  padding-bottom: 2px;
-
-  transition: all 0.2s ease;
-}
-
-#add-post:hover {
-  color: $text;
-  text-decoration: none !important;
-  border-bottom: 1px solid $text;
+  &:hover {
+    color: $accent;
+    border-color: $accent;
+    transform: translateY(-1px);
+    background: $hover-overlay;
+  }
 }
 
 /* ---------------- PROFILE ---------------- */
 
 .navbar-avatar {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s var(--spring-easing), box-shadow 0.25s ease;
+  border-radius: 50%;
+
+  &:hover {
+    transform: scale(1.08);
+  }
 }
 
 .profile-fallback-icon {
@@ -94,64 +133,73 @@
 .profile-dropdown {
   position: absolute;
   right: 0;
-  top: 40px;
+  top: 48px;
 
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: 6px;
+  background: $bg-card;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid $glass-border;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1), inset 0 1px 0 $glass-highlight;
 
-  padding: 6px 0;
-  min-width: 140px;
+  padding: 8px 0;
+  min-width: 150px;
 
   display: flex;
   flex-direction: column;
+  z-index: 1100;
+  animation: fadeInDown 0.2s var(--spring-easing);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .profile-dropdown a,
 .profile-dropdown button {
-  padding: 8px 12px;
-  font-size: 0.9rem;
-
+  padding: 9px 16px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
   background: none;
   border: none;
   text-align: left;
-
   cursor: pointer;
   color: $text-secondary;
+  transition: all 0.2s ease;
 }
 
 .profile-dropdown a:hover,
 .profile-dropdown button:hover {
-  background: $surface2;
-  color: $text;
+  background: $hover-overlay;
+  color: $accent;
 }
 
-.profile-dropdown button {
-  color: $text-secondary;
-}
-
-/* ---------------- THEME TOGGLE ---------------- */
+/* ---------------- THEME & RSS TOGGLES ---------------- */
 
 .theme-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: none;
-  border: none;
-  padding: 6px;
-  border-radius: 6px;
-
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   font-size: 18px;
   color: $text-secondary;
-
   cursor: pointer;
-  transition: all 0.2s ease;
-}
+  outline: none;
+  transition: color 0.25s ease, transform 0.25s var(--spring-easing);
 
-.theme-toggle:hover {
-  color: $text;
-  background: $surface2;
+  &:hover {
+    color: $accent;
+  }
 }
 
 /* ---------------- MOBILE ---------------- */
@@ -170,6 +218,7 @@
       width: 22px;
       height: 2px;
       background: $text;
+      border-radius: 2px;
       transition: all 0.3s ease;
     }
 
@@ -188,6 +237,7 @@
 @media (max-width: 768px) {
   .navbar {
     padding: 0 1.25rem;
+    height: 58px;
   }
 
   .navbar__toggle {
@@ -197,15 +247,17 @@
   .navbar__right {
     display: none;
     position: absolute;
-    top: 60px;
+    top: 58px;
     left: 0;
     width: 100%;
-    background: $surface;
-    border-bottom: 1px solid $border;
+    background: $header-bg;
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border-bottom: 1px solid $glass-border;
     flex-direction: column;
     padding: 1.5rem;
     gap: 1.2rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
 
     &.active {
       display: flex;

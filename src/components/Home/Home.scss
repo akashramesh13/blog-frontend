@@ -4,11 +4,11 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 0.75rem;
+    padding: 1.5rem 0.85rem;
   }
 
   @media (max-width: 480px) {
@@ -18,22 +18,23 @@
 
 .home {
   width: 100%;
-  max-width: 1000px;
+  max-width: 950px;
   margin: 0 auto;
 
   /* ---------------- HEADER ---------------- */
 
   &__header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
   &__title {
     font-size: 3.2rem;
-    font-family: "Playfair Display", serif;
-    font-weight: 600;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
     color: $text;
     line-height: 1.2;
+    letter-spacing: -0.5px;
 
     display: flex;
     flex-direction: column;
@@ -41,32 +42,35 @@
   }
 
   #home__blog-title {
-    font-family: "Playfair Display", serif;
-    font-weight: 600;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
   }
 
-  /* welcome text stays separate (not BEM) */
+  /* welcome text */
   .welcome-text {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     color: $text;
     margin-bottom: 0.4rem;
     font-weight: 400;
   }
 
-  /* ---------------- SEARCH ---------------- */
+  /* ---------------- SEARCH (Liquid Glass) ---------------- */
   &__search {
     width: 100%;
     max-width: 600px;
     margin: 1.5rem auto 0;
-    padding: 12px 20px;
+    padding: 13px 22px;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.95rem;
-    border: 1px solid $border;
-    border-radius: 30px;
-    background: $surface;
+    border: 1px solid $glass-border;
+    border-radius: 24px;
+    background: $bg-card;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 $glass-highlight, 0 4px 18px rgba(0, 0, 0, 0.03);
     color: $text;
     outline: none;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s var(--spring-easing);
 
     &:hover {
       border-color: $accent;
@@ -74,7 +78,7 @@
 
     &:focus {
       border-color: $accent;
-      box-shadow: 0 0 0 2px $accent;
+      box-shadow: 0 0 0 2px $accent, inset 0 1px 0 $glass-highlight;
     }
 
     &::placeholder {
@@ -83,30 +87,34 @@
     }
   }
 
-  /* ---------------- SORT BY ---------------- */
+  /* ---------------- SORT BY (Glass Pill) ---------------- */
   &__sort {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 0.875rem;
-    padding: 10px 12px;
+    font-family: "JetBrains Mono", "Inter", sans-serif;
+    font-size: 0.825rem;
+    font-weight: 600;
+    padding: 8px 16px;
     margin-top: 1.5rem;
-    border: 1px solid transparent;
+    border: 1px solid $glass-border;
     border-radius: 20px;
-    background: transparent;
+    background: $bg-card;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 $glass-highlight;
     color: $text-secondary;
     cursor: pointer;
     outline: none;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.25s var(--spring-easing);
     
     &:hover {
       color: $accent;
       border-color: $accent;
-      background: $hover-overlay;
+      transform: translateY(-1px);
     }
 
     &:focus {
       color: $accent;
       border-color: $accent;
-      box-shadow: 0 0 0 3px var(--color-selection);
+      box-shadow: 0 0 0 2px $accent, inset 0 1px 0 $glass-highlight;
     }
     
     option {
@@ -115,44 +123,51 @@
     }
   }
 
-  /* ---------------- CATEGORIES ---------------- */
+  /* ---------------- CATEGORIES (Tags from portfolio) ---------------- */
 
   .categories-inline {
     display: flex;
     justify-content: center;
     gap: 0.6rem;
-    margin-top: 1.2rem;
+    margin-top: 1.4rem;
     flex-wrap: wrap;
 
     span {
-      font-size: 0.85rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
       color: $category-text;
-      padding: 0.35rem 0.9rem;
-      border-radius: 20px;
-      background: $category-bg;
+      padding: 0.4rem 0.95rem;
+      border-radius: 8px;
+      background: $tag-bg;
+      border: 1px solid $tag-border;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s var(--spring-easing);
 
       &:hover {
         background: $category-hover-bg;
-        color: $text;
+        color: $accent;
+        border-color: $accent;
+        transform: translateY(-2px);
       }
 
       &.active {
-        background: $category-active-bg;
-        color: $category-active-text;
+        background: $accent;
+        color: #fff;
+        border-color: $accent;
+        box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
       }
     }
   }
 
-  /* ---------------- POSTS ---------------- */
+  /* ---------------- POSTS FEED ---------------- */
 
   &__posts {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     width: 100%;
-    padding: 1.6rem 0;
+    padding: 1.8rem 0;
   }
 
   &__skeleton-container {
@@ -163,29 +178,46 @@
     margin-top: 1.5rem;
   }
 
-  /* ---------------- POST CARD ---------------- */
+  /* ---------------- POST CARD (Liquid Glass Card) ---------------- */
 
   &__post {
-    padding: 1.6rem 2rem;
-    border-radius: 12px;
-    background: $surface;
-    border: 1px solid $border;
-    transition: all 0.2s ease;
+    padding: 1.8rem 2.2rem;
+    border-radius: 14px;
+    background: $bg-card;
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid $glass-border;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 $glass-highlight;
+    transition:
+      transform 0.4s var(--spring-easing),
+      border-color 0.4s var(--spring-easing),
+      box-shadow 0.4s var(--spring-easing);
+    position: relative;
+    overflow: hidden;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      border-color: $border-hover;
+      transform: translateY(-3px);
+      border-color: $glass-highlight;
+      box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 $glass-highlight;
       cursor: pointer;
+
+      .home__post-title {
+        color: $accent;
+      }
     }
 
     &-title {
       font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-      font-size: 1.5rem;
+      font-size: 1.55rem;
       font-weight: 700;
       line-height: 1.3;
       margin-bottom: 0.5rem;
       color: $text;
+      transition: color 0.2s ease;
     }
 
     &-excerpt {
@@ -197,10 +229,11 @@
     }
 
     &-date {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.8rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
       color: $text-muted;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
     }
   }
 
@@ -238,7 +271,7 @@
 
   &__end-message {
     text-align: center;
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.8rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -263,38 +296,38 @@
     }
 
     &__post {
-      padding: 1.2rem;
-      border-radius: 10px;
+      padding: 1.25rem 1.4rem;
+      border-radius: 12px;
 
       &-title {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
       }
 
       &-excerpt {
-        font-size: 0.95rem;
+        font-size: 0.925rem;
       }
     }
 
     .categories-inline span {
-      font-size: 0.8rem;
-      padding: 0.25rem 0.7rem;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.75rem;
     }
   }
 
   @media (max-width: 480px) {
     &__title {
-      font-size: 1.9rem;
+      font-size: 1.85rem;
     }
 
     .welcome-text {
-      font-size: 1.05rem;
+      font-size: 1rem;
     }
 
     &__post {
-      padding: 1rem;
+      padding: 1.1rem 1.15rem;
 
       &-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
       }
     }
   }

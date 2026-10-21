@@ -94,18 +94,19 @@ const NavBar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="navbar">
+    <nav className="navbar glass-high">
+      <div id="scroll-progress"></div>
       <div className="navbar__left">
         <div className="navbar__brand">
           <Link to="/" onClick={closeNavbar}>
-            Pixel Pursuit
+            <span className="bracket">&lt;</span>Pixel Pursuit<span className="bracket">/&gt;</span>
           </Link>
         </div>
       </div>
 
       <div className={`navbar__right ${isOpen ? "active" : ""}`}>
         <button
-          className="theme-toggle"
+          className="theme-toggle glass-medium glass-interactive"
           onClick={cycleTheme}
           title={`Theme: ${themeMode}`}
           aria-label={`Current theme: ${themeMode}. Click to change.`}
@@ -117,7 +118,7 @@ const NavBar: React.FC = () => {
           href={`${process.env.REACT_APP_BACKEND_URL || "https://blog-backend.akashramesh.in"}/rss.xml`}
           target="_blank"
           rel="noopener noreferrer"
-          className="theme-toggle"
+          className="theme-toggle glass-medium glass-interactive"
           title="Subscribe via RSS"
           aria-label="Subscribe via RSS Feed"
           style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
