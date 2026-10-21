@@ -1,229 +1,72 @@
 @use '../../styles/theme' as *;
 
-$size: 50px;
-
+/* ── Full-page loading overlay ── */
 .loading-container {
   position: fixed;
-  top: 30%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 1px;
-
-  // Theme-aware cat — body is a mid-tone so features are visible in both themes
-  --cat-body: #c8c8c8;       // Mid warm-grey: visible on both light & dark bg
-  --cat-features: #2e2e2e;   // Near-black for ears, eyes, muzzle
-  --cat-text: #{$text};
-  --cat-glare: rgba(255, 255, 255, 0.85);
-
-  background-color: #{$surface};
-  border: 1px solid #{$border};
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
-  width: 160px;
-  height: 160px;
-  padding: 30px;
-  border-radius: 50%;
+  gap: 20px;
   z-index: 1000;
-
-  backdrop-filter: blur(8px);
 }
 
-// Cat
-.cat {
-  position: relative;
-  height: $size;
-  width: $size * 1.13;
-}
-
-// Ears
-.ear {
-  position: absolute;
-  top: -30%;
-  height: 60%;
-  width: 25%;
-  background: var(--cat-features);
-
-  // Ear hair (Cutout matching container)
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 24%;
-    height: 10%;
-    width: 5%;
-    border-radius: 50%;
-    background: var(--cat-body);
-  }
-
-  &::after {
-    transform-origin: 50% 100%;
-  }
-}
-
-.ear--left {
-  left: -7%;
-  border-radius: 70% 30% 0% 0% / 100% 100% 0% 0%;
-  transform: rotate(-15deg);
-
-  &::before,
-  &::after {
-    right: 10%;
-  }
-
-  &::after {
-    transform: rotate(-45deg);
-  }
-}
-
-.ear--right {
-  right: -7%;
-  border-radius: 30% 70% 0% 0% / 100% 100% 0% 0%;
-  transform: rotate(15deg);
-
-  &::before,
-  &::after {
-    left: 10%;
-  }
-
-  &::after {
-    transform: rotate(45deg);
-  }
-}
-
-// Face
-.face {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background: var(--cat-body);
-  border-radius: 50%;
-}
-
-// Eyes
-.eye {
-  position: absolute;
-  top: 35%;
-  height: 30%;
-  width: 31%;
-  background: var(--cat-features);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-
-  // Eyelids (Matches face to cover eye)
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 0;
-    width: 100%;
-    border-radius: 0 0 50% 50% / 0 0 40% 40%;
-    background: var(--cat-body);
-    animation: blink 3s infinite ease-in;
-  }
-
-  @keyframes blink {
-    0% { height: 0; }
-    90% { height: 0; }
-    92.5% { height: 100%; }
-    95% { height: 0; }
-    97.5% { height: 100%; }
-    100% { height: 0; }
-  }
-
-  // Tips of the eyes
-  &::before {
-    content: "";
-    position: absolute;
-    top: 60%;
-    height: 10%;
-    width: 15%;
-    background: var(--cat-features);
-    border-radius: 50%;
-  }
-}
-
-.eye--left {
-  left: 0;
-  &::before { right: -5%; }
-}
-
-.eye--right {
-  right: 0;
-  &::before { left: -5%; }
-}
-
-// Pupils
-.eye-pupil {
-  position: absolute;
-  top: 25%;
-  height: 50%;
-  width: 20%;
-  background: var(--cat-body);
-  border-radius: 50%;
-  animation: look-around 4s infinite;
-
-  @keyframes look-around {
-    0% { transform: translate(0); }
-    5% { transform: translate(50%, -25%); }
-    10% { transform: translate(50%, -25%); }
-    15% { transform: translate(-100%, -25%); }
-    20% { transform: translate(-100%, -25%); }
-    25% { transform: translate(0, 0); }
-    100% { transform: translate(0, 0); }
-  }
-
-  .eye--left & { right: 30%; }
-  .eye--right & { left: 30%; }
-
-  // Glare on the pupil
-  &::after {
-    content: "";
-    position: absolute;
-    top: 30%;
-    right: -5%;
-    height: 20%;
-    width: 35%;
-    border-radius: 50%;
-    background: var(--cat-glare, #ffffff);
-  }
-}
-
-// Muzzle
-.muzzle {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  height: 6%;
-  width: 10%;
-  background: var(--cat-features);
-  transform: translateX(-50%);
-  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
-}
-
-.loading-text {
+/* ── Dot trio ── */
+.loader-dots {
   display: flex;
-  flex-direction: row;
-  color: var(--cat-text);
-  font-size: 0.65rem;
-  margin-top: 10px;
+  align-items: center;
+  gap: 10px;
 }
 
+.loader-dots span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #{$accent};
+  opacity: 0.15;
+  animation: dot-breathe 1.4s ease-in-out infinite;
+}
+
+.loader-dots span:nth-child(1) { animation-delay: 0s; }
+.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dot-breathe {
+  0%, 80%, 100% {
+    transform: scale(0.75);
+    opacity: 0.15;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Label ── */
+.loading-text {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #{$text-muted};
+  user-select: none;
+}
+
+/* ── Inline spinner (used inside buttons / components) ── */
 .loading-spinner-inline {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--color-border);
   border-top-color: var(--color-accent);
   border-radius: 50%;
-  animation: inline-spin 0.8s linear infinite;
+  animation: spin 0.7s linear infinite;
   display: inline-block;
   vertical-align: middle;
 }
 
-@keyframes inline-spin {
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
