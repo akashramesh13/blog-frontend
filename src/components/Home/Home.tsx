@@ -17,6 +17,8 @@ import { IPost } from "../../types/postsTypes";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
+const PAGE_SIZE = 10;
+
 const Home: React.FC = () => {
   const history = useHistory();
   const location = useLocation();
@@ -34,19 +36,14 @@ const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [sortBy, setSortBy] = useState("latest");
 
-  const size = 5;
-  const observer = useRef<IntersectionObserver | null>(null);
-
   // Debounce search query
   const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
-
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearch(searchQuery);
-    }, 400);
+    const handler = setTimeout(() => setDebouncedSearch(searchQuery), 400);
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
+  // Sync URL params → state
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const urlSearch = params.get("search") || "";
@@ -56,10 +53,11 @@ const Home: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
+  // Reset + initial fetch whenever filters change
   useEffect(() => {
     dispatch(clearPosts());
     setPage(0);
-    dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true, sortBy));
+    dispatch(fetchPosts(0, PAGE_SIZE, selectedCategory, debouncedSearch, true, sortBy));
   }, [selectedCategory, debouncedSearch, sortBy, dispatch]);
 
   useEffect(() => {
@@ -71,32 +69,77 @@ const Home: React.FC = () => {
   };
 
   const handleCategoryClick = (categoryName: string) => {
-    if (selectedCategory === categoryName) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(categoryName);
-    }
+    setSelectedCategory((prev) => (prev === categoryName ? null : categoryName));
   };
 
-  const lastPostRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (loading) return;
-      if (observer.current) observer.current.disconnect();
+  // ── Sentinel-based IntersectionObserver ──────────────────────────────────
+  // We attach the observer to a sentinel div AFTER the post list, not the
+  // last post itself. This ensures the load only triggers when the user has
+  // actually scrolled past all rendered posts.
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-      observer.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && page + 1 < totalPages) {
-            setPage((prev) => prev + 1);
-            dispatch(fetchPosts(page + 1, size, selectedCategory, debouncedSearch, false, sortBy));
-          }
-        },
-        { threshold: 0.5 },
-      );
+  // Stable ref for mutable values we need inside the observer callback
+  const stateRef = useRef({ loading, page, totalPages, selectedCategory, debouncedSearch, sortBy });
+  useEffect(() => {
+    stateRef.current = { loading, page, totalPages, selectedCategory, debouncedSearch, sortBy };
+  });
 
-      if (node) observer.current.observe(node);
+  const attachObserver = useCallback(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry.isIntersecting) return;
+
+        const { loading: isLoading, page: curPage, totalPages: total,
+                selectedCategory: cat, debouncedSearch: search, sortBy: sort } = stateRef.current;
+
+        // Only fetch if not already loading and there are more pages
+        if (!isLoading && curPage + 1 < total) {
+          const nextPage = curPage + 1;
+          setPage(nextPage);
+          dispatch(fetchPosts(nextPage, PAGE_SIZE, cat, search, false, sort));
+        }
+      },
+      {
+        // Fire when the sentinel enters the viewport — no threshold tricks
+        threshold: 0,
+        // Add a small rootMargin so it loads slightly before the sentinel
+        // hits the bottom edge (50px ahead = feels seamless, not eager)
+        rootMargin: "0px 0px 50px 0px",
+      },
+    );
+
+    if (sentinelRef.current) {
+      observerRef.current.observe(sentinelRef.current);
+    }
+  }, [dispatch]);
+
+  // Re-attach observer every time loading finishes (loading goes false)
+  // so we're always watching the sentinel.
+  useEffect(() => {
+    if (!loading) {
+      attachObserver();
+    }
+    return () => observerRef.current?.disconnect();
+  }, [loading, attachObserver]);
+
+  // Also attach when the sentinel node mounts
+  const setSentinel = useCallback(
+    (node: HTMLDivElement | null) => {
+      sentinelRef.current = node;
+      if (node && !loading) {
+        attachObserver();
+      }
     },
-    [loading, page, totalPages, selectedCategory, debouncedSearch, sortBy, dispatch],
+    [loading, attachObserver],
   );
+
+  const isInitialLoad = loading && posts.length === 0;
+  const isLoadingMore = loading && posts.length > 0;
+  const hasMore = page + 1 < totalPages;
 
   return (
     <div className="home-container">
@@ -153,32 +196,35 @@ const Home: React.FC = () => {
         </div>
 
         <div className="home__posts">
-          {loading && posts.length === 0 ? (
-            <div style={{ height: '300px' }} />
+          {isInitialLoad ? (
+            <Loading />
           ) : posts.length === 0 && !loading ? (
             <p className="no-posts">No posts found.</p>
           ) : (
-            posts.map((post, index) => {
-              if (index === posts.length - 1) {
-                return (
-                  <div ref={lastPostRef} key={post.id}>
-                    <Post post={post} handleOnPostClick={handleOnPostClick} />
-                  </div>
-                );
-              } else {
-                return (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    handleOnPostClick={handleOnPostClick}
-                  />
-                );
-              }
-            })
+            posts.map((post) => (
+              <Post
+                key={post.id}
+                post={post}
+                handleOnPostClick={handleOnPostClick}
+              />
+            ))
           )}
         </div>
 
-        {loading && <Loading />}
+        {/* Sentinel — sits below the post list; observed for scroll-triggered loads */}
+        {!isInitialLoad && <div ref={setSentinel} className="scroll-sentinel" />}
+
+        {/* Bottom spinner — only shown while paginating (not initial load) */}
+        {isLoadingMore && (
+          <div className="home__load-more-spinner">
+            <Loading inline />
+          </div>
+        )}
+
+        {/* End-of-feed message */}
+        {!loading && !hasMore && posts.length > 0 && (
+          <p className="home__end-message">You've reached the end</p>
+        )}
       </div>
     </div>
   );

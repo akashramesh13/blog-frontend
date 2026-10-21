@@ -217,6 +217,30 @@
     padding: 3rem 0;
   }
 
+  /* ---------------- SCROLL SENTINEL ---------------- */
+  /* (sibling of .home — rendered by Home.tsx outside .home) */
+
+  /* ---------------- LOAD MORE SPINNER ---------------- */
+
+  &__load-more-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0 1rem;
+  }
+
+  /* ---------------- END MESSAGE ---------------- */
+
+  &__end-message {
+    text-align: center;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $text-muted;
+    padding: 2rem 0 3rem;
+    opacity: 0.6;
+  }
+
   /* ================= RESPONSIVE ================= */
 
   @media (max-width: 768px) {
