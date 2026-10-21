@@ -16,9 +16,9 @@ export interface IPost {
   id: string | null | undefined;
   title: string;
   subtitle?: string;
-  content: string;
-  coverImage: string | null;
-  thumbnail?: string;
+  content?: string;          // only present on single-post fetch, not list
+  coverImage?: string | null; // only present on single-post fetch
+  thumbnail?: string;         // legacy, no longer used
   category: ICategory;
   user: {
     id: string;
