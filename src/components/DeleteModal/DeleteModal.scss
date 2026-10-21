@@ -5,7 +5,8 @@
 .delete-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
 
   display: flex;
   align-items: center;
@@ -20,19 +21,20 @@
 .delete-modal {
   background: $surface;
   border-radius: 8px;
+  border: 1px solid $border;
 
   max-width: 420px;
   width: 100%;
 
   padding: 1.8rem 1.6rem;
 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* ---------------- TITLE ---------------- */
 
 .delete-modal h2 {
-  font-family: var(--font-aeon-serif);
+  font-family: "Playfair Display", serif;
   font-size: 1.4rem;
   font-weight: 500;
   color: $text;
@@ -48,7 +50,7 @@
   line-height: 1.6;
 }
 
-/* subtle warning (NOT red) */
+/* subtle warning */
 .delete-modal .warning {
   color: $text-muted;
   font-size: 0.85rem;
@@ -78,18 +80,29 @@
 }
 
 /* cancel */
-.cancel-button:hover {
-  color: $text;
+.cancel-button {
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: $surface2 !important;
+  color: $text !important;
+  border: 1px solid $border !important;
+
+  &:hover {
+    background: $border !important;
+  }
 }
 
-/* delete (subtle emphasis) */
+/* delete */
 .delete-button {
   font-weight: 500;
-  color: $text-muted;
-}
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: #e11d48 !important;
+  color: #fff !important;
 
-.delete-button:hover {
-  color: $text;
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 /* mobile */

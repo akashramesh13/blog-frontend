@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike } from "../../redux/actions/postsActions";
 import { IPost } from "../../types/postsTypes";
-import moment from "moment";
+import { formatDate } from "../../utils/formatDate";
 
-const getPreview = (content: any, maxLength: number = 120) => {
+const getPreview = (content: any, maxLength: number = 140) => {
   try {
     const delta = typeof content === "string" ? JSON.parse(content) : content;
 
@@ -41,11 +41,9 @@ const getReadTime = (content: any) => {
 interface PostProps {
   post: IPost;
   handleOnPostClick: (post: IPost) => void;
-  isHero?: boolean;
-  isGridCard?: boolean;
 }
 
-const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard }) => {
+const Post: React.FC<PostProps> = ({ post, handleOnPostClick }) => {
   const preview = post.subtitle || getPreview(post.content);
   const dispatch = useDispatch<any>();
   const { userInfo } = useSelector((state: any) => state.auth);
@@ -57,119 +55,127 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick, isHero, isGridCard
 
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (!userInfo) {
       setShowLoginMsg(true);
       setTimeout(() => setShowLoginMsg(false), 2500);
       return;
     }
-    
+
     if (isAnimating) return;
-    
+
+    // Optimistic UI update
     const newIsLiked = !isLiked;
     setIsLiked(newIsLiked);
-    setLikesCount(prev => newIsLiked ? prev + 1 : prev - 1);
-    
+    setLikesCount((prev) => (newIsLiked ? prev + 1 : prev - 1));
+
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 300);
 
     try {
       await dispatch(toggleLike(post.id!));
     } catch (err) {
+      // Revert on failure
       setIsLiked(!newIsLiked);
-      setLikesCount(prev => newIsLiked ? prev - 1 : prev + 1);
+      setLikesCount((prev) => (newIsLiked ? prev - 1 : prev + 1));
     }
   };
 
   const readTime = getReadTime(post.content);
 
-  const LikeButton = () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-      <span style={{ fontSize: '0.9rem', color: isHero ? 'rgba(255,255,255,0.8)' : '#888', fontWeight: 500, fontFamily: 'var(--font-aeon-sans)' }}>
-        {readTime} min read &bull;
-      </span>
-      <div style={{ position: 'relative', display: 'inline-block' }}>
-      <div 
-        className={`post-likes ${isAnimating ? 'pop-animation' : ''}`} 
-        style={{ 
-          display: 'flex', alignItems: 'center', gap: '6px', 
-          color: isLiked ? '#ff4d6d' : (isHero ? 'rgba(255,255,255,0.8)' : '#888'),
-          cursor: 'pointer',
-          transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-        }}
-        onClick={handleLike} 
-      >
-        <svg 
-          width="18" height="18" viewBox="0 0 24 24" 
-          fill={isLiked ? "currentColor" : "none"} 
-          stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
-        >
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-        </svg>
-        <span style={{ fontSize: '0.95rem', fontWeight: isLiked ? '600' : '400' }}>{likesCount}</span>
-      </div>
-      {showLoginMsg && (
-        <div style={{
-          position: 'absolute',
-          bottom: '100%',
-          right: '50%',
-          transform: 'translateX(50%)',
-          marginBottom: '8px',
-          background: '#222',
-          color: '#fff',
-          padding: '6px 12px',
-          borderRadius: '4px',
-          fontSize: '0.75rem',
-          fontFamily: 'var(--font-aeon-sans)',
-          whiteSpace: 'nowrap',
-          pointerEvents: 'none',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-          zIndex: 10
-        }}>
-          Login required to like
-        </div>
-      )}
-      </div>
-    </div>
-  );
-
-  const imageUrl = post.thumbnail || post.coverImage;
-
-  if (isHero) {
-    return (
-      <div className="home__post--hero" onClick={() => handleOnPostClick(post)} style={{ 
-        backgroundColor: '#ca2127', 
-        backgroundImage: post.coverImage ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url(${post.coverImage})` : 'none', 
-        backgroundSize: 'cover', 
-        backgroundPosition: 'center' 
-      }}>
-        <div className="hero-content-wrapper">
-          <div style={{ fontFamily: 'var(--font-aeon-sans)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.5rem', color: 'rgba(255,255,255,0.85)', fontWeight: 600 }}>
-            {post.category?.name || 'Essay'} &bull; {moment(post.createdAt).format('MMMM YYYY')}
-          </div>
-          <h1 className="hero-title">{post.title}</h1>
-          {preview && <p className="hero-excerpt">{preview}</p>}
-          <div className="hero-footer">
-            <LikeButton />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={`home__post ${isGridCard ? 'home__post--grid' : ''}`} onClick={() => handleOnPostClick(post)}>
-      {isGridCard && post.coverImage && (
-        <div className="grid-image" style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : {}}></div>
+    <div className="home__post" onClick={() => handleOnPostClick(post)}>
+      {post.category && (
+        <div style={{ marginBottom: "0.5rem" }}>
+          <span
+            style={{
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              color: "var(--color-accent)",
+            }}
+          >
+            {post.category.name}
+          </span>
+        </div>
       )}
-      <div style={{ fontFamily: 'var(--font-aeon-sans)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '0.8rem', color: '#8a0322', fontWeight: 600 }}>
-        {post.category?.name || 'Essay'} &bull; {moment(post.createdAt).format('MMMM YYYY')}
-      </div>
+
       <h2 className="home__post-title">{post.title}</h2>
+
       {preview && <p className="home__post-excerpt">{preview}</p>}
 
-      <div className="home__post-footer" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto' }}>
-        <LikeButton />
+      <div
+        className="home__post-footer"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: "1rem",
+        }}
+      >
+        <span className="home__post-date">
+          {readTime} min read &bull; {formatDate(post.createdAt)}
+        </span>
+
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <div
+            className={`post-likes ${isAnimating ? "pop-animation" : ""}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: isLiked ? "#ff4d6d" : "var(--color-text-muted)",
+              cursor: "pointer",
+              transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+            }}
+            onClick={handleLike}
+            title={isLiked ? "Unlike post" : "Like post"}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill={isLiked ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth={isLiked ? "0" : "2"}
+            >
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+            </svg>
+            <span
+              style={{
+                fontSize: "0.95rem",
+                fontWeight: isLiked ? 600 : 400,
+              }}
+            >
+              {likesCount}
+            </span>
+          </div>
+
+          {showLoginMsg && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "100%",
+                right: "50%",
+                transform: "translateX(50%)",
+                marginBottom: "8px",
+                background: "var(--color-surface2)",
+                color: "var(--color-text)",
+                border: "1px solid var(--color-border)",
+                padding: "6px 12px",
+                borderRadius: "4px",
+                fontSize: "0.75rem",
+                whiteSpace: "nowrap",
+                pointerEvents: "none",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                zIndex: 10,
+              }}
+            >
+              Login required to like
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
@@ -19,49 +19,48 @@ type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const Home: React.FC = () => {
   const history = useHistory();
+  const location = useLocation();
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
   const { posts, categories, loading, totalPages } = useSelector(
     (state: RootState) => state.posts,
   );
 
-  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const initialSearch = searchParams.get("search") || "";
   const initialCategory = searchParams.get("category") || null;
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
   const [page, setPage] = useState(0);
-
   const [searchQuery, setSearchQuery] = useState(initialSearch);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setSearchQuery(params.get("search") || "");
-    setSelectedCategory(params.get("category") || null);
-  }, [location.search]);
   const [sortBy, setSortBy] = useState("latest");
+
+  const size = 5;
+  const observer = useRef<IntersectionObserver | null>(null);
+
   // Debounce search query
   const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
-  const isSearchOrFilter = !!(debouncedSearch || selectedCategory);
-  
-  const [visibleCount, setVisibleCount] = useState(isSearchOrFilter ? 6 : 4);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchQuery);
-    }, 500);
+    }, 400);
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  // eslint-disable-next-line
-  const [featuredPost, setFeaturedPost] = useState<IPost | null>(null);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const urlSearch = params.get("search") || "";
+    const urlCategory = params.get("category") || null;
+    if (urlSearch !== searchQuery) setSearchQuery(urlSearch);
+    if (urlCategory !== selectedCategory) setSelectedCategory(urlCategory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   useEffect(() => {
     dispatch(clearPosts());
     setPage(0);
-    setVisibleCount(isSearchOrFilter ? 6 : 4);
-    dispatch(fetchPosts(0, 12, selectedCategory, debouncedSearch, true, sortBy));
-  }, [selectedCategory, debouncedSearch, sortBy, dispatch, isSearchOrFilter]);
+    dispatch(fetchPosts(0, size, selectedCategory, debouncedSearch, true, sortBy));
+  }, [selectedCategory, debouncedSearch, sortBy, dispatch]);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -73,20 +72,38 @@ const Home: React.FC = () => {
 
   const handleCategoryClick = (categoryName: string) => {
     if (selectedCategory === categoryName) {
-      setSelectedCategory("");
-    } else setSelectedCategory(categoryName);
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(categoryName);
+    }
   };
 
-  const displayedPosts = posts.slice(0, visibleCount);
-  const hasMoreToDisplay = visibleCount < posts.length;
-  const hasMoreToFetch = page < totalPages - 1;
-  const showLoadMore = hasMoreToDisplay || hasMoreToFetch;
+  const lastPostRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && page + 1 < totalPages) {
+            setPage((prev) => prev + 1);
+            dispatch(fetchPosts(page + 1, size, selectedCategory, debouncedSearch, false, sortBy));
+          }
+        },
+        { threshold: 0.5 },
+      );
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, page, totalPages, selectedCategory, debouncedSearch, sortBy, dispatch],
+  );
 
   return (
     <div className="home-container">
       <div className="home">
         <div className="home__header">
           <h1 className="home__title">
+            <span className="welcome-text">Welcome to</span>
             <span id="home__blog-title">Pixel Pursuit</span>
           </h1>
 
@@ -134,60 +151,34 @@ const Home: React.FC = () => {
             ))}
           </div>
         </div>
+
         <div className="home__posts">
           {loading && posts.length === 0 ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
-              <Loading />
-            </div>
+            <div style={{ height: '300px' }} />
           ) : posts.length === 0 && !loading ? (
             <p className="no-posts">No posts found.</p>
           ) : (
-            <>
-              {!isSearchOrFilter && displayedPosts.length > 0 && (
-                <div className="home__hero">
+            posts.map((post, index) => {
+              if (index === posts.length - 1) {
+                return (
+                  <div ref={lastPostRef} key={post.id}>
+                    <Post post={post} handleOnPostClick={handleOnPostClick} />
+                  </div>
+                );
+              } else {
+                return (
                   <Post
-                    post={featuredPost ? featuredPost : displayedPosts[0]}
+                    key={post.id}
+                    post={post}
                     handleOnPostClick={handleOnPostClick}
-                    isHero={true}
                   />
-                </div>
-              )}
-              {(displayedPosts.length > (isSearchOrFilter ? 0 : 1) || (featuredPost && displayedPosts.length > 0)) && (
-                <div className="home__grid">
-                  {displayedPosts
-                    .filter(p => !(featuredPost && !isSearchOrFilter && p.id === featuredPost.id))
-                    .filter((p, idx) => (isSearchOrFilter || featuredPost) ? true : idx > 0)
-                    .map((post, index) => {
-                      return (
-                        <div key={post.id} className="grid-item-wrapper" style={{ display: 'flex', flexDirection: 'column' }}>
-                          <Post post={post} handleOnPostClick={handleOnPostClick} isGridCard={true} />
-                        </div>
-                      );
-                    })}
-                </div>
-              )}
-              {showLoadMore && (
-                <div className="load-more-container" style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                  <button
-                    className="btn-secondary load-more-btn"
-                    disabled={loading}
-                    onClick={() => {
-                      const nextVisibleCount = visibleCount + 3;
-                      setVisibleCount(nextVisibleCount);
-                      if (nextVisibleCount > posts.length && hasMoreToFetch) {
-                        const nextPage = page + 1;
-                        setPage(nextPage);
-                        dispatch(fetchPosts(nextPage, 12, selectedCategory, debouncedSearch, false, sortBy));
-                      }
-                    }}
-                  >
-                    {loading ? <Loading inline /> : "Load More Articles"}
-                  </button>
-                </div>
-              )}
-            </>
+                );
+              }
+            })
           )}
         </div>
+
+        {loading && <Loading />}
       </div>
     </div>
   );

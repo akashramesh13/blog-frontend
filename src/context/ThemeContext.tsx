@@ -1,12 +1,21 @@
-import React, { createContext, ReactNode, useContext, useLayoutEffect } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { Theme, ThemeMode } from "../types/theme";
-import { lightTheme } from "../styles/themes";
+import { lightTheme, darkTheme, catppuccinTheme } from "../styles/themes";
 
 type ThemeContextType = {
   themeMode: ThemeMode;
   resolvedTheme: "light" | "dark" | "catppuccin";
   setThemeMode: (mode: ThemeMode) => void;
 };
+
+const STORAGE_KEY = "blog-theme-mode";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -21,10 +30,16 @@ function applyTheme(theme: Theme): void {
   });
 }
 
-function updateFavicon(): void {
-  const accentColor = "#111111"; 
-  const bgColor = "#FFFFFF";
-  const textColor = "#111111";
+function updateFavicon(themeName: "light" | "dark" | "catppuccin"): void {
+  let accentColor = "#F97316"; // Orange accent
+  let bgColor = "#FCFCFC";
+  let textColor = "#18181B";
+
+  if (themeName === "dark" || themeName === "catppuccin") {
+    accentColor = "#F97316";
+    bgColor = "#09090B";
+    textColor = "#E4E4E7";
+  }
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
@@ -46,14 +61,45 @@ function updateFavicon(): void {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  useLayoutEffect(() => {
-    applyTheme(lightTheme);
-    document.documentElement.setAttribute("data-theme", "light");
-    updateFavicon();
+  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "light" || stored === "dark" || stored === "system") {
+      return stored;
+    }
+    return "system";
+  });
+
+  const [systemIsDark, setSystemIsDark] = useState(
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+
+  // Listen for OS theme changes
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = (e: MediaQueryListEvent) => setSystemIsDark(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
+  const resolvedTheme: "light" | "dark" | "catppuccin" =
+    themeMode === "system" ? (systemIsDark ? "dark" : "light") : (themeMode === "catppuccin" ? "dark" : themeMode);
+
+  // Apply CSS custom properties before paint
+  useLayoutEffect(() => {
+    const themeMap = { light: lightTheme, dark: darkTheme, catppuccin: catppuccinTheme };
+    const theme = themeMap[resolvedTheme];
+    applyTheme(theme);
+    document.documentElement.setAttribute("data-theme", resolvedTheme);
+    updateFavicon(resolvedTheme);
+  }, [resolvedTheme]);
+
+  const setThemeMode = (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    localStorage.setItem(STORAGE_KEY, mode);
+  };
+
   return (
-    <ThemeContext.Provider value={{ themeMode: "light", resolvedTheme: "light", setThemeMode: () => {} }}>
+    <ThemeContext.Provider value={{ themeMode, resolvedTheme, setThemeMode }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -66,3 +112,4 @@ export function useTheme(): ThemeContextType {
   }
   return context;
 }
+

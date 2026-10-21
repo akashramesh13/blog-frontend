@@ -8,9 +8,25 @@ import Loading from "../Loading/Loading";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import TableOfContents from "../TableOfContents/TableOfContents";
 import ReactQuill from "react-quill";
+import { formatDate } from "../../utils/formatDate";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
+
+const getReadStats = (content: any) => {
+  try {
+    const delta = typeof content === "string" ? JSON.parse(content) : content;
+    const text = delta.ops
+      .map((op: any) => (typeof op.insert === "string" ? op.insert : ""))
+      .join(" ");
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    const minutes = Math.ceil(words / 200);
+    return { words, readTime: Math.max(1, minutes) };
+  } catch {
+    return { words: 0, readTime: 1 };
+  }
+};
 
 const PostViewer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,23 +49,18 @@ const PostViewer: React.FC = () => {
 
   // PARSE CONTENT (supports string + object)
   const parsedContent = useMemo(() => {
-    if (!post?.content) return "";
+    if (!post?.content) return { ops: [] };
 
-    if (typeof post.content === "string") {
-      try {
-        // Test if it's a JSON Delta object
-        const parsed = JSON.parse(post.content);
-        if (parsed && parsed.ops) return parsed;
-        return post.content;
-      } catch {
-        // If not JSON, return as raw HTML string
-        return post.content;
-      }
+    try {
+      return typeof post.content === "string"
+        ? JSON.parse(post.content)
+        : post.content;
+    } catch {
+      return { ops: [] };
     }
-    return post.content;
   }, [post?.content]);
 
-  // ADD IDs FOR TOC SCROLL (Legacy, but keeping for any old links)
+  // ADD IDs FOR TOC SCROLL
   useEffect(() => {
     const headings = document.querySelectorAll(
       ".post-view__body h1, .post-view__body h2, .post-view__body h3",
@@ -58,20 +69,6 @@ const PostViewer: React.FC = () => {
     headings.forEach((el, index) => {
       el.setAttribute("id", `heading-${index}`);
     });
-  }, [parsedContent]);
-
-  const { words, readTime } = useMemo(() => {
-    let text = "";
-    if (parsedContent && parsedContent.ops) {
-      text = parsedContent.ops
-        .map((op: any) => (typeof op.insert === "string" ? op.insert : ""))
-        .join(" ");
-    } else if (typeof parsedContent === "string") {
-      text = parsedContent.replace(/<[^>]+>/g, " ");
-    }
-    const w = text.trim().split(/\s+/).filter(word => word.length > 0).length;
-    const rt = Math.max(1, Math.ceil(w / 200));
-    return { words: w, readTime: rt };
   }, [parsedContent]);
 
   const [isLiked, setIsLiked] = useState(post?.isLiked || false);
@@ -99,14 +96,14 @@ const PostViewer: React.FC = () => {
       return;
     }
 
-    if (isAnimating) return; // Prevent rapid clicking while animating
+    if (isAnimating) return;
 
     if (id) {
       // Optimistic UI update
       const newIsLiked = !isLiked;
       setIsLiked(newIsLiked);
-      setLikesCount(prev => newIsLiked ? prev + 1 : prev - 1);
-      
+      setLikesCount((prev) => (newIsLiked ? prev + 1 : prev - 1));
+
       // Animation trigger
       setIsAnimating(true);
       setTimeout(() => setIsAnimating(false), 300);
@@ -116,103 +113,157 @@ const PostViewer: React.FC = () => {
       } catch (err) {
         // Revert on failure
         setIsLiked(!newIsLiked);
-        setLikesCount(prev => newIsLiked ? prev - 1 : prev + 1);
+        setLikesCount((prev) => (newIsLiked ? prev - 1 : prev + 1));
       }
     }
   };
 
   if (error) return <div>Error: {error}</div>;
 
+  const { words, readTime } = getReadStats(post?.content);
+  const isOwner = post?.owner || (post?.user && userInfo && post.user.id === userInfo.id);
+
   return (
-    <div className="post-view-container">
+    <div className="post-view">
       {loading && post?.id !== id ? (
         <Loading />
       ) : post ? (
         <>
-          <div 
-            className={`post-hero ${!post.coverImage ? 'post-hero--no-image' : ''}`} 
-            style={post.coverImage ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${post.coverImage})` } : {}}
-          >
-            <div className="post-hero__content">
-              <h1 className="post-hero__title">{post.title}</h1>
-              {post.subtitle && <p className="post-hero__subtitle">{post.subtitle}</p>}
-            </div>
-          </div>
+          {/* HEADER */}
+          <div className="post-header">
+            <div className="post-header__left">
+              {post.category && (
+                <div style={{ marginBottom: "0.8rem" }}>
+                  <span
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: "1.5px",
+                      color: "var(--color-accent)",
+                    }}
+                  >
+                    {post.category.name}
+                  </span>
+                </div>
+              )}
 
-          <div className="post-view">
-            {/* SIDEBAR */}
-            <div className="post-view__sidebar">
-              <div className="sidebar-meta">
-                <p className="author-name">Written by <strong>{post.user?.username || "Unknown"}</strong></p>
-                <p className="post-date">{new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-                
-                <div style={{ margin: '1.5rem 0', height: '1px', background: '#eaeaea' }}></div>
+              <h1 className="post-view__title">{post.title}</h1>
 
-                <p className="read-stats">{words.toLocaleString()} words</p>
-                <p className="read-time">{readTime} minute read</p>
+              {post.subtitle && (
+                <p
+                  style={{
+                    fontFamily: '"Libre Baskerville", serif',
+                    fontSize: "1.2rem",
+                    color: "var(--color-text-secondary)",
+                    lineHeight: 1.5,
+                    margin: "0.5rem 0 1.2rem",
+                  }}
+                >
+                  {post.subtitle}
+                </p>
+              )}
 
-                <div style={{ margin: '1.5rem 0', height: '1px', background: '#eaeaea' }}></div>
+              <div className="post-meta">
+                <span className="author">
+                  {post.user?.username || "Unknown"}
+                </span>
+                <span className="dot">&bull;</span>
+                <span>{formatDate(post.createdAt)}</span>
+                <span className="dot">&bull;</span>
+                <span>{readTime} min read ({words.toLocaleString()} words)</span>
+                <span className="dot">&bull;</span>
 
-                <div className="post-actions-sidebar">
-                  <div style={{ position: 'relative', display: 'inline-block' }}>
-                    <button 
-                      className={`like-button ${isAnimating ? 'pop-animation' : ''}`}
-                      onClick={handleLike}
-                      title={isLiked ? "Unlike post" : "Like post"}
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <button
+                    className={`like-button ${isAnimating ? "pop-animation" : ""}`}
+                    onClick={handleLike}
+                    title={isLiked ? "Unlike post" : "Like post"}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      color: isLiked ? "#ff4d6d" : "var(--color-text-muted)",
+                      padding: 0,
+                      fontFamily: "inherit",
+                      fontSize: "0.95rem",
+                      transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+                    }}
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill={isLiked ? "currentColor" : "none"}
+                      stroke="currentColor"
+                      strokeWidth={isLiked ? "0" : "2"}
+                    >
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                    </svg>
+                    <span style={{ fontWeight: isLiked ? "600" : "400" }}>{likesCount}</span>
+                  </button>
+
+                  {showLoginMsg && (
+                    <div
                       style={{
-                        background: 'none', border: 'none', cursor: 'pointer',
-                        display: 'flex', alignItems: 'center', gap: '6px',
-                        color: isLiked ? '#8a0322' : '#888', padding: 0,
-                        fontFamily: 'inherit', fontSize: '1rem',
-                        transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                        position: "absolute",
+                        bottom: "100%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        marginBottom: "8px",
+                        background: "var(--color-surface2)",
+                        color: "var(--color-text)",
+                        border: "1px solid var(--color-border)",
+                        padding: "6px 12px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                        whiteSpace: "nowrap",
+                        pointerEvents: "none",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        zIndex: 10,
                       }}
                     >
-                      <svg 
-                        width="22" height="22" viewBox="0 0 24 24" 
-                        fill={isLiked ? "currentColor" : "none"} 
-                        stroke="currentColor" strokeWidth={isLiked ? "0" : "2"}
-                      >
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                      </svg>
-                      <span style={{ fontWeight: isLiked ? '600' : '400', fontSize: '1.1rem' }}>{likesCount}</span>
-                    </button>
-                    {showLoginMsg && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '100%',
-                        left: '0',
-                        marginTop: '8px',
-                        background: '#222',
-                        color: '#fff',
-                        padding: '6px 12px',
-                        borderRadius: '4px',
-                        fontSize: '0.75rem',
-                        fontFamily: 'var(--font-aeon-sans)',
-                        whiteSpace: 'nowrap',
-                        pointerEvents: 'none',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-                        zIndex: 10
-                      }}>
-                        Login required to like
-                      </div>
-                    )}
-                  </div>
-
-                  { (post.owner || (post.user && userInfo && post.user.id === userInfo.id)) && (
-                    <div className="owner-actions" style={{ display: 'flex', gap: '10px', marginTop: '1rem', flexWrap: 'wrap' }}>
-                      <button onClick={() => history.push(`/post/edit/${id}`)} className="btn-secondary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>Edit</button>
-                      <button onClick={() => setIsDeleteModalOpen(true)} className="btn-action" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>Delete</button>
+                      Login required to like
                     </div>
                   )}
                 </div>
-
               </div>
-            </div>
 
-            {/* CONTENT */}
-            <div className="post-view__body">
-              <ReactQuill value={parsedContent} readOnly theme="bubble" />
+              {isOwner && (
+                <div className="post-actions">
+                  <button
+                    className="post-view__edit-button"
+                    onClick={() => history.push(`/post/edit/${id}`)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="post-view__delete-button"
+                    onClick={() => setIsDeleteModalOpen(true)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
+          </div>
+
+          {post.coverImage && (
+            <div className="post-cover">
+              <img src={post.coverImage} alt={post.title} />
+            </div>
+          )}
+
+          {/* TOC */}
+          <TableOfContents content={parsedContent} />
+
+          {/* CONTENT */}
+          <div className="post-view__body">
+            <ReactQuill value={parsedContent} readOnly theme="bubble" />
           </div>
 
           {/* MODAL */}
@@ -224,7 +275,7 @@ const PostViewer: React.FC = () => {
           />
         </>
       ) : (
-        <div>Post not found</div>
+        <div style={{ textAlign: "center", padding: "4rem 0" }}>Post not found</div>
       )}
     </div>
   );

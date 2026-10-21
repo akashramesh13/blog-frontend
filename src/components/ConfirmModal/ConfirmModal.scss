@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: $hover-overlay;
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -21,11 +21,11 @@
   width: 400px;
   max-width: 90%;
   border: 1px solid $border;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   text-align: center;
 
   h2 {
-    font-family: var(--font-aeon-serif);
+    font-family: "Playfair Display", serif;
     font-size: 1.8rem;
     margin: 0 0 1rem;
     color: $text;
@@ -53,24 +53,21 @@
     }
 
     .cancel-btn {
-      background: transparent;
-      border: 1px solid #333333;
-      color: #333333;
+      background: $surface2;
+      border: 1px solid $border;
+      color: $text;
 
       &:hover {
-        background: #333333;
-        color: #ffffff;
+        background: $border;
       }
     }
 
     .confirm-btn {
-      background: transparent;
-      color: #8a0322;
-      border: 1px solid #8a0322;
+      background: $accent;
+      color: #fff;
 
       &:hover {
-        background: #8a0322;
-        color: #ffffff;
+        opacity: 0.9;
       }
     }
   }

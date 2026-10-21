@@ -65,7 +65,7 @@ const Essays: React.FC = () => {
           const isLast = index === posts.length - 2;
           return (
             <div ref={isLast ? lastPostRef : null} key={post.id} className="grid-item-wrapper">
-              <Post post={post} handleOnPostClick={handleOnPostClick} isGridCard={true} />
+              <Post post={post} handleOnPostClick={handleOnPostClick} />
             </div>
           );
         })}

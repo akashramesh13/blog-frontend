@@ -160,7 +160,7 @@ const PostEditor: React.FC<PostEditorProps> = ({
   useEffect(() => {
     const dropcapBtn = document.querySelector('.ql-dropcap');
     if (dropcapBtn && !dropcapBtn.innerHTML) {
-      dropcapBtn.innerHTML = '<span style="font-family: var(--font-aeon-serif); font-weight: bold; font-size: 16px; line-height: 1; color: #888;">D</span>';
+      dropcapBtn.innerHTML = '<span style="font-family: \'Playfair Display\', serif; font-weight: bold; font-size: 16px; line-height: 1; color: #888;">D</span>';
     }
   }, []);
 

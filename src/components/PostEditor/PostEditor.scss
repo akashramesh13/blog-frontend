@@ -26,40 +26,33 @@
     right: 2rem;
     z-index: 1000;
     padding: 0;
+
+    .editor-actions {
+      background: $surface;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      border: 1px solid $border;
+      flex-direction: row;
+    }
   }
 }
 
-.editor-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.editor-top-bar--floating .editor-actions {
-  background: $surface;
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid #eaeaea;
-  flex-direction: row; /* Ensure it stays horizontal */
-}
-
 @media (max-width: 768px) {
-  .editor-top-bar {
-    &--floating {
-      position: relative;
-      top: auto;
-      bottom: auto;
-      right: auto;
-      z-index: auto;
-      
-      .editor-actions {
-        flex-direction: row;
-        gap: 0.5rem;
-      }
-      
-      .btn-action {
-        box-shadow: none;
-      }
+  .editor-top-bar--floating {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    right: auto;
+    z-index: auto;
+
+    .editor-actions {
+      flex-direction: row;
+      gap: 0.5rem;
+      box-shadow: none;
+      background: transparent;
+      border: none;
+      padding: 0;
     }
   }
 }
@@ -76,15 +69,16 @@
     margin: 0;
     flex: 1;
     font-size: 2.6rem;
-    font-family: var(--font-aeon-serif);
+    font-family: "Playfair Display", Georgia, serif;
     font-weight: 600;
+    color: $text;
   }
 }
 
 /* ---------------- TITLE ---------------- */
 
 .editor-container__editor-title {
-  font-family: var(--font-aeon-serif);
+  font-family: "Playfair Display", Georgia, serif;
   font-size: 2.6rem;
   font-weight: 600;
 
@@ -99,16 +93,20 @@
   width: 100%;
   flex: 1;
 
-  border-bottom: 1px solid transparent;
-  padding-bottom: 5px;
+  border-bottom: 1px solid $border;
+  padding-bottom: 10px;
   padding-top: 10px;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.3;
   box-sizing: border-box;
   word-break: break-word;
   white-space: pre-wrap;
 
   transition: border-bottom 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+
+  &:focus {
+    border-bottom: 1px solid $accent;
+  }
 }
 
 .editor-container__editor-title:empty::before {
@@ -118,41 +116,38 @@
   cursor: text;
 }
 
-/* hover hint */
-.editor-container__editor-title:hover {
-  border-bottom: 1px solid transparent;
-}
-
-/* focus */
-.editor-container__editor-title:focus {
-  border-bottom: 1px solid transparent;
-}
-
 /* ---------------- SUBTITLE ---------------- */
 
 .editor-container__editor-subtitle {
-  font-family: var(--font-aeon-sans);
-  font-size: 1.5rem;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.25rem;
   font-weight: 400;
   color: $text-secondary;
   border: none;
   outline: none;
   background: transparent;
   width: 100%;
-  padding: 5px 0 10px;
+  padding: 8px 0 12px;
   margin-top: 0.5rem;
-  
+  border-bottom: 1px solid transparent;
+
+  &:focus {
+    border-bottom: 1px solid $border;
+  }
+
   &::placeholder {
     color: $text-placeholder;
+    font-style: italic;
   }
 }
 
 .editor-container__editor-subtitle-display {
-  font-family: var(--font-aeon-sans);
-  font-size: 1.5rem;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 1.25rem;
   font-weight: 400;
   color: $text-secondary;
-  margin: 0 0 1.5rem;
+  line-height: 1.5;
+  margin: 0.5rem 0 1rem;
 }
 
 /* ---------------- COVER IMAGE ---------------- */
@@ -163,6 +158,7 @@
   object-fit: cover;
   border-radius: 10px;
   margin: 1rem 0 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ---------------- FILE INPUT ---------------- */
@@ -175,18 +171,17 @@ input[type="file"] {
 /* ---------------- QUILL TOOLBAR ---------------- */
 
 .ql-toolbar {
-  border: none;
-  border-bottom: 1px solid #eaeaea;
+  border: 1px solid $border;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 1px solid $border;
   background: $surface;
   padding: 10px 0;
-  
+
   position: sticky;
-  top: 90px; /* Below the navbar */
+  top: 60px;
   z-index: 10;
-  margin-bottom: 20px;
-  background: $surface;
-  
-  /* Adds a subtle shadow when scrolling for better distinction */
+
   box-shadow: 0 4px 6px -6px rgba(0,0,0,0.1);
 }
 
@@ -213,21 +208,21 @@ input[type="file"] {
 .ql-toolbar .ql-picker-label:hover .ql-stroke,
 .ql-toolbar button.ql-active .ql-stroke,
 .ql-toolbar .ql-picker-label.ql-active .ql-stroke {
-  stroke: $text;
+  stroke: $accent;
 }
 
 .ql-toolbar button:hover .ql-fill,
 .ql-toolbar .ql-picker-label:hover .ql-fill,
 .ql-toolbar button.ql-active .ql-fill,
 .ql-toolbar .ql-picker-label.ql-active .ql-fill {
-  fill: $text;
+  fill: $accent;
 }
 
 .ql-toolbar button:hover,
 .ql-toolbar .ql-picker-label:hover,
 .ql-toolbar button.ql-active,
 .ql-toolbar .ql-picker-label.ql-active {
-  color: $text;
+  color: $accent;
 }
 
 /* Picker dropdown */
@@ -259,12 +254,14 @@ input[type="file"] {
 }
 
 .ql-snow .ql-tooltip a {
-  color: $text-secondary;
+  color: $accent;
 }
 
 /* Quill snow container border override */
 .ql-container.ql-snow {
-  border: none;
+  border: 1px solid $border;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 /* Quill code-block override */
@@ -280,32 +277,27 @@ input[type="file"] {
 
 /* ---------------- QUILL CONTAINER ---------------- */
 
-.editor-container .ql-container {
-  border: 2px solid #8a0322 !important;
-  border-radius: 4px;
+.ql-container {
+  border: none;
   display: flex;
   flex-direction: column;
   font-size: 1.05rem;
   line-height: 1.75;
-  min-height: 500px;
+  min-height: 320px;
   background: $surface;
-  overflow: hidden;
 }
 
 /* ---------------- EDITOR CONTENT ---------------- */
 
-.editor-container .ql-editor {
-  font-family: var(--font-aeon-serif);
+.ql-editor {
+  font-family: "Libre Baskerville", Georgia, serif;
   font-size: 1.05rem;
   line-height: 1.75;
   color: $text;
   flex: 1;
   height: 100%;
-  overflow-y: visible;
-  caret-color: #8a0322;
 }
 
-/* 🔥 FIXED placeholder alignment */
 .ql-editor::before {
   padding-top: 10px;
   right: auto;
@@ -318,7 +310,7 @@ input[type="file"] {
 .ql-editor h1,
 .ql-editor h2,
 .ql-editor h3 {
-  font-family: var(--font-aeon-serif);
+  font-family: "Playfair Display", serif;
   margin: 1.4rem 0 0.6rem;
   line-height: 1.3;
 }
@@ -340,65 +332,12 @@ input[type="file"] {
 }
 
 .ql-editor blockquote {
-  position: relative;
-  margin: 2rem auto;
-  padding: 0.5rem 1rem 0.5rem 6rem;
-  border-left: 3px solid $border;
-  font-family: var(--font-aeon-serif);
-  font-size: 1.15em;
-  line-height: 1.7;
-  color: $text;
-  font-style: normal;
-  max-width: 90%;
-  clear: both;
-}
-
-@media (max-width: 768px) {
-  .ql-editor blockquote {
-    padding: 0.5rem 1rem 0.5rem 4.5rem;
-    font-size: 1.05em;
-  }
-}
-
-.ql-editor blockquote::before {
-  content: "\201C";
-  position: absolute;
-  left: 1rem;
-  top: -0.8rem;
-  font-size: 4rem;
-  color: #8a0322;
-  opacity: 1;
-  font-family: var(--font-aeon-serif);
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-}
-
-@media (max-width: 768px) {
-  .ql-editor blockquote::before {
-    left: 0.5rem;
-    top: -0.6rem;
-    font-size: 3.5rem;
-  }
-}
-
-/* Consecutive blockquotes (multiple paragraphs in a quote) */
-.ql-editor blockquote + blockquote {
-  margin-top: -2.5rem;
-  border-left: 3px solid transparent;
-}
-
-.ql-editor blockquote + blockquote::before {
-  display: none;
-}
-
-/* Author attribution support */
-.ql-editor blockquote.ql-align-right {
-  font-size: 0.85em;
-  opacity: 0.75;
-  margin-top: 1.5rem;
-  font-style: normal;
-  border-left: 3px solid transparent;
+  border-left: 3px solid $accent;
+  padding-left: 1rem;
+  color: $text-secondary;
+  margin: 1.2rem 0;
+  font-style: italic;
+  background: $hover-overlay;
 }
 
 .ql-editor pre {
@@ -407,10 +346,11 @@ input[type="file"] {
   border-radius: 6px;
   overflow-x: auto;
   font-size: 0.9rem;
+  border: 1px solid $border;
 }
 
 .ql-editor a {
-  color: $text;
+  color: $accent;
   text-decoration: underline;
 }
 
@@ -422,42 +362,46 @@ input[type="file"] {
 
 /* ---------------- HEADER BUTTONS ---------------- */
 
-
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
 .save-button, .discard-button {
-  font-family: var(--font-aeon-sans);
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 0.45rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
-  letter-spacing: 1px;
-  text-transform: uppercase;
 }
 
 .save-button {
-  background: transparent;
-  color: #8a0322;
-  border: 1px solid #8a0322;
+  background: $accent;
+  color: #ffffff;
+  border: 1px solid $accent;
+  font-weight: 600;
 
   &:hover {
-    background: #8a0322;
-    color: #ffffff;
-    border-color: #8a0322;
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px var(--color-selection);
   }
 }
 
 .discard-button {
-  background: transparent;
-  color: #333333;
-  border: 1px solid #333333;
+  background: $surface;
+  color: $text-secondary;
+  border: 1px solid $border;
 
   &:hover {
-    background: #333333;
-    color: #ffffff;
-    border-color: #333333;
+    background: $hover-overlay;
+    color: $accent;
+    border-color: $accent;
+    transform: translateY(-1px);
   }
 }
 
@@ -478,46 +422,20 @@ input[type="file"] {
 }
 
 .image-upload:hover span {
-  color: $text;
-  border-color: $text-muted;
+  color: $accent;
+  border-color: $accent;
 }
 
 /* hide actual input */
 .image-upload input {
   display: none;
 }
+
 select {
-  font-family: var(--font-aeon-sans);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid $border;
   background: $surface;
   color: $text;
-}
-
-/* DROP CAP CUSTOM FORMAT */
-.ql-snow .ql-toolbar button.ql-dropcap {
-  width: 28px;
-}
-.ql-snow .ql-toolbar button.ql-dropcap::before {
-  content: "D";
-  font-family: var(--font-aeon-serif);
-  font-weight: bold;
-  font-size: 18px;
-  color: $text-secondary;
-}
-.ql-snow .ql-toolbar button.ql-dropcap:hover::before,
-.ql-snow .ql-toolbar button.ql-dropcap.ql-active::before {
-  color: #8a0322;
-}
-
-.dropcap {
-  float: left;
-  font-size: 4.5rem;
-  line-height: 0.8;
-  padding-top: 0.2rem;
-  padding-right: 0.5rem;
-  font-family: var(--font-aeon-serif);
-  color: #8a0322;
-  font-weight: 700;
 }

@@ -20,7 +20,8 @@
   border-radius: 10px;
   max-width: 90%;
   width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid $border;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 
   h2 {
     margin: 0 0 1.5rem 0;
@@ -44,11 +45,13 @@
       border: 1px solid $border;
       border-radius: 5px;
       font-size: 1rem;
+      background: $surface2;
+      color: $text;
       transition: border-color 0.2s ease;
 
       &:focus {
         outline: none;
-        border-color: $text;
+        border-color: $accent;
       }
     }
 
@@ -107,23 +110,20 @@
 }
 
 .cancel-button {
-  background-color: transparent;
-  color: #333333;
-  border: 1px solid #333333;
+  background-color: $surface2;
+  color: $text;
+  border: 1px solid $border !important;
 
   &:hover {
-    background-color: #333333;
-    color: #ffffff;
+    background-color: $border;
   }
 }
 
 .submit-button {
-  background-color: transparent;
-  color: #8a0322;
-  border: 1px solid #8a0322;
+  background-color: $accent;
+  color: #fff;
 
   &:hover {
-    background-color: #8a0322;
-    color: #ffffff;
+    opacity: 0.9;
   }
 }
