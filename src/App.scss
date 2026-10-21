@@ -5,11 +5,15 @@
   --smooth-easing: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+html {
+  background-color: $background;
+}
+
 body {
   margin: 0;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 16px;
-  background-color: $background;
+  background-color: transparent;
   color: $text;
   overflow-x: hidden;
   width: 100%;
@@ -29,7 +33,7 @@ body.menu-open {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -10;
+  z-index: -1;
 }
 
 #bg-canvas {
@@ -40,17 +44,16 @@ body.menu-open {
 }
 
 #bg-glow {
-  z-index: -9;
-  background: radial-gradient(circle 420px at var(--mouse-x, -100%) var(--mouse-y, -100%),
+  background: radial-gradient(circle 550px at var(--mouse-x, -100%) var(--mouse-y, -100%),
       $accent,
-      transparent 65%);
-  opacity: 0.04;
+      transparent 60%);
+  opacity: 0;
   transition: opacity 0.8s ease;
-  filter: blur(80px);
+  filter: blur(60px);
 }
 
 body:hover #bg-glow {
-  opacity: 0.04;
+  opacity: 0.08;
 }
 
 /* ─── MATERIAL SYSTEM (Liquid Glass from akashramesh13.github.io) ─── */
