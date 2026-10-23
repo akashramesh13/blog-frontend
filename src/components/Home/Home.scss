@@ -1,24 +1,24 @@
 @use '../../styles/theme' as *;
 
 .home-container {
-  max-width: 1320px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 2.5rem 1rem;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 0.85rem;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem 0.6rem;
+    padding: 1rem 0.5rem;
   }
 }
 
 .home {
   width: 100%;
-  max-width: 1260px;
+  max-width: 950px;
   margin: 0 auto;
 
   /* ---------------- HEADER ---------------- */
@@ -160,32 +160,23 @@
     }
   }
 
-  /* ---------------- POSTS FEED (2-Column Editorial Grid on Desktop) ---------------- */
+  /* ---------------- POSTS FEED (Single Column Stream) ---------------- */
 
   &__posts {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     width: 100%;
     padding: 1.8rem 0;
-
-    @media (max-width: 850px) {
-      grid-template-columns: 1fr;
-      gap: 1.4rem;
-    }
+    min-height: 200px;
   }
 
   &__skeleton-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     width: 100%;
     margin-top: 1.5rem;
-
-    @media (max-width: 850px) {
-      grid-template-columns: 1fr;
-      gap: 1.4rem;
-    }
   }
 
   /* ---------------- POST CARD (Liquid Glass Card) ---------------- */
@@ -201,15 +192,11 @@
       0 4px 20px rgba(0, 0, 0, 0.04),
       inset 0 1px 0 $glass-highlight;
     transition:
-      transform 0.35s var(--spring-easing),
-      border-color 0.35s var(--spring-easing),
-      box-shadow 0.35s var(--spring-easing);
+      transform 0.4s var(--spring-easing),
+      border-color 0.4s var(--spring-easing),
+      box-shadow 0.4s var(--spring-easing);
     position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 200px;
 
     &:hover {
       transform: translateY(-3px);

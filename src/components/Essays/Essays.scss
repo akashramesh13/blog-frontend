@@ -1,7 +1,7 @@
 @use '../../styles/theme' as *;
 
 .essays-container {
-  max-width: 1320px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 3rem 1.5rem 6rem;
 
@@ -24,15 +24,10 @@
   }
 
   .essays-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.8rem;
-    max-width: 1260px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 900px;
     margin: 0 auto;
-
-    @media (max-width: 850px) {
-      grid-template-columns: 1fr;
-      gap: 1.4rem;
-    }
   }
 }
