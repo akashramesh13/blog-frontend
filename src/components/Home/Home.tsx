@@ -17,7 +17,7 @@ import { IPost } from "../../types/postsTypes";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 const Home: React.FC = () => {
   const history = useHistory();

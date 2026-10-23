@@ -20,7 +20,7 @@ const Essays: React.FC = () => {
   );
 
   const [page, setPage] = useState(0);
-  const size = 10;
+  const size = 5;
   const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
