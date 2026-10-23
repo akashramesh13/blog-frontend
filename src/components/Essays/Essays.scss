@@ -1,7 +1,7 @@
 @use '../../styles/theme' as *;
 
 .essays-container {
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 3rem 1.5rem 6rem;
 
@@ -12,22 +12,27 @@
     h1 {
       font-family: "Playfair Display", serif;
       font-size: 3rem;
-      font-weight: 600;
+      font-weight: 700;
       color: $text;
       margin: 0 0 0.8rem;
     }
 
     p {
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: $text-secondary;
     }
   }
 
   .essays-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    max-width: 900px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
+    max-width: 1260px;
     margin: 0 auto;
+
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
   }
 }

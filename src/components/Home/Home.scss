@@ -1,24 +1,24 @@
 @use '../../styles/theme' as *;
 
 .home-container {
-  max-width: 1200px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
-  padding: 2.5rem 1rem;
+  padding: 2.5rem 1.5rem;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 0.85rem;
+    padding: 1.5rem 1rem;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem 0.5rem;
+    padding: 1rem 0.6rem;
   }
 }
 
 .home {
   width: 100%;
-  max-width: 950px;
+  max-width: 1260px;
   margin: 0 auto;
 
   /* ---------------- HEADER ---------------- */
@@ -160,22 +160,32 @@
     }
   }
 
-  /* ---------------- POSTS FEED ---------------- */
+  /* ---------------- POSTS FEED (2-Column Editorial Grid on Desktop) ---------------- */
 
   &__posts {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
     width: 100%;
     padding: 1.8rem 0;
+
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
   }
 
   &__skeleton-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.8rem;
     width: 100%;
     margin-top: 1.5rem;
+
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
   }
 
   /* ---------------- POST CARD (Liquid Glass Card) ---------------- */
@@ -191,15 +201,19 @@
       0 4px 20px rgba(0, 0, 0, 0.04),
       inset 0 1px 0 $glass-highlight;
     transition:
-      transform 0.4s var(--spring-easing),
-      border-color 0.4s var(--spring-easing),
-      box-shadow 0.4s var(--spring-easing);
+      transform 0.35s var(--spring-easing),
+      border-color 0.35s var(--spring-easing),
+      box-shadow 0.35s var(--spring-easing);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
 
     &:hover {
       transform: translateY(-3px);
-      border-color: $glass-highlight;
+      border-color: $border-hover;
       box-shadow:
         0 14px 40px rgba(0, 0, 0, 0.08),
         inset 0 1px 0 $glass-highlight;
@@ -212,25 +226,31 @@
 
     &-title {
       font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-      font-size: 1.55rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 0.5rem;
+      line-height: 1.32;
+      margin-bottom: 0.6rem;
       color: $text;
+      letter-spacing: -0.3px;
       transition: color 0.2s ease;
+      -webkit-font-smoothing: antialiased;
     }
 
     &-excerpt {
-      font-family: "Libre Baskerville", Georgia, serif;
-      font-size: 0.975rem;
-      line-height: 1.75;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.985rem;
+      font-weight: 450;
+      line-height: 1.65;
       color: $text-secondary;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      flex: 1;
     }
 
     &-date {
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 500;
       color: $text-muted;
       letter-spacing: 0.02em;

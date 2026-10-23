@@ -31,13 +31,15 @@
   }
 
   &__content {
-    max-width: 720px;
+    max-width: 840px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
     font-family: "Libre Baskerville", serif;
     font-size: 1.15rem;
-    line-height: 1.8;
+    line-height: 1.85;
     color: $text;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
     h2 {
       font-family: "Playfair Display", serif;
