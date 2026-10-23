@@ -39,7 +39,7 @@ export const darkTheme: Theme = {
   accentSecondary: "#16a34a",
   surface: "rgba(20, 22, 21, 0.92)",
   surface2: "#141714",
-  text: "#F4F4F6",              // High-contrast crisp off-white
+  text: "#EDE8E5",              // Warm, glare-free book off-white (easy on eyes)
   textSecondary: "#D4D4D8",     // Clean, legible zinc-slate
   textMuted: "#A1A1AA",         // Readable metadata & dates
   textPlaceholder: "#71717A",

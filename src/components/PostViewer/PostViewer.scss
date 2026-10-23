@@ -35,13 +35,15 @@
   /* ---------------- TITLE ---------------- */
 
   &__title {
-    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-family: "Lora", "Playfair Display", Georgia, "Times New Roman", serif;
     font-size: 2.75rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
     margin: 0 0 1rem;
-    line-height: 1.2;
+    line-height: 1.25;
     color: $text;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
     @media (max-width: 768px) {
       font-size: 2rem;
@@ -226,37 +228,40 @@
       color: $text;
     }
 
-    /* headings — use Playfair Display at proper NYT-like weight */
+    /* headings — use Lora at proper weight for glare-free reading */
     h1 {
-      font-family: "Playfair Display", Georgia, serif;
+      font-family: "Lora", "Playfair Display", Georgia, serif;
       font-size: 2rem;
-      font-weight: 700;
+      font-weight: 600;
       margin-top: 2.8rem;
       margin-bottom: 0.5rem;
-      line-height: 1.25;
+      line-height: 1.28;
       color: $text;
+      -webkit-font-smoothing: antialiased;
     }
 
     h2 {
-      font-family: "Playfair Display", Georgia, serif;
+      font-family: "Lora", "Playfair Display", Georgia, serif;
       font-size: 1.6rem;
-      font-weight: 700;
+      font-weight: 600;
       margin-top: 2.4rem;
       margin-bottom: 0.5rem;
-      line-height: 1.3;
+      line-height: 1.32;
       color: $text;
       border-bottom: 1px solid $border;
       padding-bottom: 0.3rem;
+      -webkit-font-smoothing: antialiased;
     }
 
     h3 {
-      font-family: "Playfair Display", Georgia, serif;
+      font-family: "Lora", "Playfair Display", Georgia, serif;
       font-size: 1.25rem;
       font-weight: 600;
       margin-top: 2rem;
       margin-bottom: 0.4rem;
       line-height: 1.35;
       color: $text;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* paragraphs — generous spacing like NYT */

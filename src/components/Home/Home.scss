@@ -212,15 +212,16 @@
     }
 
     &-title {
-      font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      line-height: 1.32;
+      font-family: "Lora", "Playfair Display", Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      line-height: 1.34;
       margin-bottom: 0.6rem;
       color: $text;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
       transition: color 0.2s ease;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     &-excerpt {
