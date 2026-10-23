@@ -152,10 +152,10 @@
       }
 
       &.active {
-        background: $accent;
-        color: #fff;
+        background: $category-active-bg;
+        color: $category-active-text;
         border-color: $accent;
-        box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
       }
     }
   }
