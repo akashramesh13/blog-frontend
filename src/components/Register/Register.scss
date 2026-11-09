@@ -238,15 +238,16 @@
   color: #ffffff;
   border-radius: 980px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: none;
+  transition: background-color 0.2s ease, transform 0.15s ease;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &:hover:not(:disabled) {
     background: $accent-secondary;
-    transform: scale(1.01);
-    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
+    transform: translateY(-1px);
+    box-shadow: none;
   }
 
   &:active:not(:disabled) {

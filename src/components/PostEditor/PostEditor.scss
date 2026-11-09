@@ -378,11 +378,12 @@ input[type="file"] {
   background: $accent;
   color: #ffffff;
   border: 1px solid transparent;
+  box-shadow: none;
 
   &:hover {
     background: $accent-secondary;
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
+    transform: translateY(-1px);
+    box-shadow: none;
   }
 }
 

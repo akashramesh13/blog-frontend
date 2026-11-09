@@ -142,12 +142,13 @@ textarea:focus:not(:focus-visible) {
   line-height: 1.42859;
   letter-spacing: -0.016em;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.15s ease;
   border-radius: 980px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  box-shadow: none;
 
   &, &:visited, &:link {
     color: #ffffff;
@@ -155,8 +156,8 @@ textarea:focus:not(:focus-visible) {
 
   &:hover {
     background: $accent-secondary;
-    transform: scale(1.01);
-    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
+    transform: translateY(-1px);
+    box-shadow: none;
   }
 
   &:active {
