@@ -6,14 +6,14 @@
    ══════════════════════════════════════════════════════════════════════════ */
 
 .home-container {
-  max-width: 780px; /* Editorial column width: 720px - 840px */
+  max-width: 980px; /* Canonical Apple editorial width: balances whitespace on wide monitors */
   width: 100%;
   margin: 0 auto;
-  padding: 4.5rem 1.5rem 6rem;
+  padding: 3rem 1.5rem 5rem;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 2.5rem 1.25rem 4rem;
+    padding: 2rem 1.25rem 3.5rem;
   }
 }
 
@@ -25,7 +25,7 @@
 
   &__header {
     text-align: center;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.25rem;
   }
 
   &__title {
@@ -45,7 +45,7 @@
     line-height: 1.5;
     color: $text-secondary;
     letter-spacing: -0.01em;
-    margin: 0 0 2rem;
+    margin: 0 0 1.5rem;
   }
 
   /* ---------------- UNDERSTATED CONTROLS ---------------- */
@@ -56,18 +56,19 @@
     align-items: center;
     gap: 1.25rem;
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 
   &__search-box {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 440px;
+    max-width: 480px;
+    height: 44px;
     background: #FFFFFF;
     border: 1px solid #D2D2D7;
     border-radius: 980px;
-    padding: 6px 14px 6px 16px;
+    padding: 0 14px 0 16px;
     box-sizing: border-box;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -77,12 +78,17 @@
       border-color: #38383A;
     }
 
+    &:hover {
+      border-color: #86868B;
+    }
+
+    /* Crisp Apple outline & ring — exactly matches Login & Register */
     &:focus-within {
-      border-color: $accent;
-      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12);
+      border: 2px solid $accent;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
 
       [data-theme="dark"] & {
-        box-shadow: 0 0 0 3px rgba(41, 151, 255, 0.15);
+        box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.15);
       }
     }
   }
@@ -94,15 +100,25 @@
   }
 
   &__search-input {
-    width: 100%;
-    border: none;
-    background: transparent;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none !important;
+    background: transparent !important;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
     font-size: 14px;
     color: $text;
     letter-spacing: -0.01em;
-    outline: none;
-    padding: 4px 0;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0;
+
+    &:focus,
+    &:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
 
     &::placeholder {
       color: $text-placeholder;
@@ -111,17 +127,25 @@
 
   &__sort-select {
     background: transparent;
-    border: none;
+    border: none !important;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 500;
     color: $text-secondary;
     cursor: pointer;
-    outline: none;
+    outline: none !important;
+    box-shadow: none !important;
     margin-left: 8px;
-    padding: 2px 4px;
+    padding: 2px 6px;
     border-radius: 4px;
     transition: color 0.12s ease;
+
+    &:focus,
+    &:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
 
     &:hover {
       color: $text;
@@ -239,7 +263,7 @@
 .editorial-row {
   display: flex;
   flex-direction: column;
-  padding: 2.25rem 0;
+  padding: 1.75rem 0 2rem;
   border-bottom: 1px solid $border;
   cursor: pointer;
   background: transparent;

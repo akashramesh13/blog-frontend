@@ -124,6 +124,11 @@ select:focus-visible {
   outline-offset: 2px;
 }
 
+.home__search-input:focus-visible,
+.apple-field input:focus-visible {
+  outline: none !important;
+}
+
 button:focus:not(:focus-visible),
 input:focus:not(:focus-visible),
 textarea:focus:not(:focus-visible) {
