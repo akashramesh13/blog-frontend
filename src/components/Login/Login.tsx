@@ -40,32 +40,39 @@ const Login: React.FC = () => {
       <div className="login-card">
         <h1>Sign in to Pixel Pursuit</h1>
         <form onSubmit={handleSubmit}>
-          <div className="input-group">
+          <div className={`apple-field ${username ? "has-value" : ""} ${error ? "has-error" : ""}`}>
             <input
+              id="login-username"
               type="text"
-              placeholder="Username"
               value={username}
               ref={inputRef}
               onChange={(e) => setUsername(e.target.value)}
-              className={error ? "input-error" : ""}
+              placeholder=" "
               required
+              autoComplete="username"
             />
+            <label htmlFor="login-username">Username</label>
           </div>
-          <div className="input-group password-group">
+
+          <div className={`apple-field password-field ${password ? "has-value" : ""} ${error ? "has-error" : ""}`}>
             <input
+              id="login-password"
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={error ? "input-error" : ""}
+              placeholder=" "
               required
+              autoComplete="current-password"
             />
-            <span
+            <label htmlFor="login-password">Password</label>
+            <button
+              type="button"
               className="password-toggle"
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? FaIcons.FaEyeSlash({}) : FaIcons.FaEye({})}
-            </span>
+            </button>
           </div>
 
           {error && (

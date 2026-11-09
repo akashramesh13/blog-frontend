@@ -128,65 +128,78 @@ const Register: React.FC = () => {
           </p>
         )}
         <form onSubmit={handleSubmit}>
-          <div className="input-group">
+          <div
+            className={`apple-field ${username ? "has-value" : ""} ${
+              username
+                ? usernameValidation.isValid
+                  ? "is-valid"
+                  : "has-error"
+                : error
+                ? "has-error"
+                : ""
+            }`}
+          >
             <input
+              id="register-username"
               type="text"
-              placeholder="Username"
               value={username}
               ref={inputRef}
               onChange={(e) => setUsername(e.target.value)}
-              className={
-                username
-                  ? usernameValidation.isValid
-                    ? "valid"
-                    : "invalid"
-                  : error
-                  ? "invalid"
-                  : ""
-              }
+              placeholder=" "
               required
+              autoComplete="username"
             />
-            {username && (
-              <p
-                className={`validation-message ${usernameValidation.isValid ? "valid" : "invalid"}`}
-              >
-                {usernameValidation.message}
-              </p>
-            )}
+            <label htmlFor="register-username">Username</label>
           </div>
-          <div className="input-group">
-            <div className="password-group">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={
-                  password
-                    ? passwordValidation.isValid
-                      ? "valid"
-                      : "invalid"
-                    : error
-                    ? "invalid"
-                    : ""
-                }
-                required
-              />
-              <span
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? FaIcons.FaEyeSlash({}) : FaIcons.FaEye({})}
-              </span>
-            </div>
-            {password && (
-              <p
-                className={`validation-message ${passwordValidation.isValid ? "valid" : "invalid"}`}
-              >
-                {passwordValidation.message}
-              </p>
-            )}
+          {username && (
+            <p
+              className={`validation-message ${
+                usernameValidation.isValid ? "valid" : "invalid"
+              }`}
+            >
+              {usernameValidation.message}
+            </p>
+          )}
+
+          <div
+            className={`apple-field password-field ${password ? "has-value" : ""} ${
+              password
+                ? passwordValidation.isValid
+                  ? "is-valid"
+                  : "has-error"
+                : error
+                ? "has-error"
+                : ""
+            }`}
+          >
+            <input
+              id="register-password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder=" "
+              required
+              autoComplete="new-password"
+            />
+            <label htmlFor="register-password">Password</label>
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? FaIcons.FaEyeSlash({}) : FaIcons.FaEye({})}
+            </button>
           </div>
+          {password && (
+            <p
+              className={`validation-message ${
+                passwordValidation.isValid ? "valid" : "invalid"
+              }`}
+            >
+              {passwordValidation.message}
+            </p>
+          )}
 
           {error && (
             <div className="apple-error-callout" role="alert">
