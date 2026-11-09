@@ -84,100 +84,56 @@ const Post: React.FC<PostProps> = ({ post, handleOnPostClick }) => {
   const readTime = getReadTime(post.content);
 
   return (
-    <div className="home__post" onClick={() => handleOnPostClick(post)}>
-      {post.category && (
-        <div style={{ marginBottom: "0.5rem" }}>
-          <span
-            style={{
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "1px",
-              color: "var(--color-accent)",
-            }}
-          >
+    <article className="editorial-row" onClick={() => handleOnPostClick(post)}>
+      <div className="editorial-row__header">
+        {post.category ? (
+          <span className="editorial-row__category">
             {post.category.name}
           </span>
-        </div>
-      )}
-
-      <h2 className="home__post-title">{post.title}</h2>
-
-      {preview && <p className="home__post-excerpt">{preview}</p>}
-
-      <div
-        className="home__post-footer"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: "1rem",
-        }}
-      >
-        <span className="home__post-date">
-          {readTime} min read &bull; {formatDate(post.createdAt)}
+        ) : <span />}
+        <span className="editorial-row__date">
+          {formatDate(post.createdAt)}
         </span>
+      </div>
 
-        <div style={{ position: "relative", display: "inline-block" }}>
-          <div
-            className={`post-likes ${isAnimating ? "pop-animation" : ""}`}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              color: isLiked ? "#ff4d6d" : "var(--color-text-muted)",
-              cursor: "pointer",
-              transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-            }}
+      <h2 className="editorial-row__title">
+        <span className="editorial-row__title-text">{post.title}</span>
+        <span className="editorial-row__arrow" aria-hidden="true">&rarr;</span>
+      </h2>
+
+      {preview && <p className="editorial-row__excerpt">{preview}</p>}
+
+      <div className="editorial-row__meta">
+        <span className="editorial-row__readtime">{readTime} min read</span>
+        <span className="editorial-row__dot">&bull;</span>
+        <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+          <button
+            type="button"
+            className={`editorial-row__like-btn ${isLiked ? "liked" : ""} ${isAnimating ? "pop-animation" : ""}`}
             onClick={handleLike}
-            title={isLiked ? "Unlike post" : "Like post"}
+            title={isLiked ? "Unlike story" : "Like story"}
           >
             <svg
-              width="18"
-              height="18"
+              width="13"
+              height="13"
               viewBox="0 0 24 24"
               fill={isLiked ? "currentColor" : "none"}
               stroke="currentColor"
               strokeWidth={isLiked ? "0" : "2"}
             >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span
-              style={{
-                fontSize: "0.95rem",
-                fontWeight: isLiked ? 600 : 400,
-              }}
-            >
-              {likesCount}
-            </span>
-          </div>
+            <span>{likesCount}</span>
+          </button>
 
           {showLoginMsg && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "100%",
-                right: "50%",
-                transform: "translateX(50%)",
-                marginBottom: "8px",
-                background: "var(--color-surface2)",
-                color: "var(--color-text)",
-                border: "1px solid var(--color-border)",
-                padding: "6px 12px",
-                borderRadius: "4px",
-                fontSize: "0.75rem",
-                whiteSpace: "nowrap",
-                pointerEvents: "none",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                zIndex: 10,
-              }}
-            >
+            <div className="editorial-row__login-tooltip">
               Login required to like
             </div>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

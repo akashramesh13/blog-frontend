@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./PostViewer.scss";
 import { RootState } from "../../redux/reducers";
@@ -34,6 +34,9 @@ const PostViewer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const { post, loading, error } = useSelector(
     (state: RootState) => state.posts,
@@ -46,6 +49,36 @@ const PostViewer: React.FC = () => {
       dispatch(fetchPost(id));
     }
   }, [id, dispatch, post?.id]);
+
+  // SCROLL PROGRESS LISTENER
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = (window.scrollY / totalHeight) * 100;
+        setScrollProgress(Math.min(100, Math.max(0, progress)));
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // CLOSE DROPDOWN ON OUTSIDE CLICK
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   // PARSE CONTENT (supports string + object)
   const parsedContent = useMemo(() => {
@@ -118,153 +151,177 @@ const PostViewer: React.FC = () => {
     }
   };
 
-  if (error) return <div>Error: {error}</div>;
+  if (error) {
+    return (
+      <div className="post-view">
+        <div className="post-view__not-found">
+          <h2>Unable to load story</h2>
+          <p>{error}</p>
+          <Link to="/" className="post-view__back-link">&larr; Back to all stories</Link>
+        </div>
+      </div>
+    );
+  }
 
   const { words, readTime } = getReadStats(post?.content);
   const isOwner = post?.owner || (post?.user && userInfo && post.user.id === userInfo.id);
 
   return (
     <div className="post-view">
+      {/* Scroll Progress Bar at the very top */}
+      <div
+        className="post-view__progress-bar"
+        style={{ width: `${scrollProgress}%` }}
+        role="progressbar"
+        aria-valuenow={Math.round(scrollProgress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      />
+
       {loading && post?.id !== id ? (
-        <Loading />
+        <div className="post-view__loader">
+          <Loading />
+        </div>
       ) : post ? (
         <>
-          {/* HEADER */}
-          <div className="post-header">
-            <div className="post-header__left">
-              {post.category && (
-                <div style={{ marginBottom: "0.8rem" }}>
-                  <span
-                    style={{
-                      fontSize: "0.8rem",
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: "1.5px",
-                      color: "var(--color-accent)",
-                    }}
-                  >
-                    {post.category.name}
-                  </span>
-                </div>
-              )}
+          {/* EDITORIAL HEADER (Centered, max-width ~820px) */}
+          <header className="post-view__header">
+            {post.category && (
+              <div className="post-view__category-wrapper">
+                <span className="post-view__category">
+                  {post.category.name}
+                </span>
+              </div>
+            )}
 
-              <h1 className="post-view__title">{post.title}</h1>
+            <h1 className="post-view__title">{post.title}</h1>
 
-              {post.subtitle && (
-                <p
-                  style={{
-                    fontFamily: '"Libre Baskerville", serif',
-                    fontSize: "1.2rem",
-                    color: "var(--color-text-secondary)",
-                    lineHeight: 1.5,
-                    margin: "0.5rem 0 1.2rem",
-                  }}
-                >
-                  {post.subtitle}
-                </p>
-              )}
+            {post.subtitle && (
+              <p className="post-view__subtitle">{post.subtitle}</p>
+            )}
 
-              <div className="post-meta">
-                <span className="author">
+            <div className="post-view__meta-bar">
+              <div className="post-view__meta-info">
+                <span className="post-view__author">
                   {post.user?.username || "Unknown"}
                 </span>
-                <span className="dot">&bull;</span>
-                <span>{formatDate(post.createdAt)}</span>
-                <span className="dot">&bull;</span>
-                <span>{readTime} min read ({words.toLocaleString()} words)</span>
-                <span className="dot">&bull;</span>
+                <span className="post-view__dot">&bull;</span>
+                <span className="post-view__date">{formatDate(post.createdAt)}</span>
+                <span className="post-view__dot">&bull;</span>
+                <span className="post-view__readtime">{readTime} min read</span>
+                <span className="post-view__dot">&bull;</span>
+                <span className="post-view__wordcount">{words.toLocaleString()} words</span>
+                <span className="post-view__dot">&bull;</span>
 
-                <div style={{ position: "relative", display: "inline-block" }}>
+                <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
                   <button
-                    className={`like-button ${isAnimating ? "pop-animation" : ""}`}
+                    type="button"
+                    className={`post-view__like-btn ${isLiked ? "liked" : ""} ${isAnimating ? "pop-animation" : ""}`}
                     onClick={handleLike}
-                    title={isLiked ? "Unlike post" : "Like post"}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      color: isLiked ? "#ff4d6d" : "var(--color-text-muted)",
-                      padding: 0,
-                      fontFamily: "inherit",
-                      fontSize: "0.95rem",
-                      transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                    }}
+                    title={isLiked ? "Unlike story" : "Like story"}
                   >
                     <svg
-                      width="18"
-                      height="18"
+                      width="14"
+                      height="14"
                       viewBox="0 0 24 24"
                       fill={isLiked ? "currentColor" : "none"}
                       stroke="currentColor"
                       strokeWidth={isLiked ? "0" : "2"}
                     >
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                     </svg>
-                    <span style={{ fontWeight: isLiked ? "600" : "400" }}>{likesCount}</span>
+                    <span>{likesCount}</span>
                   </button>
 
                   {showLoginMsg && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: "100%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        marginBottom: "8px",
-                        background: "var(--color-surface2)",
-                        color: "var(--color-text)",
-                        border: "1px solid var(--color-border)",
-                        padding: "6px 12px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                        whiteSpace: "nowrap",
-                        pointerEvents: "none",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                        zIndex: 10,
-                      }}
-                    >
+                    <div className="post-view__login-tooltip">
                       Login required to like
                     </div>
                   )}
                 </div>
               </div>
 
+              {/* Author Options ••• Menu (Apple Style, replaces generic edit/delete pills) */}
               {isOwner && (
-                <div className="post-actions">
+                <div className="post-view__actions-menu" ref={menuRef}>
                   <button
-                    className="post-view__edit-button"
-                    onClick={() => history.push(`/post/edit/${id}`)}
+                    type="button"
+                    className="post-view__menu-trigger"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label="Story options"
+                    title="Story options"
                   >
-                    Edit
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="5" cy="12" r="2" />
+                      <circle cx="12" cy="12" r="2" />
+                      <circle cx="19" cy="12" r="2" />
+                    </svg>
                   </button>
 
-                  <button
-                    className="post-view__delete-button"
-                    onClick={() => setIsDeleteModalOpen(true)}
-                  >
-                    Delete
-                  </button>
+                  {isMenuOpen && (
+                    <div className="post-view__dropdown" role="menu">
+                      <button
+                        type="button"
+                        className="post-view__dropdown-item"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          history.push(`/post/edit/${id}`);
+                        }}
+                        role="menuitem"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                        <span>Edit Story</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="post-view__dropdown-item destructive"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setIsDeleteModalOpen(true);
+                        }}
+                        role="menuitem"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                        <span>Delete Story</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          </div>
+          </header>
 
+          {/* HERO COVER IMAGE (Wider than body text: max-width 1040px) */}
           {post.coverImage && (
             <div className="post-cover">
               <img src={post.coverImage} alt={post.title} />
             </div>
           )}
 
-          {/* TOC */}
-          <TableOfContents content={parsedContent} />
-
-          {/* CONTENT */}
-          <div className="post-view__body">
-            <ReactQuill value={parsedContent} readOnly theme="bubble" />
+          {/* TABLE OF CONTENTS (max-width 720px) */}
+          <div className="post-view__toc-wrapper">
+            <TableOfContents content={parsedContent} />
           </div>
+
+          {/* BODY CONTENT (max-width 720px, 18-19px, line-height 1.8) */}
+          <main className="post-view__body">
+            <ReactQuill value={parsedContent} readOnly theme="bubble" />
+          </main>
+
+          {/* EDITORIAL FOOTER */}
+          <footer className="post-view__footer">
+            <div className="post-view__footer-divider" />
+            <p className="post-view__thank-you">Thank you for reading.</p>
+            <Link to="/" className="post-view__back-link">
+              &larr; Back to all stories
+            </Link>
+          </footer>
 
           {/* MODAL */}
           <DeleteModal
@@ -275,7 +332,10 @@ const PostViewer: React.FC = () => {
           />
         </>
       ) : (
-        <div style={{ textAlign: "center", padding: "4rem 0" }}>Post not found</div>
+        <div className="post-view__not-found">
+          <h2>Story not found</h2>
+          <Link to="/" className="post-view__back-link">&larr; Back to all stories</Link>
+        </div>
       )}
     </div>
   );

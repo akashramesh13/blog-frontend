@@ -144,62 +144,67 @@ const Home: React.FC = () => {
   return (
     <div className="home-container">
       <div className="home">
-        <div className="home__header">
-          <h1 className="home__title">
-            <span className="welcome-text">Welcome to</span>
-            <span id="home__blog-title">Pixel Pursuit</span>
-          </h1>
+        <header className="home__header">
+          <h1 className="home__title">Pixel Pursuit</h1>
+          <p className="home__intro">
+            Essays, notes, and observations on engineering, design, and culture.
+          </p>
 
-          <div className="home__search-container" style={{ position: 'relative', width: '100%', maxWidth: '600px', margin: '1.5rem auto 0' }}>
-            <input
-              type="text"
-              className="home__search"
-              placeholder="Search stories by title..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ margin: 0, paddingRight: '120px' }}
-            />
-
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="home__sort"
-              style={{
-                position: 'absolute',
-                right: '12px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                margin: 0,
-                padding: '4px 8px',
-                fontSize: '0.85rem',
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer'
-              }}
-            >
-              <option value="latest">Latest</option>
-              <option value="likes">Most Liked</option>
-            </select>
-          </div>
-
-          <div className="categories-inline">
-            {categories.map((category) => (
-              <span
-                key={category.id}
-                onClick={() => handleCategoryClick(category.name)}
-                className={selectedCategory === category.name ? "active" : ""}
+          <div className="home__controls">
+            <div className="home__search-box">
+              <svg
+                className="home__search-icon"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                {category.name}
-              </span>
-            ))}
-          </div>
-        </div>
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                className="home__search-input"
+                placeholder="Search stories..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="home__sort-select"
+              >
+                <option value="latest">Latest</option>
+                <option value="likes">Top</option>
+              </select>
+            </div>
 
-        <div className="home__posts">
+            <div className="home__categories-filter">
+              {categories.map((category) => (
+                <button
+                  type="button"
+                  key={category.id}
+                  onClick={() => handleCategoryClick(category.name)}
+                  className={`home__category-tab ${
+                    selectedCategory === category.name ? "active" : ""
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <div className="home__feed">
           {isInitialLoad ? (
             <Loading />
           ) : posts.length === 0 && !loading ? (
-            <p className="no-posts">No posts found.</p>
+            <p className="no-posts">No stories found.</p>
           ) : (
             posts.map((post) => (
               <Post

@@ -99,7 +99,7 @@ const NavBar: React.FC = () => {
       <div className="navbar__left">
         <div className="navbar__brand">
           <Link to="/" onClick={closeNavbar}>
-            <span className="bracket">&lt;</span>Pixel Pursuit<span className="bracket">/&gt;</span>
+            Pixel Pursuit
           </Link>
         </div>
       </div>
