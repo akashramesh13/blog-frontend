@@ -63,7 +63,21 @@ const App: React.FC = () => {
         <Redirect to="/" />
       </Switch>
       <Footer />
-      <Toaster position="bottom-center" toastOptions={{ style: { background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-glass-border)' } }} />
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '980px',
+            padding: '10px 20px',
+            fontSize: '14px',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
+          },
+        }}
+      />
       <Analytics />
     </Router>
   );

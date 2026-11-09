@@ -1,6 +1,6 @@
 @use '../../styles/theme' as *;
 
-@keyframes shimmer {
+@keyframes appleShimmer {
   0% {
     background-position: -200% 0;
   }
@@ -12,13 +12,13 @@
 .skeleton-base {
   background: linear-gradient(
     90deg,
-    $surface2 25%,
-    $border 50%,
-    $surface2 75%
+    $surface 25%,
+    $surface2 50%,
+    $surface 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite linear;
-  border-radius: 4px;
+  animation: appleShimmer 1.8s infinite ease-in-out;
+  border-radius: 6px;
 }
 
 .skeleton-wrapper {
@@ -26,30 +26,31 @@
 }
 
 .skeleton-post-card {
-  padding: 1.5rem 1.8rem;
-  border-radius: 12px;
-  background: $surface;
+  padding: 1.75rem 2rem;
+  border-radius: 16px;
+  background: $bg-card;
   border: 1px solid $border;
-  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.25rem;
 }
 
 .skeleton-profile {
   max-width: 800px;
-  margin: 60px auto;
-  padding: 0 1rem;
+  margin: 48px auto;
+  padding: 0 1.5rem;
 
   &__header {
     display: flex;
     align-items: center;
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid $border;
 
     @media (max-width: 600px) {
       flex-direction: column;
       text-align: center;
-      gap: 1.2rem;
+      gap: 1.25rem;
     }
   }
 
@@ -63,9 +64,9 @@
 
   &__bio {
     border: 1px solid $border;
-    border-radius: 12px;
-    padding: 2.5rem;
-    background: $surface;
-    min-height: 100px;
+    border-radius: 16px;
+    padding: 2rem;
+    background: $bg-card;
+    min-height: 90px;
   }
 }

@@ -1,24 +1,28 @@
 @use '../../styles/theme' as *;
 
 .essays-container {
-  max-width: 1200px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 3rem 1.5rem 6rem;
+  padding: 3.5rem 1.5rem 6rem;
 
   .essays-header {
-    margin-bottom: 3rem;
+    margin-bottom: 3.5rem;
     text-align: center;
 
     h1 {
-      font-family: "Playfair Display", serif;
-      font-size: 3rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      font-size: clamp(34px, 5vw, 48px);
       font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.08;
       color: $text;
-      margin: 0 0 0.8rem;
+      margin: 0 0 0.6rem;
     }
 
     p {
-      font-size: 1.05rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      font-size: 17px;
+      letter-spacing: -0.01em;
       color: $text-secondary;
     }
   }
@@ -26,8 +30,8 @@
   .essays-grid {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    max-width: 900px;
+    gap: 1.25rem;
+    max-width: 800px;
     margin: 0 auto;
   }
 }

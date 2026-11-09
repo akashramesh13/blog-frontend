@@ -31,14 +31,14 @@ function applyTheme(theme: Theme): void {
 }
 
 function updateFavicon(themeName: "light" | "dark"): void {
-  let accentColor = "#F97316"; // Orange accent
-  let bgColor = "#FCFCFC";
-  let textColor = "#18181B";
+  let accentColor = "#0071E3"; // Apple Blue
+  let bgColor = "#FFFFFF";
+  let textColor = "#1D1D1F";
 
   if (themeName === "dark") {
-    accentColor = "#16a34a"; // Terminal green
-    bgColor = "#09090B";
-    textColor = "#E4E4E7";
+    accentColor = "#2997FF"; // Apple Blue (dark)
+    bgColor = "#000000";
+    textColor = "#F5F5F7";
   }
 
   const svg = `

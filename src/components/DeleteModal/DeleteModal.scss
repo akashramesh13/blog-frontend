@@ -6,7 +6,8 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
   display: flex;
   align-items: center;
@@ -16,44 +17,46 @@
   padding: 1rem;
 }
 
-/* ---------------- MODAL ---------------- */
+/* ---------------- MODAL (Apple Alert Dialog) ---------------- */
 
 .delete-modal {
-  background: $surface;
-  border-radius: 8px;
+  background: $bg-card;
+  border-radius: 18px;
   border: 1px solid $border;
 
-  max-width: 420px;
+  max-width: 400px;
   width: 100%;
-
-  padding: 1.8rem 1.6rem;
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 2rem 1.8rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  text-align: center;
 }
 
 /* ---------------- TITLE ---------------- */
 
 .delete-modal h2 {
-  font-family: "Playfair Display", serif;
-  font-size: 1.4rem;
-  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
   color: $text;
-
-  margin-bottom: 0.8rem;
+  margin-top: 0;
+  margin-bottom: 0.6rem;
 }
 
 /* ---------------- TEXT ---------------- */
 
 .delete-modal p {
-  font-size: 0.95rem;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 14px;
   color: $text-secondary;
-  line-height: 1.6;
+  line-height: 1.45;
+  margin: 0;
 }
 
 /* subtle warning */
 .delete-modal .warning {
   color: $text-muted;
-  font-size: 0.85rem;
+  font-size: 12px;
   margin-top: 0.5rem;
 }
 
@@ -61,57 +64,56 @@
 
 .delete-modal__buttons {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
 
-  margin-top: 1.8rem;
-}
-
-/* base button */
-.delete-modal__buttons button {
-  background: none;
-  border: none;
-
-  font-size: 0.9rem;
-  color: $text-muted;
-
-  cursor: pointer;
-  transition: all 0.2s ease;
+  button {
+    flex: 1;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    border-radius: 980px;
+    padding: 8px 18px;
+    transition: all 0.2s ease;
+  }
 }
 
 /* cancel */
 .cancel-button {
-  padding: 6px 14px;
-  border-radius: 4px;
-  background: $surface2 !important;
+  background: $surface !important;
   color: $text !important;
   border: 1px solid $border !important;
 
   &:hover {
-    background: $border !important;
+    background: $surface2 !important;
+    border-color: $text-secondary !important;
   }
 }
 
-/* delete */
+/* delete (Apple Destructive Red) */
 .delete-button {
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 4px;
-  background: #e11d48 !important;
-  color: #fff !important;
+  background: #FF3B30 !important;
+  color: #ffffff !important;
+  border: 1px solid transparent !important;
 
   &:hover {
-    opacity: 0.9;
+    background: #E0352B !important;
+    transform: scale(1.01);
   }
 }
 
 /* mobile */
 @media (max-width: 480px) {
   .delete-modal {
-    padding: 1.4rem;
+    padding: 1.5rem;
+    border-radius: 14px;
   }
 
   .delete-modal__buttons {
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }

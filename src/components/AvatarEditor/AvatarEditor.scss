@@ -2,35 +2,39 @@
 
 .avatar-editor-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 1rem;
 }
 
 .avatar-editor-modal {
-  background: $surface;
-  padding: 2rem;
-  border-radius: 12px;
+  background: $bg-card;
+  padding: 2.2rem 2rem;
+  border-radius: 18px;
   width: 90%;
-  max-width: 600px;
+  max-width: 580px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid $border;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 
   h2 {
     margin: 0;
-    font-size: 1.8rem;
-    font-family: "Playfair Display", serif;
+    font-size: 22px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.015em;
     color: $text;
     text-align: center;
   }
@@ -39,34 +43,42 @@
     display: flex;
     justify-content: center;
     svg {
-      width: 150px;
-      height: 150px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 1px solid $border;
     }
   }
 
   &__randomize {
     align-self: center;
-    background: transparent;
+    background: $surface;
     border: 1px solid $border;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    padding: 6px 16px;
+    border-radius: 980px;
     cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 13px;
     font-weight: 500;
     color: $text;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
     &:hover {
       background: $surface2;
+      border-color: $text-secondary;
     }
   }
 
   &__disclaimer {
-    font-size: 0.85rem;
-    color: $text-muted;
-    background: $surface2;
-    padding: 1rem;
-    border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 12px;
+    color: $text-secondary;
+    background: $surface;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    border: 1px solid $border;
     margin: 0;
     text-align: center;
+    line-height: 1.4;
   }
 
   &__controls {
@@ -77,22 +89,27 @@
     label {
       display: flex;
       flex-direction: column;
-      font-size: 0.9rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      font-size: 13px;
       font-weight: 500;
       color: $text-secondary;
       gap: 0.4rem;
 
       select, .seed-input {
-        padding: 0.6rem;
+        padding: 8px 12px;
         border: 1px solid $border;
-        border-radius: 6px;
-        background: $background;
+        border-radius: 10px;
+        background: $surface;
         color: $text;
-        font-size: 0.95rem;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+        font-size: 14px;
         cursor: pointer;
+        outline: none;
+        transition: all 0.2s ease;
+
         &:focus {
-          outline: none;
-          border-color: $text;
+          border-color: $accent;
+          box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
         }
       }
       .seed-input {
@@ -104,35 +121,43 @@
   &__actions {
     display: flex;
     justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
     
     button {
-      padding: 0.8rem 1.5rem;
-      border-radius: 25px;
-      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 980px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: all 0.2s ease;
       
       &:disabled {
-        opacity: 0.6;
+        opacity: 0.4;
         cursor: not-allowed;
       }
     }
 
     .cancel-btn {
-      background: transparent;
+      background: $surface;
       border: 1px solid $border;
       color: $text;
       &:hover {
         background: $surface2;
+        border-color: $text-secondary;
       }
     }
 
     .save-btn {
-      background: $text;
-      color: $background;
-      border: none;
+      background: $accent;
+      color: #ffffff;
+      border: 1px solid transparent;
+
+      &:hover:not(:disabled) {
+        background: $accent-secondary;
+        transform: scale(1.01);
+      }
     }
   }
 }

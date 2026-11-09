@@ -1,40 +1,39 @@
 @use '../../styles/theme' as *;
 
 .home-container {
-  max-width: 1200px;
+  max-width: 980px; /* Apple's canonical layout max-width */
   width: 100%;
   margin: 0 auto;
-  padding: 2.5rem 1rem;
+  padding: 3.5rem 1.5rem;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 0.85rem;
+    padding: 2rem 1.25rem;
   }
 
   @media (max-width: 480px) {
-    padding: 1rem 0.5rem;
+    padding: 1.5rem 1rem;
   }
 }
 
 .home {
   width: 100%;
-  max-width: 950px;
   margin: 0 auto;
 
   /* ---------------- HEADER ---------------- */
 
   &__header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem;
   }
 
   &__title {
-    font-size: 3.2rem;
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+    font-size: clamp(38px, 5.5vw, 56px);
     font-weight: 700;
     color: $text;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
+    line-height: 1.07143;
+    letter-spacing: -0.015em;
 
     display: flex;
     flex-direction: column;
@@ -42,120 +41,118 @@
   }
 
   #home__blog-title {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
     font-weight: 700;
+    color: $text;
   }
 
   /* welcome text */
   .welcome-text {
-    font-size: 1.5rem;
-    color: $text;
-    margin-bottom: 0.4rem;
-    font-weight: 400;
+    font-size: clamp(17px, 2.5vw, 21px);
+    color: $text-secondary;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 
-  /* ---------------- SEARCH (Liquid Glass) ---------------- */
+  /* ---------------- SEARCH (Apple Pill Input) ---------------- */
   &__search {
     width: 100%;
-    max-width: 600px;
+    max-width: 580px;
     margin: 1.5rem auto 0;
-    padding: 13px 22px;
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 0.95rem;
-    border: 1px solid $glass-border;
-    border-radius: 24px;
-    background: $bg-card;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: inset 0 1px 0 $glass-highlight, 0 4px 18px rgba(0, 0, 0, 0.03);
+    padding: 12px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    border: 1px solid $border;
+    border-radius: 980px;
+    background: $surface;
     color: $text;
     outline: none;
-    transition: all 0.3s var(--spring-easing);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 
     &:hover {
-      border-color: $accent;
+      border-color: $text-muted;
     }
 
     &:focus {
       border-color: $accent;
-      box-shadow: 0 0 0 2px $accent, inset 0 1px 0 $glass-highlight;
+      background: $bg-card;
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
     }
 
     &::placeholder {
       color: $text-placeholder;
-      font-style: italic;
+      font-style: normal;
     }
   }
 
-  /* ---------------- SORT BY (Glass Pill) ---------------- */
+  /* ---------------- SORT BY (Apple Pill Control) ---------------- */
   &__sort {
-    font-family: "JetBrains Mono", "Inter", sans-serif;
-    font-size: 0.825rem;
-    font-weight: 600;
-    padding: 8px 16px;
-    margin-top: 1.5rem;
-    border: 1px solid $glass-border;
-    border-radius: 20px;
-    background: $bg-card;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: inset 0 1px 0 $glass-highlight;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    padding: 6px 14px;
+    border: 1px solid $border;
+    border-radius: 980px;
+    background: $surface;
     color: $text-secondary;
     cursor: pointer;
     outline: none;
-    transition: all 0.25s var(--spring-easing);
-    
+    transition: all 0.2s ease;
+
     &:hover {
-      color: $accent;
-      border-color: $accent;
-      transform: translateY(-1px);
+      color: $text;
+      border-color: $text-muted;
     }
 
     &:focus {
       color: $accent;
       border-color: $accent;
-      box-shadow: 0 0 0 2px $accent, inset 0 1px 0 $glass-highlight;
+      box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.15);
     }
-    
+
     option {
       background: $surface;
       color: $text;
     }
   }
 
-  /* ---------------- CATEGORIES (Tags from portfolio) ---------------- */
+  /* ---------------- CATEGORIES (Apple Pills) ---------------- */
 
   .categories-inline {
     display: flex;
     justify-content: center;
-    gap: 0.6rem;
-    margin-top: 1.4rem;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
     flex-wrap: wrap;
 
     span {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
       color: $category-text;
-      padding: 0.4rem 0.95rem;
-      border-radius: 8px;
-      background: $tag-bg;
-      border: 1px solid $tag-border;
+      padding: 6px 16px;
+      border-radius: 980px;
+      background: $category-bg;
+      border: 1px solid $border;
       cursor: pointer;
-      transition: all 0.25s var(--spring-easing);
+      transition: all 0.18s ease;
 
       &:hover {
         background: $category-hover-bg;
         color: $accent;
-        border-color: $accent;
-        transform: translateY(-2px);
+        border-color: rgba(0, 113, 227, 0.3);
       }
 
       &.active {
         background: $category-active-bg;
         color: $category-active-text;
-        border-color: $accent;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        border-color: transparent;
+        box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
       }
     }
   }
@@ -165,45 +162,39 @@
   &__posts {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
     width: 100%;
-    padding: 1.8rem 0;
+    padding: 1.5rem 0;
     min-height: 200px;
   }
 
   &__skeleton-container {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
     width: 100%;
     margin-top: 1.5rem;
   }
 
-  /* ---------------- POST CARD (Liquid Glass Card) ---------------- */
+  /* ---------------- POST CARD (Apple HIG Card) ---------------- */
 
   &__post {
-    padding: 1.8rem 2.2rem;
-    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    border-radius: 16px;
     background: $bg-card;
-    backdrop-filter: blur(18px) saturate(180%);
-    -webkit-backdrop-filter: blur(18px) saturate(180%);
-    border: 1px solid $glass-border;
-    box-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 $glass-highlight;
+    border: 1px solid $border;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     transition:
-      transform 0.4s var(--spring-easing),
-      border-color 0.4s var(--spring-easing),
-      box-shadow 0.4s var(--spring-easing);
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
     position: relative;
     overflow: hidden;
 
     &:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: $border-hover;
-      box-shadow:
-        0 14px 40px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 $glass-highlight;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
       cursor: pointer;
 
       .home__post-title {
@@ -212,46 +203,47 @@
     }
 
     &-title {
-      font-family: "Lora", "Playfair Display", Georgia, "Times New Roman", serif;
-      font-size: 1.55rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      font-size: 1.45rem;
       font-weight: 600;
-      line-height: 1.34;
-      margin-bottom: 0.6rem;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
       color: $text;
-      letter-spacing: -0.2px;
-      transition: color 0.2s ease;
+      letter-spacing: -0.015em;
+      transition: color 0.15s ease;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     &-excerpt {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.985rem;
-      font-weight: 450;
-      line-height: 1.65;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.47059;
+      letter-spacing: -0.01em;
       color: $text-secondary;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       flex: 1;
     }
 
     &-date {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      font-size: 12px;
+      font-weight: 400;
       color: $text-muted;
-      letter-spacing: 0.02em;
+      letter-spacing: 0;
     }
   }
 
   .pop-animation {
-    animation: pop 0.3s ease-in-out;
+    animation: pop 0.25s ease-in-out;
   }
 
   @keyframes pop {
     0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
+    50% { transform: scale(1.15); }
     100% { transform: scale(1); }
   }
 
@@ -259,13 +251,10 @@
 
   .no-posts {
     text-align: center;
-    color: $text-muted;
-    font-size: 1.1rem;
+    color: $text-secondary;
+    font-size: 16px;
     padding: 3rem 0;
   }
-
-  /* ---------------- SCROLL SENTINEL ---------------- */
-  /* (sibling of .home — rendered by Home.tsx outside .home) */
 
   /* ---------------- LOAD MORE SPINNER ---------------- */
 
@@ -279,13 +268,11 @@
 
   &__end-message {
     text-align: center;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 13px;
+    letter-spacing: -0.01em;
     color: $text-muted;
-    padding: 2rem 0 3rem;
-    opacity: 0.6;
+    padding: 2.5rem 0 3.5rem;
   }
 
   /* ================= RESPONSIVE ================= */
@@ -296,29 +283,29 @@
     }
 
     .welcome-text {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
 
     &__posts, &__skeleton-container {
-      gap: 1.2rem;
+      gap: 1rem;
     }
 
     &__post {
-      padding: 1.25rem 1.4rem;
-      border-radius: 12px;
+      padding: 1.25rem 1.35rem;
+      border-radius: 14px;
 
       &-title {
         font-size: 1.25rem;
       }
 
       &-excerpt {
-        font-size: 0.925rem;
+        font-size: 14px;
       }
     }
 
     .categories-inline span {
-      font-size: 0.78rem;
-      padding: 0.3rem 0.75rem;
+      font-size: 12px;
+      padding: 5px 12px;
     }
   }
 

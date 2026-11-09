@@ -24,24 +24,24 @@ body {
 .footer {
   flex-shrink: 0;
   width: 100%;
-  background-color: $header-bg;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  color: $text-muted;
-  border-top: 1px solid $glass-border;
+  background-color: $surface;
+  color: $text-secondary;
+  border-top: 1px solid $border;
   text-align: center;
-  padding: 1.25rem 1rem;
+  padding: 1.5rem 1rem;
   margin-top: auto;
-  transition: background-color 0.4s ease, border-color 0.4s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 
   p {
     margin: 0;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 12px;
+    line-height: 1.33337;
+    letter-spacing: -0.01em;
+    color: $text-secondary;
 
     @media (max-width: 768px) {
-      font-size: 0.75rem;
+      font-size: 11px;
     }
   }
 }
