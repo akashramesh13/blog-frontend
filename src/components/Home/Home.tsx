@@ -217,7 +217,8 @@ const Home: React.FC = () => {
         {/* Bottom spinner — only shown while paginating (not initial load) */}
         {isLoadingMore && (
           <div className="home__load-more-spinner">
-            <Loading inline />
+            <Loading inline size="large" />
+            <span className="home__load-more-text">Loading more stories...</span>
           </div>
         )}
 

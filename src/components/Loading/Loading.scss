@@ -66,6 +66,24 @@
   animation: appleSpin 0.7s linear infinite;
   display: inline-block;
   vertical-align: middle;
+
+  &--small {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+  }
+
+  &--medium {
+    width: 24px;
+    height: 24px;
+    border-width: 2.5px;
+  }
+
+  &--large {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+  }
 }
 
 @keyframes appleSpin {

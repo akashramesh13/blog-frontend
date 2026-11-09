@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 
 import { register } from "../../redux/actions/authActions";
@@ -122,7 +122,6 @@ const Register: React.FC = () => {
     <div className="register-container">
       <div className="register-card">
         <h1>Create account</h1>
-        {error && <p className="error">{error}</p>}
         {registrationSuccess && (
           <p className="success">
             Registration successful! Redirecting to login...
@@ -137,7 +136,13 @@ const Register: React.FC = () => {
               ref={inputRef}
               onChange={(e) => setUsername(e.target.value)}
               className={
-                username && (usernameValidation.isValid ? "valid" : "invalid")
+                username
+                  ? usernameValidation.isValid
+                    ? "valid"
+                    : "invalid"
+                  : error
+                  ? "invalid"
+                  : ""
               }
               required
             />
@@ -157,7 +162,13 @@ const Register: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={
-                  password && (passwordValidation.isValid ? "valid" : "invalid")
+                  password
+                    ? passwordValidation.isValid
+                      ? "valid"
+                      : "invalid"
+                    : error
+                    ? "invalid"
+                    : ""
                 }
                 required
               />
@@ -177,6 +188,12 @@ const Register: React.FC = () => {
             )}
           </div>
 
+          {error && (
+            <div className="apple-error-callout" role="alert">
+              <span className="apple-error-text">{error}</span>
+            </div>
+          )}
+
           <button
             type="submit"
             className="register-button"
@@ -187,9 +204,18 @@ const Register: React.FC = () => {
               !passwordValidation.isValid
             }
           >
-            {loading ? <Loading inline /> : "Register"}
+            {loading ? <Loading inline /> : "Create Account"}
           </button>
         </form>
+
+        <div className="auth-footer-links">
+          <p className="auth-footer-text">
+            Already have an account?{" "}
+            <Link to="/login" className="apple-link">
+              Sign in <span className="arrow">↗</span>
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

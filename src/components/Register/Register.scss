@@ -62,9 +62,9 @@ input {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
   font-size: 15px;
   letter-spacing: -0.01em;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border: 1px solid $border;
-  border-radius: 10px;
+  border-radius: 12px;
   background: $surface;
   color: $text;
   box-sizing: border-box;
@@ -170,6 +170,70 @@ input {
   }
 }
 
+/* ---------------- ERROR (Apple Yellow Beak Callout) ---------------- */
+
+.apple-error-callout {
+  position: relative;
+  margin: -6px auto 1.5rem;
+  padding: 8px 18px;
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  width: calc(100% - 24px);
+  box-sizing: border-box;
+  animation: appleCalloutFade 0.2s ease-out;
+
+  /* Upward-pointing triangle beak */
+  &::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    background: #FEF3C7;
+    border-left: 1px solid #FCD34D;
+    border-top: 1px solid #FCD34D;
+  }
+
+  .apple-error-text {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #78350F;
+    line-height: 1.35;
+    display: inline-block;
+  }
+
+  [data-theme="dark"] & {
+    background: #3B2D00;
+    border-color: #7A5C00;
+
+    &::before {
+      background: #3B2D00;
+      border-color: #7A5C00;
+    }
+
+    .apple-error-text {
+      color: #FDE047;
+    }
+  }
+}
+
+@keyframes appleCalloutFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---------------- ERROR / SUCCESS (Apple System) ---------------- */
 
 .error,
@@ -192,6 +256,41 @@ input {
   color: #34C759;
   background: rgba(52, 199, 89, 0.08);
   border: 1px solid rgba(52, 199, 89, 0.2);
+}
+
+/* ---------------- FOOTER LINKS ---------------- */
+
+.auth-footer-links {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.auth-footer-text {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 13px;
+  color: $text-secondary;
+  margin: 0;
+
+  .apple-link {
+    color: $accent;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    .arrow {
+      display: inline-block;
+      font-size: 12px;
+      transition: transform 0.15s ease;
+    }
+
+    &:hover .arrow {
+      transform: translate(2px, -2px);
+    }
+  }
 }
 
 /* ---------------- RESPONSIVE ---------------- */

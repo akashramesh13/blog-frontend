@@ -3,11 +3,12 @@ import './Loading.scss';
 
 interface LoadingProps {
   inline?: boolean;
+  size?: 'small' | 'medium' | 'large';
 }
 
-const Loading: React.FC<LoadingProps> = ({ inline }) => {
+const Loading: React.FC<LoadingProps> = ({ inline, size = 'small' }) => {
   if (inline) {
-    return <div className="loading-spinner-inline" />;
+    return <div className={`loading-spinner-inline loading-spinner-inline--${size}`} />;
   }
   return (
     <div className="loading-container">
