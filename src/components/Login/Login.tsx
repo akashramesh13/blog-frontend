@@ -38,7 +38,14 @@ const Login: React.FC = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1>Sign in to Pixel Pursuit</h1>
+        <div className="auth-brand-badge">
+          <span className="badge-sparkle">✦</span>
+          <span>Pixel Pursuit</span>
+        </div>
+        <h1>Sign In</h1>
+        <p className="auth-subtitle">
+          Welcome back. Continue where you left off.
+        </p>
         <form onSubmit={handleSubmit}>
           <div className={`apple-field ${username ? "has-value" : ""} ${error ? "has-error" : ""}`}>
             <input

@@ -121,7 +121,15 @@ const Register: React.FC = () => {
   return (
     <div className="register-container">
       <div className="register-card">
-        <h1>Create account</h1>
+        <div className="auth-brand-badge">
+          <span className="badge-sparkle">✦</span>
+          <span>Pixel Pursuit</span>
+        </div>
+        <h1>Create Your Account</h1>
+        <p className="auth-subtitle">
+          Your space to explore perspectives, read deep-dives, and share ideas that matter.
+        </p>
+
         {registrationSuccess && (
           <p className="success">
             Registration successful! Redirecting to login...
@@ -220,6 +228,14 @@ const Register: React.FC = () => {
             {loading ? <Loading inline /> : "Create Account"}
           </button>
         </form>
+
+        <div className="auth-privacy-note">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Privacy-first. No tracking, no spam, always yours.</span>
+        </div>
 
         <div className="auth-footer-links">
           <p className="auth-footer-text">
