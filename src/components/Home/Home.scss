@@ -30,22 +30,23 @@
 
   &__title {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
-    font-size: clamp(38px, 5.5vw, 52px);
+    font-size: clamp(44px, 6vw, 62px);
     font-weight: 700;
     letter-spacing: -0.03em;
-    line-height: 1.08;
+    line-height: 1.05;
     color: $text;
-    margin: 0 0 0.6rem;
+    margin: 0 0 0.8rem;
   }
 
   &__intro {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 15px;
+    font-size: clamp(17px, 2.2vw, 20.5px);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.55;
     color: $text-secondary;
-    letter-spacing: -0.01em;
-    margin: 0 0 1.5rem;
+    letter-spacing: -0.015em;
+    margin: 0 auto 1.8rem;
+    max-width: 680px;
   }
 
   /* ---------------- UNDERSTATED CONTROLS ---------------- */
@@ -125,35 +126,107 @@
     }
   }
 
-  &__sort-select {
+  /* ---------------- CUSTOM APPLE SORT POPOVER ---------------- */
+
+  &__sort-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    flex-shrink: 0;
+  }
+
+  &__sort-btn {
     background: transparent;
-    border: none !important;
+    border: none;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 500;
     color: $text-secondary;
     cursor: pointer;
-    outline: none !important;
-    box-shadow: none !important;
-    margin-left: 8px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    transition: color 0.12s ease;
+    padding: 5px 9px;
+    border-radius: 980px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.15s ease, color 0.15s ease;
 
-    &:focus,
-    &:focus-visible {
-      outline: none !important;
-      box-shadow: none !important;
-      border: none !important;
+    &:hover,
+    &.open {
+      color: $text;
+      background: $hover-overlay;
     }
+
+    svg {
+      transition: transform 0.2s ease;
+    }
+
+    &.open svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__sort-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 130px;
+    background: #FFFFFF;
+    border: 1px solid #D2D2D7;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 6px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    animation: fadeInSort 0.15s ease-out;
+
+    [data-theme="dark"] & {
+      background: #2C2C2E;
+      border-color: #38383A;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  @keyframes fadeInSort {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  &__sort-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: $text;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
 
     &:hover {
-      color: $text;
+      background: $hover-overlay;
     }
 
-    option {
-      background: $bg-card;
-      color: $text;
+    &.selected {
+      font-weight: 600;
+      color: $accent;
+    }
+
+    svg {
+      color: $accent;
     }
   }
 
@@ -279,21 +352,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
 
   &__category {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: $accent;
   }
 
   &__date {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     color: $text-muted;
     letter-spacing: 0.01em;
@@ -302,12 +375,12 @@
   /* Dominant editorial title */
   &__title {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
-    font-size: clamp(23px, 3.2vw, 29px);
+    font-size: clamp(25px, 3.4vw, 32px);
     font-weight: 600;
     line-height: 1.25;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.022em;
     color: $text;
-    margin: 0.25rem 0 0.5rem;
+    margin: 0.25rem 0 0.6rem;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -319,7 +392,7 @@
   }
 
   &__arrow {
-    font-size: 18px;
+    font-size: 19px;
     color: $accent;
     opacity: 0;
     transform: translateX(-4px);
@@ -331,12 +404,12 @@
   /* Short description / excerpt */
   &__excerpt {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.55;
     color: $text-secondary;
     letter-spacing: -0.01em;
-    margin: 0 0 0.9rem;
+    margin: 0 0 1rem;
   }
 
   /* Bottom metadata */
@@ -345,8 +418,12 @@
     align-items: center;
     gap: 8px;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
-    font-size: 12.5px;
+    font-size: 13.5px;
     color: $text-muted;
+  }
+
+  &__readtime {
+    font-size: 13px;
   }
 
   &__dot {
@@ -356,23 +433,33 @@
   &__like-btn {
     background: none;
     border: none;
-    padding: 2px 6px;
+    padding: 3px 7px;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 13px;
     color: $text-muted;
     cursor: pointer;
-    border-radius: 4px;
-    transition: color 0.15s ease, transform 0.15s ease;
+    border-radius: 980px;
+    transition: color 0.12s ease, background 0.12s ease;
 
     &:hover {
-      color: $text;
+      color: #FF3B30;
+      background: rgba(255, 59, 48, 0.08);
     }
 
     &.liked {
-      color: #ff3b30;
+      color: #FF3B30;
+      font-weight: 600;
+    }
+
+    svg {
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    &.pop-animation svg {
+      transform: scale(1.35);
     }
   }
 

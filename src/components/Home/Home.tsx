@@ -35,6 +35,21 @@ const Home: React.FC = () => {
   const [page, setPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [sortBy, setSortBy] = useState("latest");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
+
+  // Close sort dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setIsSortOpen(false);
+      }
+    };
+    if (isSortOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isSortOpen]);
 
   // Debounce search query
   const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
@@ -147,7 +162,7 @@ const Home: React.FC = () => {
         <header className="home__header">
           <h1 className="home__title">Pixel Pursuit</h1>
           <p className="home__intro">
-            Essays, notes, and observations on engineering, design, and culture.
+            Writing on engineering, design, and ideas that matter.
           </p>
 
           <div className="home__controls">
@@ -173,14 +188,69 @@ const Home: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="home__sort-select"
-              >
-                <option value="latest">Latest</option>
-                <option value="likes">Top</option>
-              </select>
+              <div className="home__sort-container" ref={sortRef}>
+                <button
+                  type="button"
+                  className={`home__sort-btn ${isSortOpen ? "open" : ""}`}
+                  onClick={() => setIsSortOpen((prev) => !prev)}
+                  aria-label="Sort stories"
+                  aria-haspopup="listbox"
+                  aria-expanded={isSortOpen}
+                >
+                  <span>{sortBy === "latest" ? "Latest" : "Top"}</span>
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {isSortOpen && (
+                  <div className="home__sort-menu" role="listbox">
+                    <button
+                      type="button"
+                      className={`home__sort-option ${sortBy === "latest" ? "selected" : ""}`}
+                      onClick={() => {
+                        setSortBy("latest");
+                        setIsSortOpen(false);
+                      }}
+                      role="option"
+                      aria-selected={sortBy === "latest"}
+                    >
+                      <span>Latest</span>
+                      {sortBy === "latest" && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className={`home__sort-option ${sortBy === "likes" ? "selected" : ""}`}
+                      onClick={() => {
+                        setSortBy("likes");
+                        setIsSortOpen(false);
+                      }}
+                      role="option"
+                      aria-selected={sortBy === "likes"}
+                    >
+                      <span>Top</span>
+                      {sortBy === "likes" && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="home__categories-filter">

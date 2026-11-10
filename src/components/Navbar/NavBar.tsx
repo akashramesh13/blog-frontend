@@ -10,7 +10,6 @@ import {
   FiSun,
   FiMoon,
   FiMonitor,
-  FiRss,
 } from "react-icons/fi";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
@@ -18,11 +17,13 @@ import { useAuthCheck } from "../../hooks/useAuthCheck";
 import { useTheme } from "../../context/ThemeContext";
 import { ThemeMode } from "../../types/theme";
 import AvatarImage from "../AvatarImage/AvatarImage";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileDropDownOpen, setIsProfileDropDownOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { userInfo } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
@@ -67,6 +68,7 @@ const NavBar: React.FC = () => {
 
   const handleLogout = async () => {
     await dispatch(logout());
+    setIsLogoutModalOpen(false);
     closeNavbar();
   };
 
@@ -114,21 +116,22 @@ const NavBar: React.FC = () => {
           {themeIcon()}
         </button>
 
-        <a
-          href={`${process.env.REACT_APP_BACKEND_URL || "https://blog-backend.akashramesh.in"}/rss.xml`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="theme-toggle glass-medium glass-interactive"
-          title="Subscribe via RSS"
-          aria-label="Subscribe via RSS Feed"
-          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
-        >
-          {FiRss({})}
-        </a>
-
         {userInfo && (
-          <Link id="add-post" to="/post/new" onClick={handleAddNewPost}>
-            Write
+          <Link id="add-post" className="navbar__write-btn" to="/post/new" onClick={handleAddNewPost}>
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
+            <span>Write</span>
           </Link>
         )}
 
@@ -154,7 +157,14 @@ const NavBar: React.FC = () => {
                 >
                   My Profile
                 </Link>
-                <button onClick={handleLogout}>Logout</button>
+                <button
+                  onClick={() => {
+                    setIsProfileDropDownOpen(false);
+                    setIsLogoutModalOpen(true);
+                  }}
+                >
+                  Logout
+                </button>
               </div>
             )}
           </div>
@@ -181,6 +191,16 @@ const NavBar: React.FC = () => {
           <span></span>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogout}
+        title="Sign Out"
+        message="Are you sure you want to log out?"
+        confirmText="Log Out"
+        cancelText="Cancel"
+      />
     </nav>
   );
 };

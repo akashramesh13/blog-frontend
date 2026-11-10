@@ -11,6 +11,8 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import TableOfContents from "../TableOfContents/TableOfContents";
 import ReactQuill from "react-quill";
 import { formatDate } from "../../utils/formatDate";
+import axios from "../../helpers/axios";
+import { IPost } from "../../types/postsTypes";
 
 type AppDispatch = ThunkDispatch<RootState, void, AnyAction>;
 
@@ -36,6 +38,7 @@ const PostViewer: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [relatedPosts, setRelatedPosts] = useState<IPost[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const { post, loading, error } = useSelector(
@@ -49,6 +52,74 @@ const PostViewer: React.FC = () => {
       dispatch(fetchPost(id));
     }
   }, [id, dispatch, post?.id]);
+
+  // UPDATE DOCUMENT TITLE & READER MODE META TAGS
+  useEffect(() => {
+    if (post?.title) {
+      document.title = `${post.title} — Pixel Pursuit`;
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement("meta");
+        metaDesc.setAttribute("name", "description");
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.setAttribute("content", post.subtitle || post.title);
+
+      let ogType = document.querySelector('meta[property="og:type"]');
+      if (!ogType) {
+        ogType = document.createElement("meta");
+        ogType.setAttribute("property", "og:type");
+        document.head.appendChild(ogType);
+      }
+      ogType.setAttribute("content", "article");
+    } else {
+      document.title = "Pixel Pursuit";
+    }
+
+    return () => {
+      document.title = "Pixel Pursuit";
+    };
+  }, [post?.title, post?.subtitle]);
+
+  // FETCH 3 RELATED POSTS FOR THE BOTTOM SECTION
+  useEffect(() => {
+    let isSubscribed = true;
+    const fetchRelated = async () => {
+      if (!post?.id) return;
+      try {
+        let items: IPost[] = [];
+        if (post.category?.name) {
+          const res = await axios.get(
+            `/posts/?page=0&size=4&category=${encodeURIComponent(post.category.name)}`
+          );
+          items = (res.data?.content || []).filter((p: IPost) => p.id !== post.id);
+        }
+        if (items.length < 3) {
+          const fallbackRes = await axios.get("/posts/?page=0&size=5");
+          const fallbackItems = (fallbackRes.data?.content || []).filter(
+            (p: IPost) => p.id !== post.id
+          );
+          const combined = [...items];
+          for (const item of fallbackItems) {
+            if (!combined.some((existing) => existing.id === item.id)) {
+              combined.push(item);
+            }
+          }
+          items = combined;
+        }
+        if (isSubscribed) {
+          setRelatedPosts(items.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Error fetching related posts", err);
+      }
+    };
+
+    fetchRelated();
+    return () => {
+      isSubscribed = false;
+    };
+  }, [post?.id, post?.category?.name]);
 
   // SCROLL PROGRESS LISTENER
   useEffect(() => {
@@ -167,7 +238,11 @@ const PostViewer: React.FC = () => {
   const isOwner = post?.owner || (post?.user && userInfo && post.user.id === userInfo.id);
 
   return (
-    <div className="post-view">
+    <article
+      className="post-view entry-content"
+      itemScope
+      itemType="https://schema.org/BlogPosting"
+    >
       {/* Scroll Progress Bar at the very top */}
       <div
         className="post-view__progress-bar"
@@ -188,25 +263,41 @@ const PostViewer: React.FC = () => {
           <header className="post-view__header">
             {post.category && (
               <div className="post-view__category-wrapper">
-                <span className="post-view__category">
+                <span className="post-view__category" itemProp="articleSection">
                   {post.category.name}
                 </span>
               </div>
             )}
 
-            <h1 className="post-view__title">{post.title}</h1>
+            <h1 className="post-view__title entry-title" itemProp="headline">
+              {post.title}
+            </h1>
 
             {post.subtitle && (
-              <p className="post-view__subtitle">{post.subtitle}</p>
+              <p className="post-view__subtitle entry-summary" itemProp="description">
+                {post.subtitle}
+              </p>
             )}
 
             <div className="post-view__meta-bar">
               <div className="post-view__meta-info">
-                <span className="post-view__author">
-                  {post.user?.username || "Unknown"}
+                <span
+                  itemProp="author"
+                  itemScope
+                  itemType="https://schema.org/Person"
+                >
+                  <span className="post-view__author" itemProp="name">
+                    {post.user?.username || "Unknown"}
+                  </span>
                 </span>
                 <span className="post-view__dot">&bull;</span>
-                <span className="post-view__date">{formatDate(post.createdAt)}</span>
+                <time
+                  className="post-view__date"
+                  itemProp="datePublished"
+                  dateTime={post.createdAt}
+                >
+                  {formatDate(post.createdAt)}
+                </time>
                 <span className="post-view__dot">&bull;</span>
                 <span className="post-view__readtime">{readTime} min read</span>
                 <span className="post-view__dot">&bull;</span>
@@ -300,7 +391,7 @@ const PostViewer: React.FC = () => {
           {/* HERO COVER IMAGE (Wider than body text: max-width 1040px) */}
           {post.coverImage && (
             <div className="post-cover">
-              <img src={post.coverImage} alt={post.title} />
+              <img src={post.coverImage} alt={post.title} itemProp="image" />
             </div>
           )}
 
@@ -310,9 +401,53 @@ const PostViewer: React.FC = () => {
           </div>
 
           {/* BODY CONTENT (max-width 720px, 18-19px, line-height 1.8) */}
-          <main className="post-view__body">
+          <main className="post-view__body post-content entry-content-body" itemProp="articleBody">
             <ReactQuill value={parsedContent} readOnly theme="bubble" />
           </main>
+
+          {/* YOU MIGHT ALSO LIKE (3 cards in a horizontal row on desktop) */}
+          {relatedPosts.length > 0 && (
+            <section className="post-view__related">
+              <div className="post-view__related-header">
+                <h3 className="post-view__related-title">You might also like</h3>
+              </div>
+              <div className="post-view__related-grid">
+                {relatedPosts.map((related) => {
+                  const relStats = getReadStats(related.content);
+                  return (
+                    <Link
+                      key={related.id}
+                      to={`/post/view/${related.id}`}
+                      className="related-card"
+                    >
+                      <div className="related-card__header">
+                        {related.category ? (
+                          <span className="related-card__category">
+                            {related.category.name}
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                        <span className="related-card__date">
+                          {formatDate(related.createdAt)}
+                        </span>
+                      </div>
+                      <h4 className="related-card__title">{related.title}</h4>
+                      {related.subtitle && (
+                        <p className="related-card__subtitle">{related.subtitle}</p>
+                      )}
+                      <div className="related-card__footer">
+                        <span className="related-card__readtime">
+                          {relStats.readTime} min read
+                        </span>
+                        <span className="related-card__arrow">&rarr;</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
           {/* EDITORIAL FOOTER */}
           <footer className="post-view__footer">
@@ -337,7 +472,7 @@ const PostViewer: React.FC = () => {
           <Link to="/" className="post-view__back-link">&larr; Back to all stories</Link>
         </div>
       )}
-    </div>
+    </article>
   );
 };
 
